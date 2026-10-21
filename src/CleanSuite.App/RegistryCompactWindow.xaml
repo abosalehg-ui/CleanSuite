@@ -1,0 +1,41 @@
+<Window x:Class="CleanSuite.App.RegistryCompactWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+        xmlns:theming="clr-namespace:CleanSuite.App.Theming"
+        Style="{StaticResource AppWindow}"
+        FlowDirection="{Binding FlowDirection, Source={x:Static loc:Loc.Instance}}"
+        Title="{loc:T RcTitle}" Height="560" Width="980" MinHeight="380" MinWidth="680"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+
+    <DockPanel Margin="12">
+        <TextBlock DockPanel.Dock="Top" Text="{loc:T RcIntro}" TextWrapping="Wrap" Margin="0,0,0,8" />
+        <TextBlock x:Name="AdminText" DockPanel.Dock="Top" Text="{loc:T RcNeedsAdmin}" Foreground="{DynamicResource DangerFg}"
+                   TextWrapping="Wrap" Margin="0,0,0,8" Visibility="Collapsed" />
+
+        <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
+            <WrapPanel>
+                <Button x:Name="AnalyseButton" Content="{loc:T RcAnalyse}" Click="Analyse_Click" Style="{StaticResource AccentButton}" />
+                <Button x:Name="CancelButton" Content="{loc:T Cancel}" Click="Cancel_Click" IsEnabled="False" />
+                <Button x:Name="ReportButton" Content="{loc:T RcSaveReport}" Click="Report_Click" IsEnabled="False" />
+            </WrapPanel>
+        </Border>
+
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+            <ProgressBar x:Name="Progress" Height="4" IsIndeterminate="True" Visibility="Collapsed" Margin="0,0,0,6" />
+            <TextBlock theming:Live.Announce="True" x:Name="StatusText" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <DataGrid x:Name="Grid" theming:Empty.Text="{loc:T EmCompact}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{loc:T RcColHive}" Binding="{Binding Name}" Width="130" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T RcColCurrent}" Binding="{Binding CurrentText}" Width="115" SortMemberPath="Row.CurrentSize" />
+                <DataGridTextColumn Header="{loc:T RcColCompact}" Binding="{Binding CompactText}" Width="125" SortMemberPath="Row.CompactSize" />
+                <DataGridTextColumn Header="{loc:T RcColSaving}" Binding="{Binding SavingText}" Width="100" SortMemberPath="Row.Saving" />
+                <DataGridTemplateColumn Header="{loc:T RcColStatus}" CellTemplate="{StaticResource StatusChip}" Width="200" SortMemberPath="Row.Status" />
+                <DataGridTextColumn Header="{loc:T RcColFile}" Binding="{Binding FileText}" Width="*" ElementStyle="{StaticResource PathCell}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

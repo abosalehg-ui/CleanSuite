@@ -1,0 +1,117 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:theming="clr-namespace:CleanSuite.App.Theming">
+    <!--
+        Main window navigation: a TabControl drawn as a side bar (start edge: right in Arabic, left in English) with an icon per
+        tool and group headings, Windows 11 style. The TabItem's own Foreground stays the normal text colour because the tool
+        pages inherit it; only the parts inside the item template are muted or accented.
+    -->
+
+    <theming:NotConverter x:Key="Not" />
+
+    <Style x:Key="NavItem" TargetType="TabItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextFg}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="Bd" Margin="0,1" Padding="12,7" CornerRadius="6" Background="Transparent" Cursor="Hand">
+                        <Grid>
+                            <Border x:Name="Marker" Width="3" Height="16" CornerRadius="1.5" HorizontalAlignment="Left" Margin="-12,0,0,0"
+                                    Background="{DynamicResource AccentBg}" Visibility="Hidden" />
+                            <StackPanel Orientation="Horizontal">
+                                <ContentControl x:Name="Glyph" Style="{StaticResource Icon}" Tag="{TemplateBinding Tag}"
+                                                Foreground="{DynamicResource TextMutedFg}" Margin="0,0,12,0" />
+                                <ContentPresenter x:Name="Label" ContentSource="Header" VerticalAlignment="Center"
+                                                  TextElement.Foreground="{DynamicResource TextFg}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource NavHoverBg}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource NavSelectedBg}" />
+                            <Setter TargetName="Marker" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Glyph" Property="Foreground" Value="{DynamicResource AccentBg}" />
+                            <Setter TargetName="Label" Property="TextElement.FontWeight" Value="SemiBold" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Group heading between navigation items; never selectable. -->
+    <Style x:Key="NavGroup" TargetType="TabItem">
+        <Setter Property="IsEnabled" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <ContentPresenter ContentSource="Header" Margin="12,10,12,2" TextElement.FontSize="12"
+                                      TextElement.Foreground="{DynamicResource TextMutedFg}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--
+        Status chip for a list cell: the row exposes ChipText and Tone ("success", "warning", "danger"; anything else is
+        neutral). Use as <DataGridTemplateColumn CellTemplate="{StaticResource StatusChip}" />.
+    -->
+    <DataTemplate x:Key="StatusChip">
+        <Border x:Name="Chip" CornerRadius="10" Padding="9,1,9,2" Margin="2,3" HorizontalAlignment="Left" VerticalAlignment="Center"
+                Background="{DynamicResource ChipNeutralBg}">
+            <TextBlock x:Name="ChipLabel" Text="{Binding ChipText}" FontSize="12.5" Foreground="{DynamicResource ChipNeutralFg}"
+                       TextTrimming="CharacterEllipsis" />
+        </Border>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Tone}" Value="success">
+                <Setter TargetName="Chip" Property="Background" Value="{DynamicResource ChipSuccessBg}" />
+                <Setter TargetName="ChipLabel" Property="Foreground" Value="{DynamicResource ChipSuccessFg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tone}" Value="warning">
+                <Setter TargetName="Chip" Property="Background" Value="{DynamicResource ChipWarningBg}" />
+                <Setter TargetName="ChipLabel" Property="Foreground" Value="{DynamicResource ChipWarningFg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tone}" Value="danger">
+                <Setter TargetName="Chip" Property="Background" Value="{DynamicResource ChipDangerBg}" />
+                <Setter TargetName="ChipLabel" Property="Foreground" Value="{DynamicResource ChipDangerFg}" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <Style x:Key="NavTabs" TargetType="TabControl">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource NavItem}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="212" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <DockPanel Grid.Column="0" Background="{DynamicResource NavBg}" TextElement.Foreground="{DynamicResource TextFg}">
+                            <ContentPresenter DockPanel.Dock="Top" Content="{TemplateBinding theming:Nav.Header}" Margin="16,14,16,8" />
+                            <ContentPresenter DockPanel.Dock="Bottom" Content="{TemplateBinding theming:Nav.Footer}" Margin="16,8,16,14" />
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="8,0">
+                                <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
+                            </ScrollViewer>
+                        </DockPanel>
+                        <Border Grid.Column="1" Background="{DynamicResource WindowBg}" BorderBrush="{DynamicResource Stroke}"
+                                BorderThickness="1,1,0,0" CornerRadius="8,0,0,0">
+                            <!-- The part name lets UI Automation find the page: screen readers see the selected page under its tab. -->
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="18,16,16,14" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

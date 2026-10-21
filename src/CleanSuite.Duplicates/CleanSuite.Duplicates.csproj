@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanSuite.Matching\CleanSuite.Matching.csproj" />
+    <ProjectReference Include="..\CleanSuite.Safety\CleanSuite.Safety.csproj" />
+    <ProjectReference Include="..\CleanSuite.Junk\CleanSuite.Junk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- CRC-32 (same IEEE polynomial as the original) and XxHash64 for the partial pre-check, vectorised. -->
+    <PackageReference Include="System.IO.Hashing" Version="8.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

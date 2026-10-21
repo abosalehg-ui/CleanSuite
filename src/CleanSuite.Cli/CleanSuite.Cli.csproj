@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanSuite.Compat\CleanSuite.Compat.csproj" />
+    <ProjectReference Include="..\CleanSuite.Shortcuts\CleanSuite.Shortcuts.csproj" />
+    <ProjectReference Include="..\CleanSuite.Uninstall\CleanSuite.Uninstall.csproj" />
+    <ProjectReference Include="..\CleanSuite.RegistryClean\CleanSuite.RegistryClean.csproj" />
+    <ProjectReference Include="..\CleanSuite.Duplicates\CleanSuite.Duplicates.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

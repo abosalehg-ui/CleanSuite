@@ -1,0 +1,65 @@
+// CleanSuite's own registry protection list, part of the program (it does not need the original program installed).
+// A finding is set aside when its text "HIVE\key\value\data\reason" contains one of these words (case does not matter).
+// These words are always applied, also when the ignore lists are switched off: every area below is maintained by Windows
+// or by the software that owns it, and keeps paths to files that are absent on purpose (install media, old versions,
+// files created on demand). Removing such entries breaks updates, repairs, uninstallers or protection software.
+// Own additions go to %LocalAppData%\CleanSuite\Ignore_Reg\*.txt (one word per line, "//" starts a comment).
+
+// Windows servicing, updates and setup
+\COMPONENT BASED SERVICING\              // package store of Windows Update; InstallLocation points at long-gone download folders
+\CURRENTVERSION\WINDOWSUPDATE\
+\CURRENTVERSION\SETUP\                   // source paths of the Windows installation media
+\CURRENTVERSION\SIDEBYSIDE\
+\WINSXS\
+\ACTIVE SETUP\                           // per-user first-run components of Windows
+\ADVANCED INF SETUP\
+
+// Windows Installer and other installers: products must stay repairable and removable. (Installer\Folders is not here:
+// the registry scan checks those folder records on purpose.)
+\CURRENTVERSION\INSTALLER\USERDATA\         // component paths of installed products, used for repair and removal
+\SOFTWARE\MICROSOFT\INSTALLER\
+\CLASSES\INSTALLER\
+HKEY_CLASSES_ROOT\INSTALLER\
+\CLICKTORUN\                             // Office Click-to-Run: paths inside its virtual file system
+\MICROSOFT\APPV\
+\MICROSOFT\.NETFRAMEWORK\
+\NET FRAMEWORK SETUP\
+\EDGEUPDATE\
+
+// Packaged (Store) apps
+\CURRENTVERSION\APPX\                    // deployment state of every package, old versions included
+\LOCAL SETTINGS\MRTCACHE\                // resource cache of packaged apps, maintained by Windows
+\APPUSERMODELID\                         // notification registrations
+@{                                       // indirect resource strings ("@{package?ms-resource://…}") are not file paths
+
+// System configuration. Shared folders and firewall rules are checked by their own scans and stay reportable; the generic
+// look at CurrentControlSet must not offer the same firewall rules a second time under that alias.
+\CURRENTCONTROLSET\SERVICES\SHAREDACCESS\
+\CONTROL\CRASHCONTROL\
+\SERVICES\EVENTLOG\
+\SERVICES\WBIOSRVC\                      // fingerprint and face databases, created on enrolment
+\SOFTWARE\POLICIES\                      // Group Policy
+\WINDOWS NT\CURRENTVERSION\WINLOGON\
+\WINDOWS NT\CURRENTVERSION\IMAGE FILE EXECUTION OPTIONS\
+\WINDOWS NT\CURRENTVERSION\PROFILELIST\
+\WINDOWS SEARCH\                         // indexer locations
+\LEXICONUPDATE\                          // input method dictionaries
+\WCMSVC\
+\DRIVERSTORE\                            // driver packages
+\ATI TECHNOLOGIES\INSTALL\
+\NVIDIA CORPORATION\INSTALLER2\
+
+// Security software: its configuration names files it creates itself
+\WINDOWS DEFENDER\
+\NORTON\
+\SYMANTEC\
+\MCAFEE\
+\KASPERSKYLAB\
+\ESET\
+\AVAST SOFTWARE\
+\AVG\
+\BITDEFENDER\
+\AVIRA\
+\SOPHOS\
+\TRENDMICRO\
+\MALWAREBYTES\

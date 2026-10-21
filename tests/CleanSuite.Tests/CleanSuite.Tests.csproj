@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <!-- UseWPF drops System.IO from the implicit usings. -->
+    <Using Include="System.IO" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CleanSuite.Compat\CleanSuite.Compat.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.App\CleanSuite.App.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.History\CleanSuite.History.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.Startup\CleanSuite.Startup.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.Shortcuts\CleanSuite.Shortcuts.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.Uninstall\CleanSuite.Uninstall.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.RegistryClean\CleanSuite.RegistryClean.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.Duplicates\CleanSuite.Duplicates.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.DiskUsage\CleanSuite.DiskUsage.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.Restore\CleanSuite.Restore.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.Scheduler\CleanSuite.Scheduler.csproj" />
+    <ProjectReference Include="..\..\src\CleanSuite.RegistryCompact\CleanSuite.RegistryCompact.csproj" />
+  </ItemGroup>
+
+</Project>

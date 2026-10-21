@@ -1,0 +1,25 @@
+<Window x:Class="CleanSuite.App.ScheduledRunWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+        Style="{StaticResource AppWindow}"
+        FlowDirection="{Binding FlowDirection, Source={x:Static loc:Loc.Instance}}"
+        Title="{loc:T SrTitle}" Width="440" SizeToContent="Height" ResizeMode="NoResize"
+        ShowActivated="False" WindowStartupLocation="Manual">
+    <StackPanel Margin="16">
+        <TextBlock x:Name="HeadText" Style="{StaticResource LabelText}" TextWrapping="Wrap" Margin="0,0,0,8" />
+        <ProgressBar x:Name="Progress" Height="4" IsIndeterminate="True" Margin="0,0,0,10" />
+        <ItemsControl x:Name="ResultList" Margin="0,0,0,8">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,0,0,4" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock x:Name="LogText" Style="{StaticResource MutedText}" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,8" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="CancelButton" Content="{loc:T Cancel}" Click="Cancel_Click" />
+            <Button x:Name="CloseButton" Content="{loc:T Close}" Click="Close_Click" Visibility="Collapsed" Style="{StaticResource AccentButton}" />
+        </StackPanel>
+    </StackPanel>
+</Window>

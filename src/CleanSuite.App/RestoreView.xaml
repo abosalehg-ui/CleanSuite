@@ -1,0 +1,32 @@
+<UserControl x:Class="CleanSuite.App.RestoreView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+             xmlns:theming="clr-namespace:CleanSuite.App.Theming"
+             Loaded="View_Loaded">
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
+            <WrapPanel>
+                <Button x:Name="RestoreButton" Content="{loc:T RsRestore}" Click="Restore_Click" Style="{StaticResource AccentButton}" IsEnabled="False" />
+                <Button x:Name="RefreshButton" Content="{loc:T StRefresh}" Click="Refresh_Click" />
+                <Button x:Name="OpenFolderButton" Content="{loc:T RsOpenFolder}" Click="OpenFolder_Click" IsEnabled="False" />
+                <Button x:Name="DeleteButton" Content="{loc:T RsDelete}" Click="Delete_Click" IsEnabled="False" />
+                <Button Content="{loc:T RsAddFolder}" Click="AddFolder_Click" />
+            </WrapPanel>
+        </Border>
+
+        <TextBlock theming:Live.Announce="True" x:Name="StatusText" DockPanel.Dock="Bottom" Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,10,0,0" />
+
+        <DataGrid x:Name="Grid" theming:Empty.Text="{loc:T EmRestore}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal" SelectionMode="Extended" SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Grid_DoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{loc:T RsColType}" Binding="{Binding KindText}" Width="170" />
+                <DataGridTextColumn Header="{loc:T RsColCreated}" Binding="{Binding CreatedText}" Width="150" SortMemberPath="Item.Created" />
+                <DataGridTextColumn Header="{loc:T RsColSize}" Binding="{Binding SizeText}" Width="100" SortMemberPath="Item.Size" />
+                <DataGridTextColumn Header="{loc:T RsColSource}" Binding="{Binding SourceText}" Width="140" />
+                <DataGridTextColumn Header="{loc:T ColName}" Binding="{Binding Item.Name}" Width="*" ElementStyle="{StaticResource PathCell}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

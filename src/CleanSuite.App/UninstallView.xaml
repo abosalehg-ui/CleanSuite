@@ -1,0 +1,53 @@
+<UserControl x:Class="CleanSuite.App.UninstallView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+             xmlns:theming="clr-namespace:CleanSuite.App.Theming"
+             Loaded="View_Loaded">
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
+            <StackPanel>
+                <WrapPanel>
+                    <Button x:Name="UninstallButton" Content="{loc:T UnUninstall}" Click="Uninstall_Click" IsEnabled="False" />
+                    <Button x:Name="ModifyButton" Content="{loc:T UnModify}" Click="Modify_Click" IsEnabled="False" />
+                    <Button x:Name="RepairButton" Content="{loc:T UnRepair}" Click="Repair_Click" IsEnabled="False" />
+                    <Button x:Name="RemoveButton" Content="{loc:T UnRemoveEntry}" Click="Remove_Click" IsEnabled="False" />
+                    <Button x:Name="WebsiteButton" Content="{loc:T UnWebsite}" Click="Website_Click" IsEnabled="False" />
+                    <Button Content="{loc:T UnReport}" Click="Report_Click" />
+                    <Button x:Name="RefreshButton" Content="{loc:T UnRefresh}" Click="Refresh_Click" Style="{StaticResource AccentButton}" />
+                </WrapPanel>
+                <WrapPanel Margin="0,8,0,0">
+                    <TextBlock Text="{loc:T UnSearch}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBox x:Name="SearchBox" AutomationProperties.Name="{loc:T UnSearch}" Width="260" TextChanged="Search_Changed" VerticalContentAlignment="Center" />
+                    <CheckBox x:Name="ShowUpdates" Content="{loc:T UnShowUpdates}" Margin="16,0,0,0" VerticalAlignment="Center" Click="Refresh_Click" />
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+
+        <TextBlock theming:Live.Announce="True" DockPanel.Dock="Bottom" x:Name="StatusText" Style="{StaticResource MutedText}" Margin="0,10,0,0" TextTrimming="CharacterEllipsis" />
+
+        <DataGrid x:Name="Grid" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
+                  SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Grid_DoubleClick">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Setter Property="ToolTip" Value="{Binding Entry.UninstallCommand}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Entry.PossiblyInvalid}" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource DangerFg}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{loc:T UnColName}" Binding="{Binding Entry.Name}" Width="*" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T UnColPublisher}" Binding="{Binding Entry.Publisher}" Width="190" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T UnColDate}" Binding="{Binding DateText}" Width="100" SortMemberPath="Entry.InstalledOn" />
+                <DataGridTextColumn Header="{loc:T UnColSize}" Binding="{Binding SizeText}" Width="90" SortMemberPath="Entry.SizeKb" />
+                <DataGridTextColumn Header="{loc:T UnColVersion}" Binding="{Binding Entry.Version}" Width="120" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T UnColNotes}" Binding="{Binding Notes}" Width="250" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

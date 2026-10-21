@@ -1,0 +1,12 @@
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+artifacts/
+
+# Analysis of the original program: kept on this computer only, never published
+docs/Phase*_*.md
+docs/specs/
+docs/مراجعة-CleanSuite.md
+tools/analysis/

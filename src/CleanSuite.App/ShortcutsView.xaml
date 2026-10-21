@@ -1,0 +1,50 @@
+<UserControl x:Class="CleanSuite.App.ShortcutsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+             xmlns:theming="clr-namespace:CleanSuite.App.Theming">
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
+            <StackPanel>
+                <WrapPanel>
+                    <Button x:Name="ScanButton" Content="{loc:T ScScan}" Command="{Binding ScanCommand}" Style="{StaticResource AccentButton}" />
+                    <Button x:Name="DeleteButton" Content="{loc:T ScDelete}" Command="{Binding CleanCommand}" />
+                    <Button x:Name="RetargetButton" Content="{loc:T ScRetarget}" Click="Retarget_Click" IsEnabled="False" />
+                    <Button x:Name="OpenButton" Content="{loc:T ScOpenFolder}" Click="Open_Click" IsEnabled="False" />
+                    <Button Content="{loc:T RgSelectAll}" Command="{Binding SelectAllCommand}" />
+                    <Button Content="{loc:T RgSelectNone}" Command="{Binding SelectNoneCommand}" />
+                </WrapPanel>
+                <WrapPanel Margin="0,8,0,0">
+                    <RadioButton x:Name="ModeStartMenu" Content="{loc:T ScModeStartMenu}" IsChecked="True" Margin="0,0,16,0" VerticalAlignment="Center" />
+                    <RadioButton x:Name="ModeDrives" Content="{loc:T ScModeDrives}" Margin="0,0,16,0" VerticalAlignment="Center" />
+                    <CheckBox x:Name="EmptyFolders" Content="{loc:T ScEmptyFolders}" Margin="0,0,16,0" VerticalAlignment="Center" />
+                    <CheckBox x:Name="IncludeRemovable" Content="{loc:T ScIncludeRemovable}" VerticalAlignment="Center" />
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+
+        <TextBlock theming:Live.Announce="True" DockPanel.Dock="Bottom" x:Name="StatusText" Style="{StaticResource MutedText}" Margin="0,10,0,0" TextTrimming="CharacterEllipsis" />
+
+        <DataGrid x:Name="Grid" theming:Empty.Text="{loc:T EmShortcuts}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
+                  SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Grid_DoubleClick">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="40" CanUserResize="False" SortMemberPath="Selected">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- Named for screen readers; not editable while the grid is read-only (a clean is running). -->
+                            <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="0"
+                                      AutomationProperties.Name="{Binding Item.FullPath}"
+                                      IsEnabled="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource Not}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="{loc:T ScColName}" Binding="{Binding Item.Name}" Width="220" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T ScColReason}" Binding="{Binding ReasonText}" Width="190" IsReadOnly="True" />
+                <DataGridTextColumn Header="{loc:T ScColTarget}" Binding="{Binding Item.Target}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T ScColFolder}" Binding="{Binding Item.Folder}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

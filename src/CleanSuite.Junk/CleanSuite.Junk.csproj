@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanSuite.Matching\CleanSuite.Matching.csproj" />
+    <ProjectReference Include="..\CleanSuite.Safety\CleanSuite.Safety.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- CleanSuite's own junk protection list, inside the program so it applies on every computer (IgnoreList.BuiltIn). -->
+    <EmbeddedResource Include="IgnoreLists\CleanSuite.txt" LogicalName="CleanSuite.Junk.IgnoreLists.CleanSuite.txt" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

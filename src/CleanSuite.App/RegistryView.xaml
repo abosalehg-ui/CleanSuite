@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="CleanSuite.App.RegistryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+             xmlns:theming="clr-namespace:CleanSuite.App.Theming">
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
+            <WrapPanel>
+                <Button x:Name="ScanButton" Content="{loc:T RgScan}" Command="{Binding ScanCommand}" Style="{StaticResource AccentButton}" />
+                <Button x:Name="CancelButton" Content="{loc:T Cancel}" Command="{Binding CancelCommand}" />
+                <Button x:Name="CleanButton" Content="{loc:T RgClean}" Command="{Binding CleanCommand}" />
+                <Button x:Name="RestoreButton" Content="{loc:T RgRestore}" Click="Restore_Click" IsEnabled="{Binding IsBusy, Converter={StaticResource Not}}" />
+                <Button Content="{loc:T RcOpen}" Click="Compactor_Click" />
+                <Button Content="{loc:T RgSelectAll}" Command="{Binding SelectAllCommand}" />
+                <Button Content="{loc:T RgSelectNone}" Command="{Binding SelectNoneCommand}" />
+                <CheckBox x:Name="ThoroughBox" Content="{loc:T RgThorough}" Margin="12,0,0,0" ToolTip="{loc:T RgThoroughHint}" />
+            </WrapPanel>
+        </Border>
+
+        <ProgressBar x:Name="Progress" DockPanel.Dock="Top" Height="4" IsIndeterminate="True" Visibility="Collapsed" Margin="0,0,0,8" />
+
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+            <TextBlock x:Name="WarningText" Foreground="{DynamicResource DangerFg}" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,4" />
+            <TextBlock theming:Live.Announce="True" x:Name="StatusText" Style="{StaticResource MutedText}" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <DataGrid x:Name="Grid" theming:Empty.Text="{loc:T EmRegistry}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Extended">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Setter Property="ToolTip" Value="{Binding Tip}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Marked}" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource TextMutedFg}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="34" CanUserResize="False" SortMemberPath="Selected">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- Named for screen readers; not editable while the grid is read-only (a clean is running). -->
+                            <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="0"
+                                      AutomationProperties.Name="{Binding Finding.KeyDisplay}"
+                                      IsEnabled="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource Not}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="{loc:T RgColCategory}" Binding="{Binding CategoryText}" Width="150" IsReadOnly="True" />
+                <DataGridTextColumn Header="{loc:T RgColProblem}" Binding="{Binding ProblemText}" Width="200" IsReadOnly="True" />
+                <DataGridTextColumn Header="{loc:T RgColKey}" Binding="{Binding Finding.KeyDisplay}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T RgColValue}" Binding="{Binding ValueText}" Width="170" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T RgColData}" Binding="{Binding Finding.Data}" Width="260" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

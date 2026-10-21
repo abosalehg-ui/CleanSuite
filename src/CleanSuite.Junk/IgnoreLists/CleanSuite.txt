@@ -1,0 +1,23 @@
+// CleanSuite's own junk protection list, part of the program (it does not need the original program installed).
+// One mask per line, "//" starts a comment; a mask with "\" is matched against the full path, otherwise the file name.
+// Applied in drive and folder scans (not inside Temp folders), always, also when the ignore lists are switched off:
+// these files match a junk pattern by name only and belong to programs or to Windows.
+// Own additions go to %LocalAppData%\CleanSuite\Ignore_Junk\*.txt (same format).
+
+// Checkpoint files of ESE databases (Windows Search, WebCache, packaged apps' Indexed DB, Exchange): "*.chk" is meant for
+// CHKDSK's FILE0000.CHK fragments, but "edb.chk", "MSS.chk", "V01.chk"… are live database files.
+???.CHK
+*\INDEXED DB\*.CHK
+*\WEBCACHE\*.CHK
+
+// Program files that a name pattern such as "chklist.*" or "*.old" can catch (Tcl's ChkList.tcl in every Python install)
+*.TCL
+*.PY
+*.PYD
+*.EXE
+*.DLL
+*.SYS
+*.OCX
+*.CPL
+*.MSI
+*.MSP

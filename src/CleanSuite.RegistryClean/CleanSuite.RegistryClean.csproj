@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanSuite.Safety\CleanSuite.Safety.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="CleanSuite.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- CleanSuite's own protection list, inside the program so it applies on every computer (see IgnoreWords.Protective). -->
+    <EmbeddedResource Include="IgnoreLists\CleanSuite.txt" LogicalName="CleanSuite.RegistryClean.IgnoreLists.CleanSuite.txt" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

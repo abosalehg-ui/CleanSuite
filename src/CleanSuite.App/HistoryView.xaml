@@ -1,0 +1,81 @@
+<UserControl x:Class="CleanSuite.App.HistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+             xmlns:theming="clr-namespace:CleanSuite.App.Theming">
+    <UserControl.Resources>
+        <DataTemplate x:Key="OptionTemplate">
+            <CheckBox Content="{Binding Label}" IsChecked="{Binding IsChecked}" IsEnabled="{Binding Enabled}"
+                      ToolTip="{Binding Tip}" ToolTipService.ShowOnDisabled="True" Margin="0,2" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
+            <WrapPanel>
+                <Button x:Name="AnalyseButton" Content="{loc:T HsAnalyse}" Command="{Binding ScanCommand}" Style="{StaticResource AccentButton}" />
+                <Button x:Name="CancelButton" Content="{loc:T Cancel}" Command="{Binding CancelCommand}" />
+                <Button x:Name="CleanButton" Content="{loc:T HsClean}" Command="{Binding CleanCommand}" Style="{StaticResource DangerButton}" />
+                <Button Content="{loc:T HsSelectAll}" Command="{Binding SelectAllCommand}" />
+                <Button Content="{loc:T HsSelectNone}" Command="{Binding SelectNoneCommand}" />
+                <CheckBox x:Name="AllUsersBox" Content="{loc:T HsAllUsers}" Margin="12,0,0,0" ToolTip="{loc:T HsAllUsersHint}" />
+            </WrapPanel>
+        </Border>
+
+        <ProgressBar x:Name="Progress" DockPanel.Dock="Top" Height="4" IsIndeterminate="True" Visibility="Collapsed" Margin="0,0,0,8" />
+
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+            <TextBlock x:Name="NotesText" Foreground="{DynamicResource DangerFg}" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,4" />
+            <TextBlock theming:Live.Announce="True" x:Name="StatusText" Style="{StaticResource MutedText}" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" MinWidth="220" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="7*" MinWidth="260" />
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1" Style="{StaticResource PaneSplitter}" />
+            <Border x:Name="OptionsPanel" Background="{DynamicResource SurfaceBg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" CornerRadius="6" Padding="10,2">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="{loc:T HsGroupWindows}" Style="{StaticResource GroupTitle}" />
+                        <ItemsControl x:Name="WindowsList" ItemTemplate="{StaticResource OptionTemplate}" />
+                        <TextBlock Text="{loc:T HsGroupStart}" Style="{StaticResource GroupTitle}" />
+                        <ItemsControl x:Name="StartList" ItemTemplate="{StaticResource OptionTemplate}" />
+                        <TextBlock Text="{loc:T HsGroupFirefox}" Style="{StaticResource GroupTitle}" />
+                        <ItemsControl x:Name="FirefoxList" ItemTemplate="{StaticResource OptionTemplate}" />
+                        <TextBlock Text="{loc:T HsGroupUnavailable}" Style="{StaticResource GroupTitle}" />
+                        <ItemsControl x:Name="UnavailableList" ItemTemplate="{StaticResource OptionTemplate}" />
+                        <TextBlock Text="{loc:T HsUnavailableNote}" Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,2,0,8" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <DataGrid x:Name="Grid" theming:Empty.Text="{loc:T EmHistory}" Grid.Column="2" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                      HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Extended">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                        <Setter Property="ToolTip" Value="{Binding Tip}" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="34" CanUserResize="False" SortMemberPath="Selected">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <!-- Named for screen readers; not editable while the grid is read-only (a clean is running). -->
+                                <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="0"
+                                          AutomationProperties.Name="{Binding TargetText}"
+                                          IsEnabled="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource Not}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{loc:T HsColItem}" Binding="{Binding ItemText}" Width="200" IsReadOnly="True" />
+                    <DataGridTextColumn Header="{loc:T HsColAction}" Binding="{Binding KindText}" Width="150" IsReadOnly="True" />
+                    <DataGridTextColumn Header="{loc:T HsColTarget}" Binding="{Binding TargetText}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                    <DataGridTextColumn Header="{loc:T HsColSize}" Binding="{Binding SizeText}" Width="90" IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </DockPanel>
+</UserControl>

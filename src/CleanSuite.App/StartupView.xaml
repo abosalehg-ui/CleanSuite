@@ -1,0 +1,48 @@
+<UserControl x:Class="CleanSuite.App.StartupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:CleanSuite.App.Localization"
+             xmlns:theming="clr-namespace:CleanSuite.App.Theming"
+             Loaded="View_Loaded">
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
+            <WrapPanel>
+                <Button x:Name="RefreshButton" Content="{loc:T StRefresh}" Click="Refresh_Click" Style="{StaticResource AccentButton}" />
+                <Button x:Name="DisableButton" Content="{loc:T StDisable}" Click="Disable_Click" IsEnabled="False" />
+                <Button x:Name="EnableButton" Content="{loc:T StEnable}" Click="Enable_Click" IsEnabled="False" />
+                <Button x:Name="DeleteButton" Content="{loc:T StDelete}" Click="Delete_Click" IsEnabled="False" />
+                <Button x:Name="OpenButton" Content="{loc:T StOpenLocation}" Click="Open_Click" IsEnabled="False" />
+                <CheckBox x:Name="HideMicrosoft" Content="{loc:T StHideMicrosoft}" Margin="12,0,0,0" Click="Filter_Click" />
+            </WrapPanel>
+        </Border>
+
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+            <TextBlock x:Name="WarningText" Foreground="{DynamicResource DangerFg}" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,4" />
+            <TextBlock theming:Live.Announce="True" x:Name="StatusText" Style="{StaticResource MutedText}" TextTrimming="CharacterEllipsis" />
+        </StackPanel>
+
+        <DataGrid x:Name="Grid" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
+                  SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Grid_DoubleClick">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Setter Property="ToolTip" Value="{Binding Entry.Command}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Entry.Enabled}" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource TextMutedFg}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="{loc:T StColState}" CellTemplate="{StaticResource StatusChip}" Width="200" SortMemberPath="StateText" />
+                <DataGridTextColumn Header="{loc:T StColName}" Binding="{Binding Entry.Name}" Width="160" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T StColCompany}" Binding="{Binding Publisher}" Width="140" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T StColLocation}" Binding="{Binding LocationText}" Width="170" />
+                <DataGridTextColumn Header="{loc:T StColCommand}" Binding="{Binding Entry.Command}" Width="3*" MinWidth="120" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T StColNotes}" Binding="{Binding Notes}" Width="2*" MinWidth="120" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

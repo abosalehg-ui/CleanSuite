@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\CleanSuite.ico</ApplicationIcon>
+    <AssemblyTitle>CleanSuite</AssemblyTitle>
+    <Product>CleanSuite</Product>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanSuite.Compat\CleanSuite.Compat.csproj" />
+    <ProjectReference Include="..\CleanSuite.Startup\CleanSuite.Startup.csproj" />
+    <ProjectReference Include="..\CleanSuite.Shortcuts\CleanSuite.Shortcuts.csproj" />
+    <ProjectReference Include="..\CleanSuite.Uninstall\CleanSuite.Uninstall.csproj" />
+    <ProjectReference Include="..\CleanSuite.RegistryClean\CleanSuite.RegistryClean.csproj" />
+    <ProjectReference Include="..\CleanSuite.History\CleanSuite.History.csproj" />
+    <ProjectReference Include="..\CleanSuite.Duplicates\CleanSuite.Duplicates.csproj" />
+    <ProjectReference Include="..\CleanSuite.DiskUsage\CleanSuite.DiskUsage.csproj" />
+    <ProjectReference Include="..\CleanSuite.Restore\CleanSuite.Restore.csproj" />
+    <ProjectReference Include="..\CleanSuite.Scheduler\CleanSuite.Scheduler.csproj" />
+    <ProjectReference Include="..\CleanSuite.RegistryCompact\CleanSuite.RegistryCompact.csproj" />
+  </ItemGroup>
+
+</Project>
