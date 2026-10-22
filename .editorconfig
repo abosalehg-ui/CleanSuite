@@ -1,0 +1,29 @@
+# The code style CleanSuite is written in; "dotnet format whitespace --verify-no-changes" checks it in CI.
+root = true
+
+[*]
+indent_style = space
+insert_final_newline = true
+
+[*.{cs,xaml}]
+indent_size = 4
+
+[*.{csproj,props,targets,runsettings,xml,yml,json}]
+indent_size = 2
+
+[*.cs]
+# Short members, initializers and guards stay on one line, as the code is written.
+csharp_preserve_single_line_statements = true
+csharp_preserve_single_line_blocks = true
+csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_members_in_anonymous_types = false
+csharp_new_line_between_query_expression_clauses = false
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_style_namespace_declarations = file_scoped:suggestion
+dotnet_sort_system_directives_first = true

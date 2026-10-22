@@ -1,4 +1,4 @@
-<UserControl x:Class="CleanSuite.App.DuplicatesView"
+﻿<UserControl x:Class="CleanSuite.App.DuplicatesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:loc="clr-namespace:CleanSuite.App.Localization"
@@ -12,13 +12,13 @@
     <DockPanel>
         <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
             <WrapPanel>
-                <Button x:Name="ScanButton" Content="{loc:T DpScan}" Click="Scan_Click" Style="{StaticResource AccentButton}" />
-                <Button x:Name="CancelButton" Content="{loc:T Cancel}" Click="Cancel_Click" IsEnabled="False" />
-                <Button x:Name="DeleteButton" Content="{loc:T DpDelete}" Click="Delete_Click" IsEnabled="False" />
+                <Button x:Name="ScanButton" Content="{loc:T DpScan}" Command="{Binding ScanCommand}" Style="{StaticResource AccentButton}" />
+                <Button x:Name="CancelButton" Content="{loc:T Cancel}" Command="{Binding CancelCommand}" />
+                <Button x:Name="DeleteButton" Content="{loc:T DpDelete}" Command="{Binding CleanCommand}" />
                 <Button x:Name="CheckOneButton" Content="{loc:T DpCheckOne}" Click="CheckOne_Click" ToolTip="{loc:T DpCheckOneTip}" />
-                <Button x:Name="UncheckAllButton" Content="{loc:T DpUncheckAll}" Click="UncheckAll_Click" />
+                <Button x:Name="UncheckAllButton" Content="{loc:T DpUncheckAll}" Command="{Binding SelectNoneCommand}" />
                 <TextBlock Text="{loc:T RemovalLabel}" VerticalAlignment="Center" Margin="12,0,4,0" />
-                <ComboBox x:Name="RemovalCombo" AutomationProperties.Name="{loc:T RemovalLabel}" Width="230" SelectedIndex="0">
+                <ComboBox x:Name="RemovalCombo" AutomationProperties.Name="{loc:T RemovalLabel}" MinWidth="200" SelectedIndex="0">
                     <ComboBoxItem Content="{loc:T RemovalRecycle}" />
                     <ComboBoxItem Content="{loc:T RemovalZip}" />
                 </ComboBox>
@@ -60,7 +60,7 @@
                         <CheckBox x:Name="DateBox" Content="{loc:T DpSameDate}" />
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                             <TextBlock Text="{loc:T DpContent}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                            <ComboBox x:Name="ContentCombo" AutomationProperties.Name="{loc:T DpContent}" Width="150" SelectedIndex="2">
+                            <ComboBox x:Name="ContentCombo" AutomationProperties.Name="{loc:T DpContent}" MinWidth="150" SelectedIndex="2">
                                 <ComboBoxItem Content="{loc:T DpContentNone}" />
                                 <ComboBoxItem Content="CRC-32" />
                                 <ComboBoxItem Content="MD5" />
@@ -69,7 +69,7 @@
                         <!-- Wraps in a narrow pane: the field and its unit move under the label instead of being cut off. -->
                         <WrapPanel Margin="0,6,0,0">
                             <CheckBox x:Name="MinSizeBox" Content="{loc:T DpMinSize}" IsChecked="True" VerticalAlignment="Center" />
-                            <TextBox x:Name="MinSizeText" AutomationProperties.Name="{loc:T DpMinSize}" Text="1" Width="50" Margin="6,0" FlowDirection="LeftToRight" VerticalContentAlignment="Center" />
+                            <TextBox x:Name="MinSizeText" AutomationProperties.Name="{loc:T DpMinSize}" Text="1" MinWidth="50" Margin="6,0" FlowDirection="LeftToRight" VerticalContentAlignment="Center" />
                             <ComboBox x:Name="UnitCombo" AutomationProperties.Name="{loc:T DpMinSize}" MinWidth="70" SelectedIndex="0">
                                 <ComboBoxItem Content="{loc:T UnitMB}" />
                                 <ComboBoxItem Content="{loc:T UnitKB}" />
@@ -103,8 +103,8 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="{loc:T ColName}" Binding="{Binding File.Name}" Width="2*" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
                     <DataGridTextColumn Header="{loc:T ColFolder}" Binding="{Binding File.Folder}" Width="3*" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
-                    <DataGridTextColumn Header="{loc:T DpColSize}" Binding="{Binding SizeText}" Width="100" IsReadOnly="True" />
-                    <DataGridTextColumn Header="{loc:T DpColModified}" Binding="{Binding ModifiedText}" Width="140" IsReadOnly="True" />
+                    <DataGridTextColumn Header="{loc:T DpColSize}" Binding="{Binding SizeText}" Width="Auto" MinWidth="80" IsReadOnly="True" ElementStyle="{StaticResource NumberCell}" />
+                    <DataGridTextColumn Header="{loc:T DpColModified}" Binding="{Binding ModifiedText}" Width="Auto" MinWidth="120" IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

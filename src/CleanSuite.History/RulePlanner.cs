@@ -1,3 +1,4 @@
+﻿using CleanSuite.Safety;
 using CleanSuite.Matching;
 
 namespace CleanSuite.History;
@@ -138,29 +139,22 @@ public sealed class RulePlanner
         if (fi.Exists && (fi.Attributes & FileAttributes.ReparsePoint) == 0) AddFile(actions, itemKey, fi);
     }
 
+    /// <summary>The files of <paramref name="dir"/> (and below, when <paramref name="recurse"/>) that match; links never followed (<see cref="SafeWalk"/>).</summary>
     private void AddFiles(List<HistoryAction> actions, string itemKey, string dir, IReadOnlyList<string> masks,
         IReadOnlyList<string> exclusions, bool recurse, CancellationToken ct)
     {
-        ct.ThrowIfCancellationRequested();
-        List<FileSystemInfo> entries;
-        try
+        dir = dir.TrimEnd('\\');
+        SafeWalk.Walk(dir, d => recurse || d.Equals(dir, StringComparison.OrdinalIgnoreCase), (folder, entries) =>
         {
-            entries = new DirectoryInfo(dir + "\\").EnumerateFileSystemInfos("*", new EnumerationOptions
-            { IgnoreInaccessible = true, AttributesToSkip = 0, RecurseSubdirectories = false }).ToList();
-        }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { return; }
-        foreach (var e in entries)
-        {
-            if ((e.Attributes & FileAttributes.ReparsePoint) != 0) continue;
-            if ((e.Attributes & FileAttributes.Directory) != 0)
+            foreach (var e in entries)
             {
-                if (recurse) AddFiles(actions, itemKey, e.FullName, masks, exclusions, recurse, ct);
-                continue;
+                if ((e.Attributes & (FileAttributes.ReparsePoint | FileAttributes.Directory)) != 0) continue;
+                if (!masks.Any(m => AceWildcard.IsMatch(e.Name, m))) continue;
+                var full = folder + "\\" + e.Name;
+                if (exclusions.Any(x => AceWildcard.IsMatch(x.Contains('\\') ? full : e.Name, x))) continue;
+                AddFile(actions, itemKey, (FileInfo)e);
             }
-            if (!masks.Any(m => AceWildcard.IsMatch(e.Name, m))) continue;
-            if (exclusions.Any(x => AceWildcard.IsMatch(x.Contains('\\') ? e.FullName : e.Name, x))) continue;
-            AddFile(actions, itemKey, (FileInfo)e);
-        }
+        }, ct: ct);
     }
 
     private void AddSubfolderRemovals(List<HistoryAction> actions, string itemKey, string dir, CancellationToken ct)

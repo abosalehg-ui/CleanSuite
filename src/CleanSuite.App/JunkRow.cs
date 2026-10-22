@@ -1,22 +1,13 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using CleanSuite.App.Localization;
+using CleanSuite.App.ViewModels;
 using CleanSuite.Junk;
 
 namespace CleanSuite.App;
 
-/// <summary>One row of the results grid.</summary>
-public sealed class JunkRow : INotifyPropertyChanged
+/// <summary>One row of the junk results grid; checked unless an ignore list matched it (shown in expert mode only).</summary>
+public sealed class JunkRow(JunkItem item) : SelectableRow(!item.Flags.HasFlag(JunkReason.IgnoredShown))
 {
-    private bool _isChecked = true;
-
-    public JunkRow(JunkItem item)
-    {
-        Item = item;
-        _isChecked = !item.Flags.HasFlag(JunkReason.IgnoredShown);
-    }
-
-    public JunkItem Item { get; }
+    public JunkItem Item { get; } = item;
     public string Name => Item.Name;
     public string Folder => Item.Folder;
     public long SizeKb => Item.SizeKb;
@@ -30,19 +21,13 @@ public sealed class JunkRow : INotifyPropertyChanged
         _ => Loc.F("GroupDisk", Item.Group / 100),
     };
 
-    public bool IsChecked
-    {
-        get => _isChecked;
-        set { if (_isChecked != value) { _isChecked = value; OnChanged(); } }
-    }
-
     /// <summary>Re-reads the language-dependent columns after a language switch.</summary>
     public void RefreshTexts()
     {
-        OnChanged(nameof(SizeText));
-        OnChanged(nameof(Category));
-        OnChanged(nameof(Reason));
-        OnChanged(nameof(GroupTitle));
+        Raise(nameof(SizeText));
+        Raise(nameof(Category));
+        Raise(nameof(Reason));
+        Raise(nameof(GroupTitle));
     }
 
     public static string DescribeReason(JunkReason f)
@@ -55,15 +40,12 @@ public sealed class JunkRow : INotifyPropertyChanged
         if (f.HasFlag(JunkReason.EmptyTempFolder)) return Loc.T("ReasonEmptyTemp");
         return "";
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    private void OnChanged([CallerMemberName] string? name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
 
 /// <summary>Drive check box in the "Drives" panel.</summary>
 /// <param name="name">"C:" or "C: (label)"; shown as its own left-to-right text so labels in either script keep their order.</param>
 /// <param name="free">Free-space text in the UI language.</param>
-public sealed class DriveChoice(string root, string name, string free, bool isChecked) : INotifyPropertyChanged
+public sealed class DriveChoice(string root, string name, string free, bool isChecked) : ViewModelBase
 {
     private bool _isChecked = isChecked;
     public string Root { get; } = root;
@@ -72,7 +54,6 @@ public sealed class DriveChoice(string root, string name, string free, bool isCh
     public bool IsChecked
     {
         get => _isChecked;
-        set { if (_isChecked != value) { _isChecked = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsChecked))); } }
+        set => Set(ref _isChecked, value);
     }
-    public event PropertyChangedEventHandler? PropertyChanged;
 }

@@ -1,4 +1,4 @@
-using CleanSuite.Safety;
+﻿using CleanSuite.Safety;
 using System.Runtime.InteropServices;
 
 namespace CleanSuite.History;
@@ -126,134 +126,147 @@ public sealed class WindowsHistoryCleaner
         _clipboardHasContent = clipboardHasContent ?? ClearClipboardAction.HasContent;
     }
 
+    /// <summary>What one item's planner needs: where to add actions, the item's key, the Recent folder and cancellation.</summary>
+    private sealed record PlanContext(List<HistoryAction> Actions, string Key, string RecentFolder, CancellationToken Ct);
+
+    /// <summary>
+    /// One planner per catalog item, keyed by the item's key (see <see cref="WindowsHistoryCatalog.Items"/>). Each states in a few
+    /// lines which registry keys and file rules the item covers; adding an item is one catalog line and one entry here.
+    /// </summary>
+    private IReadOnlyDictionary<string, Action<PlanContext>> Planners() => new Dictionary<string, Action<PlanContext>>
+    {
+        ["start.netrecent"] = c => _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, @"Network\Recent"),
+        ["win.mapdrives"] = c => _reg.EmptyKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\Map Network Drive MRU"),
+        // Every RunMRU value except names starting with "url" (MRUList included).
+        ["start.runmru"] = c =>
+        {
+            foreach (var v in _reg.ValueNames(RegHive.CurrentUser, Explorer + @"\RunMRU").Where(v => !v.StartsWith("url", StringComparison.OrdinalIgnoreCase)))
+                _reg.DeleteValue(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\RunMRU", v);
+        },
+        ["start.jumplists"] = c => _files.AddEmptyFolder(c.Actions, c.Key, Path.Combine(c.RecentFolder, "AutomaticDestinations"), removeFolder: true, c.Ct),
+        ["win.miscmru"] = c =>
+        {
+            foreach (var sub in new[] { "PrnPortsMRU", "ComputerDescriptions", "WordWheelQuery", "TypedPaths", "Wallpaper", @"Wallpapers\Images" })
+                _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + "\\" + sub);
+            _reg.DeleteValue(c.Actions, c.Key, RegHive.CurrentUser, @"Software\Microsoft\Direct3D\MostRecentApplication", "Name");
+            _reg.DeleteValue(c.Actions, c.Key, RegHive.LocalMachine, @"Software\Microsoft\Direct3D\MostRecentApplication", "Name");
+            _reg.DeleteValue(c.Actions, c.Key, RegHive.CurrentUser, @"Software\Microsoft\DirectInput\MostRecentApplication", "Id");
+            _reg.DeleteValue(c.Actions, c.Key, RegHive.CurrentUser, @"Software\Microsoft\DirectInput\MostRecentApplication", "Name");
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.LocalMachine, @"Software\Microsoft\DirectDraw\MostRecentApplication");
+        },
+        ["win.ftp"] = c => _reg.EmptyKey(c.Actions, c.Key, RegHive.CurrentUser, @"Software\Microsoft\Ftp\Accounts"),
+        ["win.dumps"] = c => Rules(c, @"%windir%\memory.dmp", @"%windir%\MiniDump\*.dmp", @"%LocalAppData%\CrashDumps\*.dmp"),
+        ["win.logs"] = c => Rules(c, LogRules.ToArray()),
+        ["win.wer"] = c =>
+        {
+            Rules(c,
+                @"%ALLUSERSPROFILE%\Microsoft\Windows\WER\ReportArchive/E",
+                @"%ALLUSERSPROFILE%\Microsoft\Windows\WER\ReportQueue/E",
+                @"%LocalAppData%\Microsoft\Windows\WER\ReportArchive/E",
+                @"%LocalAppData%\Microsoft\Windows\WER\ReportQueue/E",
+                @"%LocalAppData%\ElevatedDiagnostics/E/R");
+            _reg.DeleteValue(c.Actions, c.Key, RegHive.CurrentUser, @"Software\Microsoft\Windows\Windows Error Reporting\Debug", "StoreLocation");
+            _reg.DeleteValue(c.Actions, c.Key, RegHive.LocalMachine, @"Software\Microsoft\Windows\Windows Error Reporting\Debug", "StoreLocation");
+        },
+        ["win.fontcache"] = c => Rules(c, @"%windir%\System32\FNTCACHE.DAT", @"%LocalAppData%\GDIPFONTCACHEV1.DAT",
+            @"%windir%\ServiceProfiles\LocalService\AppData\Local\FontCache*.dat"),
+        ["win.iislogs"] = c => Rules(c, @"%SystemDirectory%\LogFiles\*.* /X:""*\SCM"" /C/S", @"%SystemDirectory%\inetpub\logs\LogFiles/E"),
+        ["win.thumbcache"] = c => Rules(c, @"%LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db",
+            @"%LocalAppData%\Microsoft\Windows\Explorer\ThumbCacheToDelete\thm*.tmp"),
+        ["start.recentdocs"] = c =>
+        {
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\RecentDocs");
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\ComDlg32\LastVisitedMRU");
+            c.Actions.AddRange(_files.Plan(c.Key, Path.Combine(c.RecentFolder, "*.lnk"), c.Ct));
+        },
+        ["win.windowpos"] = c =>
+        {
+            _reg.EmptyKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\StreamMRU");
+            for (int n = 0, misses = 0; n < 10000 && misses <= 10; n++)
+            {
+                var sub = Explorer + $@"\Streams\{n}";
+                if (_reg.KeyExists(RegHive.CurrentUser, sub)) { _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, sub); misses = 0; }
+                else misses++;
+            }
+            foreach (var sub in new[] { @"Software\Microsoft\Windows\Shell\BagMRU", @"Software\Microsoft\Windows\Shell\Bags",
+                                        @"Software\Microsoft\Windows\ShellNoRoam\BagMRU", @"Software\Microsoft\Windows\ShellNoRoam\Bags" })
+                _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, sub);
+            foreach (var sub in new[] { "BagMRU", "Bags", "MuiCache" })
+                _reg.DeleteKey(c.Actions, c.Key, RegHive.ClassesRoot, @"Local Settings\Software\Microsoft\Windows\Shell\" + sub);
+        },
+        ["win.opensave"] = c =>
+        {
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\ComDlg32");
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.Users, @".DEFAULT\" + Explorer + @"\ComDlg32");
+        },
+        ["start.findfiles"] = c =>
+        {
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, IeBars + @"\FilesNamedMRU");
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, IeBars + @"\ContainingTextMRU");
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, @"Software\Microsoft\Search Assistant\ACMru");
+            _reg.EmptyKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\Doc Find Spec MRU");
+        },
+        ["start.findcomputer"] = c =>
+        {
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\FindComputerMRU");
+            _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, IeBars + @"\ComputerNameMRU");
+        },
+        ["win.clipboard"] = c => { if (_clipboardHasContent()) c.Actions.Add(new ClearClipboardAction { ItemKey = c.Key, Target = "clipboard" }); },
+        ["win.eventlogs"] = c =>
+        {
+            foreach (var (channel, _) in _eventLogs()) c.Actions.Add(new ClearEventLogAction { ItemKey = c.Key, Target = channel, Size = 0 });
+        },
+        ["win.outlooknk2"] = c => Rules(c, @"%APPDATA%\Microsoft\Outlook\Outlook.NK2"),
+        ["start.userassist.invalid"] = c => PlanUserAssist(c.Actions, c.Key, all: false),
+        ["start.userassist.all"] = c => PlanUserAssist(c.Actions, c.Key, all: true),
+        ["start.menuorder"] = c => _reg.DeleteKey(c.Actions, c.Key, RegHive.CurrentUser, Explorer + @"\MenuOrder\Start Menu"),
+        ["win.prefetch"] = c => Rules(c, @"%windir%\Prefetch\*.pf|Ag*.db|layout.ini"),
+        ["win.outlooktemp"] = c => PlanOutlookTemp(c.Actions, c.Key, c.Ct),
+        ["win.spool"] = c => Rules(c, @"%windir%\System32\spool\PRINTERS\*.spl"),
+        ["win.emptytemp"] = c =>
+        {
+            foreach (var t in _tempFolders())
+                if (Directory.Exists(t)) c.Actions.Add(new RemoveEmptySubfoldersAction { ItemKey = c.Key, Target = t });
+        },
+        ["win.appcompat"] = c =>
+        {
+            _reg.EmptyKey(c.Actions, c.Key, RegHive.CurrentUser, @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Persisted");
+            _reg.DeleteValue(c.Actions, c.Key, RegHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache", "AppCompatCache");
+            _reg.EmptyKey(c.Actions, c.Key, RegHive.LocalMachine, @"SOFTWARE\Microsoft\RADAR\HeapLeakDetection\DiagnosedApplications");
+        },
+        ["win.trayicons"] = c =>
+        {
+            var tray = new List<HistoryAction>();
+            foreach (var name in new[] { "IconStreams", "PastIconsStream" })
+            {
+                _reg.DeleteValue(tray, c.Key, RegHive.CurrentUser, Explorer + @"\TrayNotify", name);
+                _reg.DeleteValue(tray, c.Key, RegHive.ClassesRoot, @"Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify", name);
+            }
+            if (tray.Count == 0) return;
+            // Explorer rewrites these values when it exits, so it is closed first and started again afterwards.
+            c.Actions.Add(new StopExplorerAction { ItemKey = c.Key, Target = "explorer.exe" });
+            c.Actions.AddRange(tray);
+            c.Actions.Add(new StartExplorerAction { ItemKey = c.Key, Target = "explorer.exe" });
+        },
+    };
+
+    private void Rules(PlanContext c, params string[] rules)
+    {
+        foreach (var r in rules) c.Actions.AddRange(_files.Plan(c.Key, r, c.Ct));
+    }
+
+    /// <summary>The catalog keys that have a planner (every catalog item must; checked by a unit test).</summary>
+    public IReadOnlyCollection<string> PlannedKeys => Planners().Keys.ToList();
+
     public HistoryPlan Plan(IReadOnlySet<int> selected, string? recentFolder = null, CancellationToken ct = default)
     {
         var plan = new HistoryPlan();
-        var a = plan.Actions;
-        string Key(int id) => WindowsHistoryCatalog.ById(id)!.Key;
-        void Rules(int id, params string[] rules) { foreach (var r in rules) a.AddRange(_files.Plan(Key(id), r, ct)); }
         recentFolder ??= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"Microsoft\Windows\Recent");
-
-        foreach (var id in WindowsHistoryCatalog.Items.Select(i => i.Id).Where(selected.Contains))
+        var planners = Planners();
+        foreach (var item in WindowsHistoryCatalog.Items.Where(i => selected.Contains(i.Id)))
         {
             ct.ThrowIfCancellationRequested();
-            var k = Key(id);
-            switch (id)
-            {
-                case 16: _reg.DeleteKey(a, k, RegHive.CurrentUser, @"Network\Recent"); break;
-                case 12: _reg.EmptyKey(a, k, RegHive.CurrentUser, Explorer + @"\Map Network Drive MRU"); break;
-                case 4:
-                    // Every RunMRU value except names starting with "url" (MRUList included).
-                    foreach (var v in _reg.ValueNames(RegHive.CurrentUser, Explorer + @"\RunMRU")
-                                 .Where(v => !v.StartsWith("url", StringComparison.OrdinalIgnoreCase)))
-                        _reg.DeleteValue(a, k, RegHive.CurrentUser, Explorer + @"\RunMRU", v);
-                    break;
-                case 32:
-                    _files.AddEmptyFolder(a, k, Path.Combine(recentFolder, "AutomaticDestinations"), removeFolder: true, ct);
-                    break;
-                case 34:
-                    foreach (var sub in new[] { "PrnPortsMRU", "ComputerDescriptions", "WordWheelQuery", "TypedPaths", "Wallpaper", @"Wallpapers\Images" })
-                        _reg.DeleteKey(a, k, RegHive.CurrentUser, Explorer + "\\" + sub);
-                    _reg.DeleteValue(a, k, RegHive.CurrentUser, @"Software\Microsoft\Direct3D\MostRecentApplication", "Name");
-                    _reg.DeleteValue(a, k, RegHive.LocalMachine, @"Software\Microsoft\Direct3D\MostRecentApplication", "Name");
-                    _reg.DeleteValue(a, k, RegHive.CurrentUser, @"Software\Microsoft\DirectInput\MostRecentApplication", "Id");
-                    _reg.DeleteValue(a, k, RegHive.CurrentUser, @"Software\Microsoft\DirectInput\MostRecentApplication", "Name");
-                    _reg.DeleteKey(a, k, RegHive.LocalMachine, @"Software\Microsoft\DirectDraw\MostRecentApplication");
-                    break;
-                case 35: _reg.EmptyKey(a, k, RegHive.CurrentUser, @"Software\Microsoft\Ftp\Accounts"); break;
-                case 36: Rules(id, @"%windir%\memory.dmp", @"%windir%\MiniDump\*.dmp", @"%LocalAppData%\CrashDumps\*.dmp"); break;
-                case 37: Rules(id, LogRules.ToArray()); break;
-                case 38:
-                    Rules(id,
-                        @"%ALLUSERSPROFILE%\Microsoft\Windows\WER\ReportArchive/E",
-                        @"%ALLUSERSPROFILE%\Microsoft\Windows\WER\ReportQueue/E",
-                        @"%LocalAppData%\Microsoft\Windows\WER\ReportArchive/E",
-                        @"%LocalAppData%\Microsoft\Windows\WER\ReportQueue/E",
-                        @"%LocalAppData%\ElevatedDiagnostics/E/R");
-                    _reg.DeleteValue(a, k, RegHive.CurrentUser, @"Software\Microsoft\Windows\Windows Error Reporting\Debug", "StoreLocation");
-                    _reg.DeleteValue(a, k, RegHive.LocalMachine, @"Software\Microsoft\Windows\Windows Error Reporting\Debug", "StoreLocation");
-                    break;
-                case 39:
-                    Rules(id, @"%windir%\System32\FNTCACHE.DAT", @"%LocalAppData%\GDIPFONTCACHEV1.DAT",
-                        @"%windir%\ServiceProfiles\LocalService\AppData\Local\FontCache*.dat");
-                    break;
-                case 40: Rules(id, @"%SystemDirectory%\LogFiles\*.* /X:""*\SCM"" /C/S", @"%SystemDirectory%\inetpub\logs\LogFiles/E"); break;
-                case 41:
-                    Rules(id, @"%LocalAppData%\Microsoft\Windows\Explorer\thumbcache_*.db",
-                        @"%LocalAppData%\Microsoft\Windows\Explorer\ThumbCacheToDelete\thm*.tmp");
-                    break;
-                case 5:
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, Explorer + @"\RecentDocs");
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, Explorer + @"\ComDlg32\LastVisitedMRU");
-                    a.AddRange(_files.Plan(k, Path.Combine(recentFolder, "*.lnk"), ct));
-                    break;
-                case 28:
-                    _reg.EmptyKey(a, k, RegHive.CurrentUser, Explorer + @"\StreamMRU");
-                    for (int n = 0, misses = 0; n < 10000 && misses <= 10; n++)
-                    {
-                        var sub = Explorer + $@"\Streams\{n}";
-                        if (_reg.KeyExists(RegHive.CurrentUser, sub)) { _reg.DeleteKey(a, k, RegHive.CurrentUser, sub); misses = 0; }
-                        else misses++;
-                    }
-                    foreach (var sub in new[] { @"Software\Microsoft\Windows\Shell\BagMRU", @"Software\Microsoft\Windows\Shell\Bags",
-                                                @"Software\Microsoft\Windows\ShellNoRoam\BagMRU", @"Software\Microsoft\Windows\ShellNoRoam\Bags" })
-                        _reg.DeleteKey(a, k, RegHive.CurrentUser, sub);
-                    foreach (var sub in new[] { "BagMRU", "Bags", "MuiCache" })
-                        _reg.DeleteKey(a, k, RegHive.ClassesRoot, @"Local Settings\Software\Microsoft\Windows\Shell\" + sub);
-                    break;
-                case 2:
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, Explorer + @"\ComDlg32");
-                    _reg.DeleteKey(a, k, RegHive.Users, @".DEFAULT\" + Explorer + @"\ComDlg32");
-                    break;
-                case 6:
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, IeBars + @"\FilesNamedMRU");
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, IeBars + @"\ContainingTextMRU");
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, @"Software\Microsoft\Search Assistant\ACMru");
-                    _reg.EmptyKey(a, k, RegHive.CurrentUser, Explorer + @"\Doc Find Spec MRU");
-                    break;
-                case 13:
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, Explorer + @"\FindComputerMRU");
-                    _reg.DeleteKey(a, k, RegHive.CurrentUser, IeBars + @"\ComputerNameMRU");
-                    break;
-                case 9:
-                    if (_clipboardHasContent()) a.Add(new ClearClipboardAction { ItemKey = k, Target = "clipboard" });
-                    break;
-                case 45:
-                    foreach (var (channel, records) in _eventLogs())
-                        a.Add(new ClearEventLogAction { ItemKey = k, Target = channel, Size = 0 });
-                    break;
-                case 30: Rules(id, @"%APPDATA%\Microsoft\Outlook\Outlook.NK2"); break;
-                case 15: PlanUserAssist(a, k, all: false); break;
-                case 27: PlanUserAssist(a, k, all: true); break;
-                case 19: _reg.DeleteKey(a, k, RegHive.CurrentUser, Explorer + @"\MenuOrder\Start Menu"); break;
-                case 23: Rules(id, @"%windir%\Prefetch\*.pf|Ag*.db|layout.ini"); break;
-                case 31: PlanOutlookTemp(a, k, ct); break;
-                case 24: Rules(id, @"%windir%\System32\spool\PRINTERS\*.spl"); break;
-                case 21:
-                    foreach (var t in _tempFolders())
-                        if (Directory.Exists(t)) a.Add(new RemoveEmptySubfoldersAction { ItemKey = k, Target = t });
-                    break;
-                case 43:
-                    _reg.EmptyKey(a, k, RegHive.CurrentUser, @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Compatibility Assistant\Persisted");
-                    _reg.DeleteValue(a, k, RegHive.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache", "AppCompatCache");
-                    _reg.EmptyKey(a, k, RegHive.LocalMachine, @"SOFTWARE\Microsoft\RADAR\HeapLeakDetection\DiagnosedApplications");
-                    break;
-                case 26:
-                    var tray = new List<HistoryAction>();
-                    foreach (var name in new[] { "IconStreams", "PastIconsStream" })
-                    {
-                        _reg.DeleteValue(tray, k, RegHive.CurrentUser, Explorer + @"\TrayNotify", name);
-                        _reg.DeleteValue(tray, k, RegHive.ClassesRoot, @"Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify", name);
-                    }
-                    if (tray.Count > 0)
-                    {
-                        // Explorer rewrites these values when it exits, so it is closed first and started again afterwards.
-                        a.Add(new StopExplorerAction { ItemKey = k, Target = "explorer.exe" });
-                        a.AddRange(tray);
-                        a.Add(new StartExplorerAction { ItemKey = k, Target = "explorer.exe" });
-                    }
-                    break;
-            }
+            if (planners.TryGetValue(item.Key, out var planner)) planner(new PlanContext(plan.Actions, item.Key, recentFolder, ct));
         }
         return plan;
     }
@@ -284,9 +297,29 @@ public sealed class WindowsHistoryCleaner
                 folders.Add(Environment.ExpandEnvironmentVariables(f).TrimEnd('\\'));
         if (folders.Count == 0)
             folders.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.InternetCache), "Content.Outlook"));
-        foreach (var f in folders.Distinct(StringComparer.OrdinalIgnoreCase))
+        foreach (var f in folders.Distinct(StringComparer.OrdinalIgnoreCase).Where(IsOutlookTempFolder))
             foreach (var sub in Directory.Exists(f) ? Directory.EnumerateDirectories(f).ToList() : new List<string>())
                 _files.AddEmptyFolder(a, itemKey, sub, removeFolder: true, ct);
+    }
+
+    /// <summary>
+    /// The registry value can name any folder (a mis-set Outlook, or another program): only a folder that is plainly Outlook's
+    /// secure temp folder is emptied, i.e. "Content.Outlook" (or an older "OLK…" folder) inside the user's Internet cache, local
+    /// application data or temp folder. Anything else, such as Documents, is left alone, also in scheduled runs.
+    /// </summary>
+    internal static bool IsOutlookTempFolder(string folder)
+    {
+        string full;
+        try { full = Path.GetFullPath(folder).TrimEnd('\\'); }
+        catch (Exception e) when (e is ArgumentException or NotSupportedException or PathTooLongException) { return false; }
+        var name = Path.GetFileName(full);
+        if (!name.Equals("Content.Outlook", StringComparison.OrdinalIgnoreCase) && !name.StartsWith("OLK", StringComparison.OrdinalIgnoreCase)) return false;
+        var roots = new[]
+        {
+            Environment.GetFolderPath(Environment.SpecialFolder.InternetCache), Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            Path.GetTempPath(),
+        };
+        return roots.Where(r => r.Length > 0).Any(r => full.StartsWith(r.TrimEnd('\\') + "\\", StringComparison.OrdinalIgnoreCase));
     }
 }
 

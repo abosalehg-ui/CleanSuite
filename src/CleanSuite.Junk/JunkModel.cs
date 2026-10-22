@@ -1,4 +1,4 @@
-namespace CleanSuite.Junk;
+﻿namespace CleanSuite.Junk;
 
 /// <summary>Result flags; values match the original result record.</summary>
 [Flags]
@@ -16,9 +16,6 @@ public enum JunkReason
     CanDelete = 0x100,
     EmptyTempFolder = 0x200,
 }
-
-/// <summary>Value of Junk\DelJunkToBin.</summary>
-public enum RemovalMode { Permanent = 0, RecycleBin = 1, ZipBackup = 2 }
 
 /// <summary>Which ignore list applies: drive scan = General, Temp-folder scan = TempOnly ("/T" lines).</summary>
 public enum ScanMode { Drive = 1, Temp = 2 }

@@ -1,36 +1,46 @@
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using CleanSuite.App.Localization;
+using CleanSuite.App.Theming;
+using CleanSuite.App.ViewModels;
 using CleanSuite.Compat;
 using CleanSuite.Duplicates;
-using CleanSuite.Junk;
+using CleanSuite.Safety;
 
 namespace CleanSuite.App;
 
 /// <summary>
-/// Find Duplicate Files tab: choose folders and criteria, scan (read-only), review the groups, check the copies to
-/// remove, and send them to the Recycle Bin or a "Dup …" zip backup. Nothing is checked after a scan (as in the
-/// original); a copy of every group is always kept unless removing whole groups is confirmed.
+/// Find Duplicate Files page: folders and criteria, the groups found, and the questions before a removal. The scan → review →
+/// clean state lives in <see cref="DuplicatesViewModel"/>.
 /// </summary>
-public partial class DuplicatesView : UserControl
+public partial class DuplicatesView : UserControl, IToolPage
 {
+    private readonly DuplicatesViewModel _vm;
     private readonly ObservableCollection<RootOption> _roots = new();
     private readonly Dictionary<string, IReadOnlyList<string>> _profiles = new(DupProfiles.BuiltIn, StringComparer.OrdinalIgnoreCase);
-    private List<DupRow> _rows = new();
-    private DupScanResult? _result;
     private IReadOnlyList<string> _ignore = Array.Empty<string>();
-    private IReadOnlyList<string> _excludes = DupProfiles.DefaultExcludes;
-    private CancellationTokenSource? _cts;
+    private readonly IReadOnlyList<string> _excludes = DupProfiles.DefaultExcludes;
     private bool _autoStarted;
 
     public DuplicatesView()
     {
         InitializeComponent();
+        _vm = new DuplicatesViewModel(Options, () => RemovalCombo.SelectedIndex == 1 ? RemovalMode.ZipBackup : RemovalMode.RecycleBin);
+        _vm.Confirm = ConfirmRemoval;
+        _vm.Error += ex => { UiErrors.Show(Owner, ex, "duplicates"); Render(); };
+        _vm.Changed += RenderStatus;
+        _vm.Cleaned += ShowCleaned;
+        _vm.NoRoots += () => Loc.Show(Owner, Loc.T("DpNoRoots"), Loc.T("TabDuplicates"), MessageBoxButton.OK, MessageBoxImage.Information);
+        _vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(_vm.Rows)) Render();
+            else if (e.PropertyName == nameof(_vm.IsBusy)) { Grid.IsReadOnly = _vm.IsBusy; RenderStatus(); }
+        };
+        DataContext = _vm;
         foreach (var d in DriveInfo.GetDrives().Where(d => d.DriveType == DriveType.Fixed && d.IsReady))
             _roots.Add(new RootOption(d.Name.TrimEnd('\\')));
         RootsList.ItemsSource = _roots;
@@ -47,27 +57,17 @@ public partial class DuplicatesView : UserControl
             for (int i = 0; i < args.Length - 1; i++)
                 if (args[i] == "--scan" && Directory.Exists(args[i + 1])) _roots.Add(new RootOption(Path.GetFullPath(args[i + 1]).TrimEnd('\\')) { IsChecked = true });
             ContentCombo.SelectedIndex = 2;
-            Scan_Click(this, new RoutedEventArgs());
+            _vm.ScanCommand.Execute(null);
         };
     }
 
-    /// <summary>True while a scan or removal is running (the snapshot aid waits for it).</summary>
-    public bool Busy => _busy;
+    // ---------------------------------------------------------------- IToolPage
 
-    /// <summary>True while files are being removed; the window waits for it before closing.</summary>
-    public bool IsChanging { get; private set; }
-
-    private bool _busy;
-
-    /// <summary>Scan and removal never overlap, and the selection cannot change while either runs.</summary>
-    private void SetBusy(bool busy, bool cancellable = false)
-    {
-        _busy = busy;
-        ScanButton.IsEnabled = CheckOneButton.IsEnabled = UncheckAllButton.IsEnabled = !busy;
-        CancelButton.IsEnabled = busy && cancellable;
-        Grid.IsReadOnly = busy;
-        UpdateButtons();
-    }
+    public bool IsBusy => _vm.IsBusy;
+    public bool IsChanging => _vm.IsChanging;
+    Button? IToolPage.ScanButton => ScanButton;
+    Button? IToolPage.CancelButton => CancelButton;
+    public void CancelWork() => _vm.Cancel();
 
     private Window Owner => Window.GetWindow(this)!;
 
@@ -124,70 +124,52 @@ public partial class DuplicatesView : UserControl
         }
     }
 
-    private async void Scan_Click(object sender, RoutedEventArgs e)
-    {
-        if (_busy || Options() is not { } o) return;
-        if (o.Roots.Count == 0)
-        {
-            Loc.Show(Owner, Loc.T("DpNoRoots"), Loc.T("TabDuplicates"), MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-        _cts = new CancellationTokenSource();
-        var ct = _cts.Token;
-        SetBusy(true, cancellable: true);
-        StatusText.Text = Loc.T("DpScanning");
-        var sw = Stopwatch.StartNew();
-        try
-        {
-            var scanner = new DuplicateScanner(o);
-            scanner.Progress += (phase, n) => Dispatcher.BeginInvoke(() =>
-                StatusText.Text = phase == "hash" ? Loc.F("DpHashing", Loc.N0(n)) : Loc.F("DpScanningCount", Loc.N0(n)));
-            _result = await Task.Run(() => scanner.Scan(ct), ct);
-            _rows = _result.Groups.SelectMany(g => g.Files.Select(f => new DupRow(g, f))).ToList();
-            foreach (var r in _rows) r.PropertyChanged += (_, _) => UpdateButtons();
-            Render();
-            StatusText.Text += " · " + Loc.F("DpElapsed", sw.Elapsed.TotalSeconds.ToString("0.0", Loc.Instance.NumberCulture));
-        }
-        catch (OperationCanceledException) { StatusText.Text = Loc.T("ScanCancelled"); }
-        catch (Exception ex) { StatusText.Text = ""; UiErrors.Show(Owner, ex, "duplicates scan"); }
-        finally { SetBusy(false); }
-    }
-
-    private void Cancel_Click(object sender, RoutedEventArgs e) => _cts?.Cancel();
+    // ---------------------------------------------------------------- rendering
 
     private void Render()
     {
-        var view = new ListCollectionView(_rows);
+        var rows = _vm.Rows;
+        var view = new ListCollectionView(rows.ToList());
         view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(DupRow.GroupNumber)));
         // A GroupStyle on an empty grid collapses its columns, so grouping is attached only when there are rows.
         Grid.GroupStyle.Clear();
-        if (_rows.Count > 0) Grid.GroupStyle.Add(new GroupStyle { HeaderTemplate = (DataTemplate)FindResource("GroupHeader") });
-        Grid.ItemsSource = _rows.Count > 0 ? view : _rows;
-        if (_result == null) StatusText.Text = Loc.T("DpIntro");
+        if (rows.Count > 0) Grid.GroupStyle.Add(new GroupStyle { HeaderTemplate = (DataTemplate)FindResource("GroupHeader") });
+        Grid.ItemsSource = rows.Count > 0 ? view : rows;
+        Grid.IsReadOnly = _vm.IsBusy;
+        RenderStatus();
+    }
+
+    private void RenderStatus()
+    {
+        var r = _vm.Result;
+        if (_vm.IsBusy)
+            StatusText.Text = _vm.IsChanging ? Loc.T("DpRemoving")
+                : _vm.Progress is { Phase: "hash" } p ? Loc.F("DpHashing", Loc.N0(p.Value))
+                : _vm.Progress is { } q ? Loc.F("DpScanningCount", Loc.N0(q.Value)) : Loc.T("DpScanning");
+        else if (_vm.WasCancelled) StatusText.Text = Loc.T("ScanCancelled");
+        else if (r == null) StatusText.Text = Loc.T("DpIntro");
         else
-            StatusText.Text = Loc.F("DpResult", Loc.N0(_result.FilesSearched), Loc.N0(_result.Groups.Count), Loc.N0(_rows.Count),
-                Loc.FormatSize(_result.Groups.Sum(g => g.Reclaimable)));
+            StatusText.Text = Loc.F("DpResult", Loc.N0(r.FilesSearched), Loc.N0(r.Groups.Count), Loc.N0(_vm.Rows.Count),
+                                    Loc.FormatSize(r.Groups.Sum(g => g.Reclaimable)))
+                              + " · " + Loc.F("DpElapsed", _vm.ElapsedSeconds.ToString("0.0", Loc.Instance.NumberCulture))
+                              + (_vm.SelectedCount > 0 ? " · " + Loc.F("DpSelected", Loc.N0(_vm.SelectedCount), Loc.FormatSize(_vm.SelectedBytes)) : "");
         var warnings = new List<string>();
-        if (_result is { ContentVerified: false } && _rows.Count > 0) warnings.Add(Loc.T("DpNotVerified"));
-        if (_result is { Unreadable.Count: > 0 }) warnings.Add(Loc.F("DpUnreadable", Loc.N0(_result.Unreadable.Count)));
+        if (r is { ContentVerified: false } && _vm.Rows.Count > 0) warnings.Add(Loc.T("DpNotVerified"));
+        if (r is { Unreadable.Count: > 0 }) warnings.Add(Loc.F("DpUnreadable", Loc.N0(r.Unreadable.Count)));
         WarningText.Text = string.Join("\n", warnings);
         WarningText.Visibility = warnings.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
-        UpdateButtons();
     }
 
-    private void UpdateButtons() => DeleteButton.IsEnabled = !_busy && _rows.Any(r => r.Selected);
+    // ---------------------------------------------------------------- actions
 
-    /// <summary>The original's "Check mark one file in each group": checks the first file of every group (all but one stay).</summary>
+    /// <summary>The original's "Check mark one file in each group", with a warning first when content was not compared.</summary>
     private void CheckOne_Click(object sender, RoutedEventArgs e)
     {
-        if (_busy || _rows.Count == 0) return;
-        if (_result is { ContentVerified: false } && Loc.Show(Owner, Loc.T("DpCheckOneWarning"), Loc.T("TabDuplicates"), MessageBoxButton.OKCancel,
+        if (!_vm.CheckOneCommand.CanExecute(null)) return;
+        if (_vm.Result is { ContentVerified: false } && Loc.Show(Owner, Loc.T("DpCheckOneWarning"), Loc.T("TabDuplicates"), MessageBoxButton.OKCancel,
                 MessageBoxImage.Warning, MessageBoxResult.Cancel) != MessageBoxResult.OK) return;
-        foreach (var g in _rows.GroupBy(r => r.GroupNumber))
-            if (g.Count() >= 2) g.First().Selected = true;
+        _vm.CheckOneCommand.Execute(null);
     }
-
-    private void UncheckAll_Click(object sender, RoutedEventArgs e) { if (!_busy) foreach (var r in _rows) r.Selected = false; }
 
     private void Grid_DoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
@@ -195,71 +177,52 @@ public partial class DuplicatesView : UserControl
             Process.Start(new ProcessStartInfo("explorer.exe", $"/select,\"{r.File.FullPath}\"") { UseShellExecute = true });
     }
 
-    private async void Delete_Click(object sender, RoutedEventArgs e)
+    /// <summary>Asks before a removal: first whether whole groups may go (when every copy of some group is checked), then the removal itself.</summary>
+    private bool ConfirmRemoval(IReadOnlyList<DupRow> chosen)
     {
-        if (_busy || _result == null) return;
-        var selected = new HashSet<string>(_rows.Where(r => r.Selected).Select(r => r.File.FullPath), StringComparer.OrdinalIgnoreCase);
-        if (selected.Count == 0) return;
-        int whole = DuplicateRemover.WholeGroupsSelected(_result.Groups, selected);
-        bool allowWhole = false;
+        var selected = new HashSet<string>(chosen.Select(r => r.File.FullPath), StringComparer.OrdinalIgnoreCase);
+        int whole = DuplicateRemover.WholeGroupsSelected(_vm.Groups, selected);
+        _vm.AllowWholeGroups = false;
         if (whole > 0)
         {
             if (Loc.Show(Owner, Loc.F("DpWholeGroups", Loc.N0(whole)), Loc.T("DpWholeGroupsTitle"), MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes) return;
-            allowWhole = true;
+                    MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes) return false;
+            _vm.AllowWholeGroups = true;
         }
-        var mode = RemovalCombo.SelectedIndex == 1 ? RemovalMode.ZipBackup : RemovalMode.RecycleBin;
-        var bytes = _rows.Where(r => r.Selected).Sum(r => r.File.Size);
-        if (Loc.Show(Owner, Loc.F("DpConfirm", Loc.N0(selected.Count), Loc.FormatSize(bytes), Loc.T(mode == RemovalMode.ZipBackup ? "HowZip" : "HowRecycle")),
-                Loc.T("DpConfirmTitle"), MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) return;
+        bool zip = RemovalCombo.SelectedIndex == 1;
+        bool ok = Loc.Show(Owner, Loc.F("DpConfirm", Loc.N0(selected.Count), Loc.FormatSize(chosen.Sum(r => r.File.Size)), Loc.T(zip ? "HowZip" : "HowRecycle")),
+                      Loc.T("DpConfirmTitle"), MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes;
+        if (!ok) _vm.AllowWholeGroups = false;
+        return ok;
+    }
 
-        DupRemovalResult res;
-        var groups = _result.Groups;
-        SetBusy(true);
-        IsChanging = true;
-        StatusText.Text = Loc.T("DpRemoving");
-        try { res = await Task.Run(() => new DuplicateRemover().Remove(groups, selected, mode, null, allowWhole)); }
-        catch (Exception ex) { UiErrors.Show(Owner, ex, "duplicates delete"); Render(); return; }
-        finally { IsChanging = false; SetBusy(false); }
-        var failed = new HashSet<string>(res.Failed.Select(f => f.Path), StringComparer.OrdinalIgnoreCase);
-        _rows = _rows.Where(r => !r.Selected || failed.Contains(r.File.FullPath) || File.Exists(r.File.FullPath)).ToList();
-        // a group with a single remaining file is no longer a duplicate group
-        _rows = _rows.GroupBy(r => r.GroupNumber).Where(g => g.Count() >= 2).SelectMany(g => g).ToList();
+    private void ShowCleaned(DupRemovalResult res)
+    {
         var msg = Loc.F("DpRemoved", Loc.N0(res.Deleted), Loc.FormatSize(res.BytesFreed));
         if (res.Failed.Count > 0) msg += "\n" + Loc.F("DpNotRemoved", Loc.N0(res.Failed.Count), Loc.Reason(res.Failed[0].Reason));
         if (res.ZipPath != null && File.Exists(res.ZipPath)) msg += "\n\n" + Loc.F("RgBackupAt", Loc.Ltr(res.ZipPath));
         Loc.Show(Owner, msg, Loc.T("TabDuplicates"), MessageBoxButton.OK, res.Failed.Count > 0 ? MessageBoxImage.Warning : MessageBoxImage.Information);
-        Render();
     }
 }
 
-public sealed class RootOption(string path) : INotifyPropertyChanged
+public sealed class RootOption(string path) : ViewModelBase
 {
     private bool _checked;
     public string Path { get; } = path;
     public bool IsChecked
     {
         get => _checked;
-        set { if (_checked != value) { _checked = value; PropertyChanged?.Invoke(this, new(nameof(IsChecked))); } }
+        set => Set(ref _checked, value);
     }
-    public event PropertyChangedEventHandler? PropertyChanged;
 }
 
-/// <summary>One file of a duplicate group in the grid.</summary>
-public sealed class DupRow(DupGroup group, DupFile file) : INotifyPropertyChanged
+/// <summary>One file of a duplicate group in the grid; nothing is checked after a scan, as in the original.</summary>
+public sealed class DupRow(DupGroup group, DupFile file) : SelectableRow(false)
 {
-    private bool _selected;
     public DupGroup Group { get; } = group;
     public DupFile File { get; } = file;
     public int GroupNumber => Group.Number;
     public string GroupTitle => Loc.F("DpGroupTitle", Loc.N0(Group.Number), Loc.N0(Group.Files.Count), Loc.FormatSize(Group.Reclaimable));
     public string SizeText => Loc.FormatSize(File.Size);
     public string ModifiedText => Loc.FormatDate(File.LastWriteUtc.ToLocalTime());
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    public bool Selected
-    {
-        get => _selected;
-        set { if (_selected != value) { _selected = value; PropertyChanged?.Invoke(this, new(nameof(Selected))); } }
-    }
 }

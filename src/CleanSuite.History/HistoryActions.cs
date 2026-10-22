@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 using CleanSuite.Safety;
 
@@ -50,11 +50,11 @@ public sealed class DeleteFileAction : HistoryAction
 
     public override ActionResult Execute(ExecutionContext ctx)
     {
-        if (ctx.Protected.Check(Target) is { } why) return Record(ctx, ActionResult.Fail(why));
+        if (ctx.Protected.CheckResolved(Target) is { } why) return Record(ctx, ActionResult.Fail(why));
         var fi = new FileInfo(Target);
         if (!fi.Exists) return ActionResult.Ok;                                       // already gone: nothing to do
         if ((fi.Attributes & FileAttributes.ReparsePoint) != 0) return Record(ctx, ActionResult.Fail("reparse point"));
-        if (fi.Length != Size || fi.LastWriteTimeUtc != LastWriteUtc) return Record(ctx, ActionResult.Fail("changed since scan"));
+        if (FileIdentity.ChangedSince(fi, Size, LastWriteUtc) is { } changed) return Record(ctx, ActionResult.Fail(changed));
         try
         {
             if ((fi.Attributes & FileAttributes.ReadOnly) != 0) fi.Attributes &= ~FileAttributes.ReadOnly;
@@ -82,7 +82,7 @@ public sealed class RemoveFolderIfEmptyAction : HistoryAction
     public override ActionResult Execute(ExecutionContext ctx)
     {
         if (!Directory.Exists(Target)) return ActionResult.Ok;
-        if (ctx.Protected.Check(Target, isDirectory: true) is { } why) return ActionResult.Fail(why);
+        if (ctx.Protected.CheckResolved(Target, isDirectory: true) is { } why) return ActionResult.Fail(why);
         try
         {
             if ((File.GetAttributes(Target) & FileAttributes.ReparsePoint) != 0) return ActionResult.Fail("reparse point");
@@ -119,7 +119,7 @@ public sealed class RemoveEmptySubfoldersAction : HistoryAction
                 catch (Exception e) when (e is IOException or UnauthorizedAccessException) { continue; }
                 Walk(s, false);
             }
-            if (isRoot || ctx.Protected.Check(dir, true) != null) return;
+            if (isRoot || ctx.Protected.CheckResolved(dir, true) != null) return;
             try
             {
                 if (Directory.EnumerateFileSystemEntries(dir).Any()) return;
@@ -144,7 +144,7 @@ public sealed class IniDeleteAction : HistoryAction
     public override ActionResult Execute(ExecutionContext ctx)
     {
         if (!File.Exists(Target)) return ActionResult.Ok;
-        if (ctx.Protected.Check(Target) is { } why) return ActionResult.Fail(why);
+        if (ctx.Protected.CheckResolved(Target) is { } why) return ActionResult.Fail(why);
         bool ok = WritePrivateProfileStringW(Section, Key, null, Target);
         var err = ok ? null : new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error()).Message;
         ctx.Journal.Record("ini-delete", Target, ok, backupRef: Detail, error: err);

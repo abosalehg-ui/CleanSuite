@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
@@ -54,7 +54,10 @@ public sealed class AppHiveRegistryRoots : IRegistryRoots, IDisposable
 
     public static string HiveName(RegHive h) => h switch
     {
-        RegHive.ClassesRoot => "HKCR", RegHive.CurrentUser => "HKCU", RegHive.LocalMachine => "HKLM", _ => "HKU",
+        RegHive.ClassesRoot => "HKCR",
+        RegHive.CurrentUser => "HKCU",
+        RegHive.LocalMachine => "HKLM",
+        _ => "HKU",
     };
 
     public void Dispose()
@@ -76,15 +79,23 @@ public sealed class RegBackupWriter : IDisposable
     private readonly string _folder;
     private StreamWriter? _writer;
 
-    public RegBackupWriter(string? folder = null) =>
-        _folder = folder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Backups");
+    /// <param name="journal">Receives a line when the finished backup cannot be recorded in the ledger (see <see cref="BackupLedger"/>).</param>
+    public RegBackupWriter(string? folder = null, OperationJournal? journal = null)
+    {
+        _folder = folder ?? CleanSuitePaths.Backups;
+        _journal = journal;
+    }
+
+    private readonly OperationJournal? _journal;
 
     public string? FilePath { get; private set; }
 
     public static string HivePath(RegHive h) => h switch
     {
-        RegHive.ClassesRoot => "HKEY_CLASSES_ROOT", RegHive.CurrentUser => "HKEY_CURRENT_USER",
-        RegHive.LocalMachine => "HKEY_LOCAL_MACHINE", _ => "HKEY_USERS",
+        RegHive.ClassesRoot => "HKEY_CLASSES_ROOT",
+        RegHive.CurrentUser => "HKEY_CURRENT_USER",
+        RegHive.LocalMachine => "HKEY_LOCAL_MACHINE",
+        _ => "HKEY_USERS",
     };
 
     private StreamWriter Writer()
@@ -191,14 +202,16 @@ public sealed class RegBackupWriter : IDisposable
         if (_writer == null) return;
         _writer.Dispose();
         _writer = null;
-        if (FilePath != null) BackupLedger.Record(FilePath);
+        if (FilePath != null && !BackupLedger.Record(FilePath)) _journal?.Record("ledger", FilePath, false, error: BackupLedger.NotRecorded);
     }
 }
 
 /// <summary>Imports a REGEDIT5 file written by <see cref="RegBackupWriter"/> (restore of a History or registry clean).</summary>
 public static class RegFileImporter
 {
-    public static int Import(string regFile, IRegistryRoots roots)
+    /// <param name="refuse">Keys (as written in the file, "HKEY_…\path") that must not be written; their values are skipped.</param>
+    /// <param name="refused">Called with every key skipped because of <paramref name="refuse"/>.</param>
+    public static int Import(string regFile, IRegistryRoots roots, Func<string, bool>? refuse = null, Action<string>? refused = null)
     {
         var lines = File.ReadAllText(regFile).Replace("\r\n", "\n").Split('\n');
         RegistryKey? current = null;
@@ -221,7 +234,9 @@ public static class RegFileImporter
                 if (line.StartsWith('[') && line.EndsWith(']'))
                 {
                     current?.Dispose();
+                    current = null;
                     var path = line[1..^1];
+                    if (refuse?.Invoke(path) == true) { refused?.Invoke(path); continue; }
                     int slash = path.IndexOf('\\');
                     var hive = ParseHive(slash < 0 ? path : path[..slash]);
                     current = roots.Root(hive).CreateSubKey(slash < 0 ? "" : path[(slash + 1)..], writable: true);
@@ -240,8 +255,10 @@ public static class RegFileImporter
 
     private static RegHive ParseHive(string s) => s.ToUpperInvariant() switch
     {
-        "HKEY_CLASSES_ROOT" => RegHive.ClassesRoot, "HKEY_CURRENT_USER" => RegHive.CurrentUser,
-        "HKEY_LOCAL_MACHINE" => RegHive.LocalMachine, "HKEY_USERS" => RegHive.Users,
+        "HKEY_CLASSES_ROOT" => RegHive.ClassesRoot,
+        "HKEY_CURRENT_USER" => RegHive.CurrentUser,
+        "HKEY_LOCAL_MACHINE" => RegHive.LocalMachine,
+        "HKEY_USERS" => RegHive.Users,
         _ => throw new InvalidDataException("unknown hive " + s),
     };
 

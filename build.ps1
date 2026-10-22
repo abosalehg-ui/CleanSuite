@@ -56,7 +56,8 @@ function Find-Iscc {
     throw 'ISCC.exe (Inno Setup 6) was not found. Install Inno Setup 6, or pass -Iscc <path to ISCC.exe>.'
 }
 
-if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) { throw 'The .NET 8 SDK (dotnet) is not on PATH.' }
+if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) { throw 'The .NET 10 SDK (dotnet) is not on PATH.' }
+if (-not (dotnet --list-sdks | Where-Object { $_ -match '^(1[0-9]|[2-9][0-9])\.' })) { throw 'The .NET 10 SDK (or later) is required: https://dotnet.microsoft.com/download' }
 if (-not $Version) {
     [xml]$project = Get-Content -LiteralPath (Join-Path $root 'src\CleanSuite.App\CleanSuite.App.csproj') -Raw
     $Version = @($project.Project.PropertyGroup | ForEach-Object { $_.Version } | Where-Object { $_ })[0]

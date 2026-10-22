@@ -4,9 +4,10 @@ using System.Text.RegularExpressions;
 using CleanSuite.Compat;
 using CleanSuite.Junk;
 using CleanSuite.RegistryClean;
+using CleanSuite.Safety;
 using CleanSuite.Shortcuts;
 
-// CleanSuite proof-of-concept CLI. Read-only by design: nothing here deletes or modifies files or registry.
+// CleanSuite command line. Read-only by design: nothing here deletes or modifies files or the registry.
 return Cli.Run(args);
 
 static class Cli
@@ -45,7 +46,7 @@ static class Cli
                 _ => Usage(UnknownCommand),
             };
         }
-        catch (Exception e) when (e is ArgumentException or FormatException or OverflowException)
+        catch (Exception e) when (e is ArgumentException or FormatException or OverflowException or RegexMatchTimeoutException)
         {
             Console.Error.WriteLine("error: " + e.Message);
             return BadArguments;
@@ -79,7 +80,7 @@ static class Cli
     {
         var w = exitCode == Ok ? Console.Out : Console.Error;
         w.WriteLine("""
-            CleanSuite PoC (read-only)
+            CleanSuite command line (read-only)
 
               junk, shortcuts, registry and duplicates scans apply the same ignore lists as their tabs (the original
               program's Data\Ignore_* folders when it is installed, and CleanSuite's own Ignore_Junk and Ignore_Reg in
@@ -181,7 +182,7 @@ static class Cli
     private static int JunkScan(string[] a)
     {
         var roots = Values(a, "--root");
-        if (roots.Count == 0) throw new ArgumentException("at least one --root is required (no implicit drive scan in the PoC)");
+        if (roots.Count == 0) throw new ArgumentException("at least one --root is required (the command line never scans a drive it was not given)");
         foreach (var r in roots)
             if (!Directory.Exists(r.Length == 2 && r[1] == ':' ? r + "\\" : r)) throw new ArgumentException($"root not found: {r}");
 
@@ -295,8 +296,10 @@ static class Cli
             SameDate = o.SameDate || Flag(a, "--date"),
             Content = content switch
             {
-                "md5" => CleanSuite.Duplicates.ContentCompare.Md5, "crc" => CleanSuite.Duplicates.ContentCompare.Crc32,
-                "none" => CleanSuite.Duplicates.ContentCompare.None, _ => o.Content,
+                "md5" => CleanSuite.Duplicates.ContentCompare.Md5,
+                "crc" => CleanSuite.Duplicates.ContentCompare.Crc32,
+                "none" => CleanSuite.Duplicates.ContentCompare.None,
+                _ => o.Content,
             },
             MinSize = min != null ? ParseSize(min) : o.MinSize,
             Patterns = profile != null && CleanSuite.Duplicates.DupProfiles.BuiltIn.TryGetValue(profile, out var p) ? p : o.Patterns,
@@ -337,7 +340,8 @@ static class Cli
         var text = File.ReadAllText(ini, System.Text.Encoding.Latin1);
         var db = new SortedDictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
         int failures = 0;
-        foreach (Match m in Regex.Matches(text, @"(?m)^\[([^\]]+)\]\r?\n((?:(?!^\[).*\r?\n?)*)"))
+        // A time limit: a crafted file must not keep the pattern busy forever.
+        foreach (Match m in Regex.Matches(text, @"(?m)^\[([^\]]+)\]\r?\n((?:(?!^\[).*\r?\n?)*)", RegexOptions.None, TimeSpan.FromSeconds(10)))
         {
             var section = m.Groups[1].Value;
             if (section.StartsWith("_General_", StringComparison.Ordinal)) continue;

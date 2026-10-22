@@ -29,7 +29,7 @@ public sealed class IgnoreWords
 
     /// <summary>The user's own ignore lists: %LocalAppData%\CleanSuite\Ignore_Reg\*.txt, one word per line.</summary>
     public static string UserFolder =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Ignore_Reg");
+        CleanSuite.Safety.CleanSuitePaths.IgnoreReg;
 
     /// <summary>
     /// The ignore folders a scan uses by default: the original's Data\Ignore_Reg when that program is installed (read

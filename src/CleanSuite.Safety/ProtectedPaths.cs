@@ -1,4 +1,8 @@
-﻿namespace CleanSuite.Safety;
+﻿using System.Runtime.InteropServices;
+using System.Text;
+using Microsoft.Win32.SafeHandles;
+
+namespace CleanSuite.Safety;
 
 /// <summary>
 /// Last-line guard applied to every delete, independent of scan rules (not present in the original;
@@ -64,6 +68,48 @@ public sealed class ProtectedPaths
                     return "contains a protected folder: " + p;
         return null;
     }
+
+    /// <summary>
+    /// <see cref="Check"/> on the path as written and on the path Windows would really act on. The real path follows every
+    /// junction, symbolic link and subst drive on the way (a folder replaced by a link to C:\Windows after the scan) and expands
+    /// short 8.3 names (C:\PROGRA~1); the item itself is not followed (deleting a link removes the link). An item that cannot be
+    /// opened (gone, access denied) is judged by its written path; the caller's existence check deals with the rest.
+    /// </summary>
+    public string? CheckResolved(string path, bool isDirectory = false)
+    {
+        if (Check(path, isDirectory) is { } why) return why;
+        var real = RealPath(path);
+        if (real == null) return null;
+        if (Check(real, isDirectory) is not null) return "protected location reached through a link or short name: " + real;
+        return null;
+    }
+
+    /// <summary>The final path of an existing file or folder (the item itself not followed), or null when it cannot be opened.</summary>
+    public static string? RealPath(string path)
+    {
+        try
+        {
+            using var h = CreateFileW(path, 0x80 /* FILE_READ_ATTRIBUTES */, 7 /* share all */, IntPtr.Zero, 3 /* OPEN_EXISTING */,
+                0x02000000 | 0x00200000 /* BACKUP_SEMANTICS | OPEN_REPARSE_POINT */, IntPtr.Zero);
+            if (h.IsInvalid) return null;
+            var sb = new StringBuilder(1024);
+            uint n = GetFinalPathNameByHandleW(h, sb, (uint)sb.Capacity, 0 /* FILE_NAME_NORMALIZED | VOLUME_NAME_DOS */);
+            if (n == 0) return null;
+            if (n >= sb.Capacity)
+            {
+                sb = new StringBuilder((int)n + 1);
+                if (GetFinalPathNameByHandleW(h, sb, (uint)sb.Capacity, 0) == 0) return null;
+            }
+            return sb.ToString();
+        }
+        catch (Exception e) when (e is ArgumentException or IOException) { return null; }
+    }
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern SafeFileHandle CreateFileW(string name, uint access, uint share, IntPtr security, uint disposition, uint flags, IntPtr template);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern uint GetFinalPathNameByHandleW(SafeFileHandle file, StringBuilder path, uint length, uint flags);
 
     /// <summary>Full path without trailing separators and without the \\?\ / \\?\UNC\ long-path prefixes.</summary>
     private static string Normalize(string path)

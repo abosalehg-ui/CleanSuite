@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Principal;
 using CleanSuite.Safety;
 using Microsoft.Win32;
@@ -106,7 +106,7 @@ public sealed class UninstallScanner
     /// <summary>Settings\ShowUpdates: also list entries with ParentKeyName (updates of another program).</summary>
     public bool ShowUpdates { get; init; }
 
-    public IReadOnlyList<UninstallEntry> Scan()
+    public IReadOnlyList<UninstallEntry> Scan(CancellationToken ct = default)
     {
         var list = new List<UninstallEntry>();
         var msiCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -120,6 +120,7 @@ public sealed class UninstallScanner
             using (root)
                 foreach (var sub in SafeSubKeys(root))
                 {
+                    ct.ThrowIfCancellationRequested();
                     var e = Read(root, hive, parent, sub, is32);
                     if (e == null) continue;
                     if (e.IsWindowsInstaller && !msiCodes.Add(e.SubKey)) continue;          // same product in another view

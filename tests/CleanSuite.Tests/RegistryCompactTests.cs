@@ -54,7 +54,11 @@ public class RegistryCompactTests
 
     private static long? Sizes(string path) => Path.GetFileName(path) switch
     {
-        "ELAM" => 0x40000, "DEFAULT" => 0x40001, "SYSTEM" => 30 << 20, "SOFTWARE" => 120 << 20, _ => 2 << 20,
+        "ELAM" => 0x40000,
+        "DEFAULT" => 0x40001,
+        "SYSTEM" => 30 << 20,
+        "SOFTWARE" => 120 << 20,
+        _ => 2 << 20,
     };
 
     [Fact]

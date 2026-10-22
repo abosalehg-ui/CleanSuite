@@ -1,11 +1,13 @@
-using CleanSuite.Matching;
+﻿using CleanSuite.Matching;
+using CleanSuite.Safety;
 
 namespace CleanSuite.Junk;
 
 /// <summary>
 /// Temp folder discovery. Order and de-duplication follow the original. Safety beyond the original:
 /// its temp-path rule is applied to every candidate, not only to GetTempPath, and drive roots, the Windows folder and user
-/// profile folders are refused, so a TEMP variable pointing at e.g. D:\Downloads or C:\ never turns real files into junk.
+/// profile folders are refused, so a TEMP variable pointing at e.g. D:\Downloads or C:\ never turns real files into junk; so is a
+/// temp folder that is itself a junction or symbolic link.
 /// </summary>
 public static class TempFolderLocator
 {
@@ -19,6 +21,7 @@ public static class TempFolderLocator
             if (string.IsNullOrWhiteSpace(path)) return;
             path = path.TrimEnd('\\');
             if (!IsSafeTempFolder(path, profiles, win)) return;
+            if (SafeWalk.IsLink(path)) return;                     // a temp folder that is a link could lead anywhere: not cleaned
             if (!result.Any(p => string.Equals(p, path, StringComparison.OrdinalIgnoreCase))) result.Add(path);
         }
 

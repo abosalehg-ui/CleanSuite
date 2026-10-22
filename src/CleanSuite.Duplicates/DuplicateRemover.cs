@@ -1,5 +1,4 @@
-using CleanSuite.Junk;
-using CleanSuite.Safety;
+﻿using CleanSuite.Safety;
 
 namespace CleanSuite.Duplicates;
 
@@ -22,10 +21,14 @@ public sealed class DupRemovalResult
 /// </summary>
 public sealed class DuplicateRemover
 {
-    private readonly JunkRemover _remover;
+    private readonly FileRemover _remover;
+    private readonly string? _journalBase;
 
-    public DuplicateRemover(IRecycleBin? recycleBin = null, ProtectedPaths? protectedPaths = null, string? journalBase = null) =>
-        _remover = new JunkRemover(recycleBin, protectedPaths, journalBase);
+    public DuplicateRemover(IRecycleBin? recycleBin = null, ProtectedPaths? protectedPaths = null, string? journalBase = null)
+    {
+        _remover = new FileRemover(recycleBin, protectedPaths);
+        _journalBase = journalBase;
+    }
 
     /// <summary>Groups in which every remaining file is selected (the original's "All the files in %d group(s)…" warning).</summary>
     public static int WholeGroupsSelected(IEnumerable<DupGroup> groups, ISet<string> selected) =>
@@ -34,7 +37,7 @@ public sealed class DuplicateRemover
     public DupRemovalResult Remove(IReadOnlyList<DupGroup> groups, ISet<string> selected, RemovalMode mode, string? backupFolder = null,
         bool allowWholeGroups = false, CancellationToken ct = default)
     {
-        var items = new List<JunkItem>();
+        var items = new List<RemovalItem>();
         var refused = new List<(string, string)>();
         foreach (var g in groups)
         {
@@ -53,18 +56,18 @@ public sealed class DuplicateRemover
                     refused.Add((f.FullPath, "no other copy with the same content would be kept"));
                     continue;
                 }
-                items.Add(new JunkItem(f.FullPath, f.Name, f.Folder, f.Size, JunkReason.None, "Duplicate", g.Number) { LastWriteUtc = f.LastWriteUtc });
+                items.Add(new RemovalItem(f.FullPath, f.Size, f.LastWriteUtc));
             }
         }
-        var res = _remover.Remove(new JunkRemovalRequest
-        {
-            Items = items, Mode = mode == RemovalMode.Permanent ? RemovalMode.RecycleBin : mode,
-            BackupFolder = backupFolder ?? JunkRemovalRequest.DefaultBackupFolder, BackupPrefix = "Dup",
-        }, ct);
+        using var journal = new OperationJournal("duplicates", _journalBase);
+        foreach (var (path, why) in refused) journal.Record("skip", path, false, error: why);
+        // Permanent deletion is never offered for duplicates: it is turned into the Recycle Bin.
+        var res = _remover.Remove(items, mode == RemovalMode.Permanent ? RemovalMode.RecycleBin : mode, journal,
+            backupFolder ?? CleanSuitePaths.Backups, "Dup", ct: ct);
         return new DupRemovalResult
         {
             Deleted = res.Deleted, BytesFreed = res.BytesFreed, Failed = refused.Concat(res.Failed).ToList(), ZipPath = res.ZipPath,
-            JournalPath = res.JournalPath,
+            JournalPath = journal.FilePath,
         };
     }
 }

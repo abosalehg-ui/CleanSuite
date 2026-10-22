@@ -26,7 +26,7 @@ public static class AceInstallation
 
     /// <summary>CleanSuite's own junk ignore folder (%LocalAppData%\CleanSuite\Ignore_Junk).</summary>
     public static string OwnJunkIgnoreFolder =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Ignore_Junk");
+        CleanSuite.Safety.CleanSuitePaths.IgnoreJunk;
 
     /// <summary>The junk ignore folders that exist, as the Junk tab uses them: the original's Data\Ignore_Junk, then CleanSuite's.</summary>
     public static IReadOnlyList<string> DefaultJunkIgnoreFolders()

@@ -91,7 +91,10 @@ public class ShortcutTests
         LinkTarget? Read(string p) => new(targets[Path.GetFileName(p)], "", false, false);
         DriveKind Drive(string root) => root.ToUpperInvariant() switch
         {
-            @"R:\" => DriveKind.CdRom, @"U:\" => DriveKind.Removable, @"Q:\" => DriveKind.NoRootDir, _ => DriveKind.Fixed,
+            @"R:\" => DriveKind.CdRom,
+            @"U:\" => DriveKind.Removable,
+            @"Q:\" => DriveKind.NoRootDir,
+            _ => DriveKind.Fixed,
         };
         Assert.Empty(Scanner(sb, drives: Drive, read: Read).Scan());
         var withRemovable = Scanner(sb, drives: Drive, read: Read, removable: true).Scan();

@@ -9,6 +9,7 @@
             <StackPanel>
                 <WrapPanel>
                     <Button x:Name="ScanButton" Content="{loc:T ScScan}" Command="{Binding ScanCommand}" Style="{StaticResource AccentButton}" />
+                    <Button x:Name="CancelButton" Content="{loc:T Cancel}" Command="{Binding CancelCommand}" />
                     <Button x:Name="DeleteButton" Content="{loc:T ScDelete}" Command="{Binding CleanCommand}" />
                     <Button x:Name="RetargetButton" Content="{loc:T ScRetarget}" Click="Retarget_Click" IsEnabled="False" />
                     <Button x:Name="OpenButton" Content="{loc:T ScOpenFolder}" Click="Open_Click" IsEnabled="False" />

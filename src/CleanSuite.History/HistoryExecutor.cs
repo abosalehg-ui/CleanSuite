@@ -1,4 +1,4 @@
-using CleanSuite.Safety;
+﻿using CleanSuite.Safety;
 
 namespace CleanSuite.History;
 
@@ -52,7 +52,7 @@ public sealed class HistoryExecutor
     public HistoryRunResult Execute(IReadOnlyList<HistoryAction> actions, CancellationToken ct = default)
     {
         using var journal = new OperationJournal("history", _journalBase);
-        using var regBackup = new RegBackupWriter(_backupFolder);
+        using var regBackup = new RegBackupWriter(_backupFolder, journal);
         var ctx = new ExecutionContext
         {
             Journal = journal, Protected = _protected, Cancellation = ct, Registry = _registry, RegistryBackup = regBackup,

@@ -23,7 +23,7 @@ results and confirm, and every change can be undone from the Restore page.
 | **Registry** | 16 categories of entries that point to missing files, with built-in protection for the parts Windows and installers manage |
 | **Startup programs** | Run keys and startup folders: disable, enable or delete, and spot entries that turned themselves back on |
 | **Installed programs** | Uninstall, change or repair, find entries whose uninstaller is missing, export the list |
-| **Disk analysis** | Folder tree by size, charts by folder and file type, the 100 largest files, empty folders |
+| **Disk analysis** | "This PC" with every drive's capacity; choose a drive and it is analyzed at once: folder tree by size, pie charts of the largest folders and files and of the file types, folder contents, the 100 largest files, empty folders |
 | **Restore** | Every backup CleanSuite made (files and registry), restored in a few clicks |
 | **Scheduler** | Runs the cleaners automatically through Windows Task Scheduler |
 | **Registry compactor** | Measures how much the registry hives would shrink (analysis only) |
@@ -32,8 +32,10 @@ results and confirm, and every change can be undone from the Restore page.
 
 - Scans never change anything. Results are shown for review first.
 - Files go to the Recycle Bin or into a zip backup; drives without a Recycle Bin are refused instead of deleting for good.
-- Every registry key or value is exported to a `.reg` file before it is changed.
-- Files or keys that changed since the scan are skipped. Windows folders and protected locations are never touched.
+- Every registry key or value is exported to a `.reg` file before it is changed. A `.reg` file CleanSuite did not write never
+  restores the keys that start programs.
+- Files or keys that changed since the scan are skipped. Windows folders and protected locations are never touched, also when
+  a folder was replaced by a link to them after the scan.
 - Every operation is written to a journal in `%LocalAppData%\CleanSuite\Journal`.
 - CleanSuite runs with normal user rights. Some system-wide items need "Run as administrator", and the program says so.
 
@@ -52,12 +54,14 @@ The setup is not signed yet, so Windows SmartScreen may show "Windows protected 
 Choose a tool in the side bar, press **Scan** (or F5), review the list, untick what you want to keep, then press the
 clean button. Language and theme are at the bottom of the side bar.
 
-Keyboard: F5 scans or refreshes the current page, Esc cancels, Space ticks or clears the selected row. Screen readers
-(Narrator, NVDA) and Windows contrast themes are supported.
+Keyboard: F5 scans or refreshes the current page, Esc cancels, Space ticks or clears the selected row, Ctrl+A checks every
+row of a result list and Delete cleans the checked rows (after asking). In Disk analysis, Alt+← / Alt+→ / Alt+↑ go back,
+forward and up. Screen readers (Narrator, NVDA) and Windows contrast themes are supported. In a narrow window the side bar
+folds to icons; the menu button unfolds it.
 
 ## Build from source
 
-Requires the [.NET 8 SDK](https://dotnet.microsoft.com/download) on Windows.
+Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) on Windows.
 
 ```
 dotnet test CleanSuite.sln
@@ -101,6 +105,7 @@ It contains no code, images or other material of Ace Utilities and is not affili
   وشغّله. يحتاج Windows 10 (الإصدار 1809) أو أحدث، 64 بت، ولا يحتاج تثبيت .NET. المُثبِّت غير موقّع بعد، فقد يظهر تحذير
   SmartScreen: اختر «مزيد من المعلومات» ثم «التشغيل على أي حال».
 - **الاستخدام:** اختر أداة من الشريط الجانبي، واضغط «فحص» (أو F5)، وراجع القائمة، وأزل التحديد عما تريد إبقاءه، ثم نظّف.
+  في «تحليل القرص» اختر قرصًا من شجرة «هذا الكمبيوتر» فيُحلَّل فورًا، وتظهر أكبر المجلدات والملفات وأنواع الملفات برسوم دائرية.
 - **الأمان:** الملفات تُنقل إلى سلة المحذوفات أو نسخة zip، وكل تعديل في السجل تسبقه نسخة `.reg`، وما تغيّر بعد الفحص
   يُتخطّى، ومجلدات النظام لا تُمس، وكل عملية تُسجَّل.
 - **الرخصة:** [MIT](LICENSE).

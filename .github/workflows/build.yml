@@ -3,6 +3,7 @@ name: build
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
 
 permissions:
@@ -20,16 +21,38 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
       - name: Restore
         run: dotnet restore CleanSuite.sln
+
+      - name: Code style (.editorconfig)
+        run: dotnet format whitespace CleanSuite.sln --no-restore --verify-no-changes
 
       - name: Build (warnings are errors)
         run: dotnet build CleanSuite.sln -c Release --no-restore
 
       - name: Test with coverage
-        run: dotnet test CleanSuite.sln -c Release --no-build --logger trx --results-directory TestResults --collect:"XPlat Code Coverage"
+        run: dotnet test CleanSuite.sln -c Release --no-build --logger trx --results-directory TestResults -s coverage.runsettings --collect:"XPlat Code Coverage"
+
+      # The engines (every assembly except the desktop program) must stay at 80 % line coverage or more; the desktop
+      # program's coverage is reported, not enforced (its pages are checked with the --snapshot aid).
+      - name: Coverage threshold
+        shell: pwsh
+        run: |
+          $file = Get-ChildItem TestResults -Recurse -Filter coverage.cobertura.xml | Select-Object -First 1
+          if (-not $file) { throw 'No coverage report was written.' }
+          [xml]$report = Get-Content $file.FullName
+          $lines = 0; $covered = 0
+          foreach ($p in $report.coverage.packages.package) {
+            $rate = [double]$p.'line-rate'
+            "{0,-28} {1,6:P1}" -f $p.name, $rate
+            if ($p.name -eq 'CleanSuite.App') { continue }
+            foreach ($c in $p.classes.class) { foreach ($l in $c.lines.line) { $lines++; if ([int]$l.hits -gt 0) { $covered++ } } }
+          }
+          $engines = if ($lines) { $covered / $lines } else { 0 }
+          "Engines: {0:P1} of {1} lines" -f $engines, $lines
+          if ($engines -lt 0.80) { throw ("Engine line coverage {0:P1} is below 80 %" -f $engines) }
 
       - name: Vulnerable packages
         shell: pwsh
@@ -44,3 +67,38 @@ jobs:
         with:
           name: test-results
           path: TestResults
+
+  # A tag "v1.2.3" builds the installer the same way build.ps1 does on a developer's computer and publishes it with its SHA-256.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Installer
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref_name }}'.TrimStart('v')
+          ./build.ps1 -SkipTests -Version $version
+          $setup = "artifacts/installer/CleanSuite-Setup-$version.exe"
+          (Get-FileHash $setup -Algorithm SHA256).Hash + "  CleanSuite-Setup-$version.exe" | Out-File "$setup.sha256" -Encoding ascii
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            artifacts/installer/CleanSuite-Setup-*.exe
+            artifacts/installer/CleanSuite-Setup-*.exe.sha256

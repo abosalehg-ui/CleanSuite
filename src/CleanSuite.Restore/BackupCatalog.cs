@@ -1,7 +1,6 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
-using CleanSuite.Junk;
 using CleanSuite.Safety;
 
 namespace CleanSuite.Restore;
@@ -27,7 +26,7 @@ public sealed record RegistryZipItem(string EntryName, bool IsKey, string Item);
 /// </summary>
 public static class BackupCatalog
 {
-    public static string CleanSuiteFolder => JunkRemovalRequest.DefaultBackupFolder;
+    public static string CleanSuiteFolder => CleanSuitePaths.Backups;
 
     /// <summary>The original's default backup folder (%LOCALAPPDATA%\Acelogix\Ace Utilities\Backups); its settings are not read.</summary>
     public static string OriginalFolder => System.IO.Path.Combine(
@@ -107,12 +106,15 @@ public static class BackupCatalog
         roots ??= WindowsRegistryRoots.Instance;
         using var journal = new OperationJournal("restore", journalBase);
         var errors = new List<string>();
+        var skippedKeys = new List<string>();
+        // A backup CleanSuite did not write (or that changed since) may not write the places through which programs start.
+        Func<string, bool>? refuse = Trust(backup) == BackupTrust.Verified ? null : IsAutoStartKey;
         int values = 0, fragments = 0;
         void Import(string regFile, string label)
         {
             try
             {
-                values += RegFileImporter.Import(regFile, roots);
+                values += RegFileImporter.Import(regFile, roots, refuse, skippedKeys.Add);
                 fragments++;
                 journal.Record("reg-import", label, true, backupRef: backup.Path);
             }
@@ -146,8 +148,19 @@ public static class BackupCatalog
             }
         }
         else throw new ArgumentException("not a registry backup", nameof(backup));
+        foreach (var key in skippedKeys.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            errors.Add(key + ": " + AutoStartRefused);
+            journal.Record("reg-import", key, false, backupRef: backup.Path, error: AutoStartRefused);
+        }
         return new RegistryRestoreResult(values, fragments, errors, journal.FilePath);
     }
+
+    /// <summary>Reason recorded for a key kept out of a restore (see <see cref="AutoStartKeys"/>).</summary>
+    public const string AutoStartRefused = AutoStartKeys.Refused;
+
+    /// <summary>See <see cref="AutoStartKeys.IsMatch"/>.</summary>
+    public static bool IsAutoStartKey(string key) => AutoStartKeys.IsMatch(key);
 
     /// <summary>Whether CleanSuite wrote this backup and it is unchanged (<see cref="BackupLedger"/>).</summary>
     public static BackupTrust Trust(BackupItem backup) => BackupLedger.Status(backup.Path);
@@ -184,21 +197,7 @@ public static class BackupCatalog
     {
         bin ??= new ShellRecycleBin();
         using var journal = new OperationJournal("restore", journalBase);
-        var failed = new List<string>();
-        var paths = new List<string>();
-        foreach (var p in backups.Select(b => b.Path).Where(File.Exists))
-        {
-            if (bin.WhyNotRecyclable(p) is { } noBin) { failed.Add(p); journal.Record("skip", p, false, error: noBin); }
-            else paths.Add(p);
-        }
-        var notRecycled = new HashSet<string>(paths.Count > 0 ? bin.Recycle(paths, silent: false) : Array.Empty<string>(), StringComparer.OrdinalIgnoreCase);
-        int ok = 0;
-        foreach (var p in paths)
-        {
-            bool gone = !notRecycled.Contains(p) && !File.Exists(p);
-            journal.Record("recycle", p, gone, backupRef: gone ? "RecycleBin" : null);
-            if (gone) ok++; else failed.Add(p);
-        }
-        return (ok, failed);
+        var (recycled, notRecycled) = RecycleStep.Run(bin, backups.Select(b => b.Path).Where(File.Exists).ToList(), journal, silent: false);
+        return (recycled.Count, notRecycled.Select(f => f.Path).ToList());
     }
 }

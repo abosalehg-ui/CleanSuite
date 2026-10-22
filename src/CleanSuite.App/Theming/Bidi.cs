@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
@@ -11,7 +11,7 @@ namespace CleanSuite.App.Theming;
 /// </summary>
 public static class Bidi
 {
-    private const char Lre = '‪', Pdf = '‬';
+    private const char Lre = '\u202A', Pdf = '\u202C';
 
     private static readonly DependencyProperty RawProperty =
         DependencyProperty.RegisterAttached("Raw", typeof(string), typeof(Bidi));
@@ -41,5 +41,5 @@ public static class Bidi
 
     /// <summary>The text without the embedding controls and direction marks.</summary>
     public static string Plain(string text) =>
-        text.Replace("‪", "").Replace("‬", "").Replace("‎", "").Replace("‏", "");
+        text.Replace("\u202A", "").Replace("\u202C", "").Replace("\u200E", "").Replace("\u200F", "");
 }

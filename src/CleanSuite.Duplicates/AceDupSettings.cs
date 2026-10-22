@@ -1,5 +1,4 @@
-using CleanSuite.Junk;
-using CleanSuite.Safety;
+﻿using CleanSuite.Safety;
 using Microsoft.Win32;
 
 namespace CleanSuite.Duplicates;
@@ -112,7 +111,7 @@ public static class IgnoreFile
         foreach (var f in Directory.EnumerateFiles(folder).OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
         {
             List<string> lines;
-            try { lines = CleanSuite.Junk.IgnoreList.ReadLines(f).ToList(); }
+            try { lines = TextFiles.ReadLines(f).ToList(); }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException) { continue; }
             foreach (var raw in lines)
             {

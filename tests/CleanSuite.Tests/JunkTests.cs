@@ -1,7 +1,8 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using CleanSuite.Compat;
 using CleanSuite.Junk;
 using CleanSuite.Matching;
+using CleanSuite.Safety;
 using Xunit;
 
 namespace CleanSuite.Tests;

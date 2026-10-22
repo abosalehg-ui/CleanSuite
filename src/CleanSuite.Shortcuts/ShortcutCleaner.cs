@@ -1,5 +1,4 @@
-using System.Globalization;
-using CleanSuite.Junk;
+﻿using System.Globalization;
 using CleanSuite.Safety;
 
 namespace CleanSuite.Shortcuts;
@@ -29,44 +28,41 @@ public sealed class ShortcutCleaner
         _bin = recycleBin ?? new ShellRecycleBin();
         _protected = protectedPaths ?? ProtectedPaths.ForCurrentSystem();
         _journalBase = journalBase;
-        _backupFolder = backupFolder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Backups");
+        _backupFolder = backupFolder ?? CleanSuitePaths.Backups;
     }
 
     /// <summary>
     /// Sends the items to the Recycle Bin. Skipped: shortcuts that changed since the scan (or whose target came back),
     /// folders that are no longer empty, and protected system locations.
     /// </summary>
-    public ShortcutRunResult Remove(IReadOnlyList<ShortcutItem> items, bool silent = true)
+    public ShortcutRunResult Remove(IReadOnlyList<ShortcutItem> items, bool silent = true, CancellationToken ct = default)
     {
         using var journal = new OperationJournal("shortcuts", _journalBase);
         var failed = new List<(ShortcutItem, string)>();
         var batch = new List<ShortcutItem>();
         foreach (var it in items)
         {
+            ct.ThrowIfCancellationRequested();
             var path = it.FullPath;
-            var why = it.Kind == ShortcutItemKind.EmptyFolder ? CheckFolder(path) : CheckShortcut(it);
-            why ??= _protected.Check(path, it.Kind == ShortcutItemKind.EmptyFolder);
-            why ??= _bin.WhyNotRecyclable(path);
-            if (why != null) { failed.Add((it, why)); journal.Record("recycle", path, false, error: why); continue; }
+            bool folder = it.Kind == ShortcutItemKind.EmptyFolder;
+            var why = folder ? CheckFolder(path) : CheckShortcut(it);
+            why ??= _protected.CheckResolved(path, folder);
+            if (why != null) { failed.Add((it, why)); journal.Record("skip", path, false, error: why); continue; }
             batch.Add(it);
         }
-        _bin.Recycle(batch.Select(b => b.FullPath).ToList(), silent);
-        int ok = 0;
-        foreach (var it in batch)
-        {
-            bool gone = !File.Exists(it.FullPath) && !Directory.Exists(it.FullPath);
-            journal.Record("recycle", it.FullPath, gone, error: gone ? null : "could not be recycled");
-            if (gone) ok++; else failed.Add((it, "could not be recycled"));
-        }
-        return new ShortcutRunResult { Succeeded = ok, Failed = failed, JournalPath = journal.FilePath };
+        ct.ThrowIfCancellationRequested();
+        var byPath = batch.GroupBy(b => b.FullPath, StringComparer.OrdinalIgnoreCase).ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+        var (recycled, notRecycled) = RecycleStep.Run(_bin, byPath.Keys.ToList(), journal, silent);
+        failed.AddRange(notRecycled.Select(f => (byPath[f.Path], f.Reason)));
+        return new ShortcutRunResult { Succeeded = recycled.Count, Failed = failed, JournalPath = journal.FilePath };
     }
 
     private static string? CheckShortcut(ShortcutItem it)
     {
         var fi = new FileInfo(it.FullPath);
         if (!fi.Exists) return "no longer exists";
-        if (it.LastWriteUtc != default && fi.LastWriteTimeUtc != it.LastWriteUtc) return "changed since the scan";
-        return null;
+        if ((fi.Attributes & FileAttributes.ReparsePoint) != 0) return "reparse point";
+        return it.LastWriteUtc != default && fi.LastWriteTimeUtc != it.LastWriteUtc ? FileIdentity.ChangedReason : null;
     }
 
     private static string? CheckFolder(string path)

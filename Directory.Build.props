@@ -1,9 +1,23 @@
 <Project>
   <PropertyGroup>
+    <!-- .NET 10 (LTS, supported until November 2028); Windows 10 version 1809 (build 17763) is the oldest Windows supported. -->
+    <TargetFramework>net10.0-windows10.0.17763.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>12</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Every Windows DLL CleanSuite calls (kernel32, advapi32, shell32, user32, msi, wevtapi) is loaded from System32 only, never
+      from the program's folder or the current folder: a DLL planted next to a per-user installation cannot be loaded in its place,
+      also when the program runs as administrator.
+    -->
+    <AssemblyAttribute Include="System.Runtime.InteropServices.DefaultDllImportSearchPathsAttribute">
+      <_Parameter1>System.Runtime.InteropServices.DllImportSearchPath.System32</_Parameter1>
+      <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>

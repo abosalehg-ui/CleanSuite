@@ -1,4 +1,4 @@
-using CleanSuite.Safety;
+﻿using CleanSuite.Safety;
 using Microsoft.Win32;
 
 namespace CleanSuite.Startup;
@@ -24,17 +24,18 @@ public sealed class StartupManager
         _roots = roots ?? WindowsRegistryRoots.Instance;
         _locations = locations ?? StartupLocations.RegistryLocations.Concat(StartupLocations.FolderLocations()).ToList();
         _journalBase = journalBase;
-        _backupFolder = backupFolder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Backups");
+        _backupFolder = backupFolder ?? CleanSuitePaths.Backups;
         _monitor = monitor;
     }
 
     // ---------------- scan (read-only) ----------------
 
-    public IReadOnlyList<StartupEntry> Scan()
+    public IReadOnlyList<StartupEntry> Scan(CancellationToken ct = default)
     {
         var list = new List<StartupEntry>();
         foreach (var loc in _locations)
         {
+            ct.ThrowIfCancellationRequested();
             if (loc.Kind == LocationKind.RegistryRun) ScanRun(loc, list);
             else ScanFolder(loc, list);
         }
@@ -114,7 +115,7 @@ public sealed class StartupManager
     private ChangeResult Change(string tool, StartupEntry e, Action<OperationJournal, RegBackupWriter> work)
     {
         using var journal = new OperationJournal("startup", _journalBase);
-        using var backup = new RegBackupWriter(_backupFolder);
+        using var backup = new RegBackupWriter(_backupFolder, journal);
         try
         {
             work(journal, backup);

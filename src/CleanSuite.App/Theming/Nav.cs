@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 
@@ -28,6 +28,54 @@ public static class Nav
 /// </summary>
 public sealed class NavTabControl : TabControl
 {
+    /// <summary>Below this width the side bar folds to icons (a menu button unfolds it again).</summary>
+    public const double CompactBelow = 1000;
+
+    public static readonly DependencyProperty IsNarrowProperty = DependencyProperty.Register(nameof(IsNarrow), typeof(bool), typeof(NavTabControl),
+        new PropertyMetadata(false, (d, _) => ((NavTabControl)d).UpdateCompact()));
+
+    public static readonly DependencyProperty UserExpandedProperty = DependencyProperty.Register(nameof(UserExpanded), typeof(bool), typeof(NavTabControl),
+        new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, _) => ((NavTabControl)d).UpdateCompact()));
+
+    public static readonly DependencyProperty IsCompactProperty = DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(NavTabControl),
+        new PropertyMetadata(false));
+
+    /// <summary>The window is narrower than <see cref="CompactBelow"/>.</summary>
+    public bool IsNarrow
+    {
+        get => (bool)GetValue(IsNarrowProperty);
+        private set => SetValue(IsNarrowProperty, value);
+    }
+
+    /// <summary>The user unfolded the side bar with the menu button (only meaningful while narrow).</summary>
+    public bool UserExpanded
+    {
+        get => (bool)GetValue(UserExpandedProperty);
+        set => SetValue(UserExpandedProperty, value);
+    }
+
+    /// <summary>The side bar shows icons only.</summary>
+    public bool IsCompact
+    {
+        get => (bool)GetValue(IsCompactProperty);
+        private set => SetValue(IsCompactProperty, value);
+    }
+
+    protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+    {
+        base.OnRenderSizeChanged(sizeInfo);
+        IsNarrow = sizeInfo.NewSize.Width < CompactBelow;
+    }
+
+    private void UpdateCompact() => IsCompact = IsNarrow && !UserExpanded;
+
+    /// <summary>Choosing a page with the mouse in an unfolded narrow side bar folds it again, so the page gets the room.</summary>
+    protected override void OnSelectionChanged(SelectionChangedEventArgs e)
+    {
+        base.OnSelectionChanged(e);
+        if (IsNarrow && UserExpanded && !IsKeyboardFocusWithin) UserExpanded = false;
+    }
+
     protected override AutomationPeer OnCreateAutomationPeer() => new Peer(this);
 
     private sealed class Peer(NavTabControl owner) : TabControlAutomationPeer(owner)

@@ -56,7 +56,8 @@ public class DiskUsageTests
         Write(sb, @"real\big.bin", 5000);
         var link = Path.Combine(sb.Root, "link");
         using (var p = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("cmd.exe",
-                   $"/c mklink /J \"{link}\" \"{Path.Combine(sb.Root, "real")}\"") { CreateNoWindow = true, UseShellExecute = false })!)
+                   $"/c mklink /J \"{link}\" \"{Path.Combine(sb.Root, "real")}\"")
+        { CreateNoWindow = true, UseShellExecute = false })!)
             p.WaitForExit();
         Assert.True(Directory.Exists(link));
         var root = DiskScanner.Scan(sb.Root);

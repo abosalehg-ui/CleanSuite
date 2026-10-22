@@ -1,4 +1,4 @@
-using CleanSuite.Matching;
+﻿using CleanSuite.Matching;
 using CleanSuite.Safety;
 
 namespace CleanSuite.DiskUsage;
@@ -32,31 +32,27 @@ public static class EmptyFolderFinder
         int seen = 0;
         var start = root.Length == 2 && root[1] == ':' ? root + "\\" : root;
 
-        void Walk(string dir, bool isRoot)
+        // The shared walk (links never followed). A folder is entered unless excluded, already reported as empty (a tree of empty
+        // folders is reported once, at its top), or hidden, system or read-only (chkdsk's "FOUND.???" excepted).
+        var skip = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var top = start.TrimEnd('\\');
+        SafeWalk.Walk(top, dir =>
         {
-            ct.ThrowIfCancellationRequested();
-            if (dir.Length >= 0x105) return;
-            if (ex.Any(p => AceWildcard.IsMatch(dir.TrimEnd('\\'), p))) return;
-            if (!isRoot && IsEmptyTree(dir))
+            if (skip.Contains(dir) || ex.Any(p => AceWildcard.IsMatch(dir, p))) return false;
+            if (dir.Equals(top, StringComparison.OrdinalIgnoreCase) || !IsEmptyTree(dir)) return true;
+            if (protectedPaths.CheckResolved(dir, true) == null) found.Add(dir);
+            return false;
+        }, (dir, entries) =>
+        {
+            foreach (var e in entries)
             {
-                if (protectedPaths.Check(dir, true) == null) found.Add(dir);
-                return;
+                var a = e.Attributes;
+                if ((a & FileAttributes.Directory) == 0 || SafeWalk.IsLink(a)) continue;
+                bool chkdsk = AceWildcard.IsMatch(e.Name, "FOUND.???");
+                if (!chkdsk && (a & (FileAttributes.Hidden | FileAttributes.System | FileAttributes.ReadOnly)) != 0) skip.Add(dir + "\\" + e.Name);
+                else if (++seen % 500 == 0) progress?.Invoke(seen);
             }
-            IEnumerable<DirectoryInfo> subs;
-            try { subs = new DirectoryInfo(dir).EnumerateDirectories("*", new EnumerationOptions { AttributesToSkip = 0, IgnoreInaccessible = true }).ToList(); }
-            catch (Exception e) when (e is IOException or UnauthorizedAccessException or System.Security.SecurityException) { return; }
-            foreach (var s in subs)
-            {
-                var a = s.Attributes;
-                if ((a & FileAttributes.ReparsePoint) != 0) continue;
-                bool chkdsk = AceWildcard.IsMatch(s.Name, "FOUND.???");
-                if (!chkdsk && (a & (FileAttributes.Hidden | FileAttributes.System | FileAttributes.ReadOnly)) != 0) continue;
-                if (++seen % 500 == 0) progress?.Invoke(seen);
-                Walk(s.FullName, false);
-            }
-        }
-
-        Walk(start, true);
+        }, ct: ct);
         progress?.Invoke(seen);
         return found;
     }

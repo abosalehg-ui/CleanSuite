@@ -60,7 +60,10 @@ public partial class ScheduledRunWindow : Window
 
     private static string ToolName(ScheduledTasks t) => Loc.T(t switch
     {
-        ScheduledTasks.Junk => "TabJunk", ScheduledTasks.Registry => "TabRegistry", ScheduledTasks.History => "TabHistory", _ => "TabShortcuts",
+        ScheduledTasks.Junk => "TabJunk",
+        ScheduledTasks.Registry => "TabRegistry",
+        ScheduledTasks.History => "TabHistory",
+        _ => "TabShortcuts",
     });
 
     internal static string Line(StepResult r)

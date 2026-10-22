@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,12 +14,18 @@ namespace CleanSuite.App;
 /// Home page: free space of the fixed drives, the newest backup, the scheduled cleanup, and buttons that open a tool. It only
 /// reads; nothing is scanned, cleaned or changed from here. Refreshed every time the page is shown.
 /// </summary>
-public partial class HomeView : UserControl
+public partial class HomeView : UserControl, IToolPage
 {
     private int _refreshVersion, _shownVersion;
 
     /// <summary>A refresh is still reading (used by the snapshot aid).</summary>
-    public bool Busy => _shownVersion != _refreshVersion;
+    public bool IsBusy => _shownVersion != _refreshVersion;
+
+    /// <summary>The home page only reads.</summary>
+    public bool IsChanging => false;
+    Button? IToolPage.ScanButton => null;
+    Button? IToolPage.CancelButton => null;
+    public void CancelWork() { }
 
     public HomeView()
     {

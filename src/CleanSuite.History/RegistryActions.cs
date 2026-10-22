@@ -1,4 +1,4 @@
-using CleanSuite.Safety;
+﻿using CleanSuite.Safety;
 using Microsoft.Win32;
 
 namespace CleanSuite.History;

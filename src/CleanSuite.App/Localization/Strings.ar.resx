@@ -1,0 +1,2196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>CleanSuite</value>
+  </data>
+  <data name="AboutLicense" xml:space="preserve">
+    <value>برنامج مجاني ومفتوح المصدر برخصة MIT.</value>
+  </data>
+  <data name="AboutDeveloper" xml:space="preserve">
+    <value>صفحة المطور</value>
+  </data>
+  <data name="UnitMB" xml:space="preserve">
+    <value>ميغابايت</value>
+  </data>
+  <data name="UnitKB" xml:space="preserve">
+    <value>كيلوبايت</value>
+  </data>
+  <data name="PaneSplitter" xml:space="preserve">
+    <value>تغيير عرض الأجزاء (مفاتيح الأسهم)</value>
+  </data>
+  <data name="ScRemoving" xml:space="preserve">
+    <value>جارٍ نقل الاختصارات المحددة إلى سلة المحذوفات…</value>
+  </data>
+  <data name="SdHour" xml:space="preserve">
+    <value>الساعة</value>
+  </data>
+  <data name="SdMinute" xml:space="preserve">
+    <value>الدقيقة</value>
+  </data>
+  <data name="RsReading" xml:space="preserve">
+    <value>جارٍ قراءة النسخة الاحتياطية…</value>
+  </data>
+  <data name="RsDeleting" xml:space="preserve">
+    <value>جارٍ نقل النسخ الاحتياطية إلى سلة المحذوفات…</value>
+  </data>
+  <data name="StLoading" xml:space="preserve">
+    <value>جارٍ قراءة برامج بدء التشغيل…</value>
+  </data>
+  <data name="RestoreChecking" xml:space="preserve">
+    <value>جارٍ فحص أماكن الاستعادة…</value>
+  </data>
+  <data name="RestoreRunning" xml:space="preserve">
+    <value>جارٍ الاستعادة…</value>
+  </data>
+  <data name="RsKeys" xml:space="preserve">
+    <value>ستُكتب {0:مفتاح|مفتاحان|مفاتيح|مفتاحًا}، منها:</value>
+  </data>
+  <data name="RsTrust_Verified" xml:space="preserve">
+    <value>أنشأ CleanSuite هذه النسخة ولم تتغير.</value>
+  </data>
+  <data name="RsTrust_Modified" xml:space="preserve">
+    <value>تنبيه: تغيّرت هذه النسخة بعد أن كتبها CleanSuite. راجع المفاتيح أعلاه قبل الاستعادة.</value>
+  </data>
+  <data name="RsTrust_Unknown" xml:space="preserve">
+    <value>تنبيه: لم ينشئ CleanSuite هذه النسخة (مثل نسخ البرنامج الأصلي). راجع المفاتيح أعلاه قبل الاستعادة.</value>
+  </data>
+  <data name="RsAdminUnverified" xml:space="preserve">
+    <value>يعمل CleanSuite بصلاحيات المسؤول، فيمكن لهذه النسخة أن تكتب في أي مكان في السجل.</value>
+  </data>
+  <data name="RcLeftOver" xml:space="preserve">
+    <value>تعذر حذف {0:نسخة مؤقتة|نسختين مؤقتتين|نسخ مؤقتة|نسخة مؤقتة} (يستخدمها برنامج آخر). احذفها لاحقًا من {1}.</value>
+  </data>
+  <data name="UnCommand" xml:space="preserve">
+    <value>الأمر الذي سيُشغَّل: {0}</value>
+  </data>
+  <data name="ErrTitle" xml:space="preserve">
+    <value>CleanSuite</value>
+  </data>
+  <data name="ErrUnexpected" xml:space="preserve">
+    <value>حدث خطأ غير متوقع: {0}&#xA;&#xA;توقفت العملية عند هذه النقطة، وما تم قبلها مدوّن في سجل العمليات. كُتبت التفاصيل في {1}.</value>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>تعذر حفظ الملف: {0}</value>
+  </data>
+  <data name="WaitForClean" xml:space="preserve">
+    <value>ما زال الحذف جاريًا. انتظر حتى ينتهي ثم أغلق CleanSuite؛ فإيقافه في منتصفه يترك نسخته الاحتياطية ناقصة.</value>
+  </data>
+  <data name="CleanCancelledCount" xml:space="preserve">
+    <value>كان قد حُذف {0:ملف|ملفان|ملفات|ملفًا} قبل الإلغاء.</value>
+  </data>
+  <data name="RgCleaning" xml:space="preserve">
+    <value>جارٍ حذف عناصر السجل المحددة…</value>
+  </data>
+  <data name="HsCleaning" xml:space="preserve">
+    <value>جارٍ تنظيف العناصر المحددة…</value>
+  </data>
+  <data name="DaDeleting" xml:space="preserve">
+    <value>جارٍ النقل إلى سلة المحذوفات…</value>
+  </data>
+  <data name="DpRemoving" xml:space="preserve">
+    <value>جارٍ حذف الملفات المحددة…</value>
+  </data>
+  <data name="UnLoading" xml:space="preserve">
+    <value>جارٍ قراءة البرامج المثبتة…</value>
+  </data>
+  <data name="EmJunk" xml:space="preserve">
+    <value>لا توجد نتائج بعد. اختر الأقراص أو المجلدات ثم اضغط «فحص».</value>
+  </data>
+  <data name="EmRegistry" xml:space="preserve">
+    <value>لا توجد نتائج بعد. اضغط «فحص السجل» لعرض العناصر غير الصالحة.</value>
+  </data>
+  <data name="EmShortcuts" xml:space="preserve">
+    <value>لا توجد نتائج بعد. اضغط «فحص» للبحث عن الاختصارات المعطوبة.</value>
+  </data>
+  <data name="EmHistory" xml:space="preserve">
+    <value>لم يُحلَّل شيء بعد. اختر العناصر واضغط «تحليل» لترى ما سيُنظَّف.</value>
+  </data>
+  <data name="EmDuplicates" xml:space="preserve">
+    <value>لا توجد نتائج بعد. اختر المجلدات أو الأقراص ثم اضغط «فحص».</value>
+  </data>
+  <data name="EmRestore" xml:space="preserve">
+    <value>لا توجد نسخ احتياطية بعد. تظهر هنا النسخ التي تُنشأ عند حذف الملفات أو بيانات السجل.</value>
+  </data>
+  <data name="EmCompact" xml:space="preserve">
+    <value>اضغط «تحليل» لقياس ما يوفّره ضغط السجل.</value>
+  </data>
+  <data name="TabHome" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="NavClean" xml:space="preserve">
+    <value>التنظيف</value>
+  </data>
+  <data name="NavSystem" xml:space="preserve">
+    <value>النظام</value>
+  </data>
+  <data name="NavTools" xml:space="preserve">
+    <value>الأدوات</value>
+  </data>
+  <data name="AppTagline" xml:space="preserve">
+    <value>صيانة Windows</value>
+  </data>
+  <data name="AboutOpen" xml:space="preserve">
+    <value>حول CleanSuite</value>
+  </data>
+  <data name="AboutText" xml:space="preserve">
+    <value>ينظّف Windows ويصونه: الملفات المهملة، والآثار، والملفات المكررة، والاختصارات المعطوبة، والسجل، وبرامج بدء التشغيل والبرامج المثبتة.</value>
+  </data>
+  <data name="HmWelcome" xml:space="preserve">
+    <value>مرحبًا بك في CleanSuite</value>
+  </data>
+  <data name="HmSubtitle" xml:space="preserve">
+    <value>اختر أداة من القائمة. كل فحص للقراءة فقط، ولا يُحذف شيء حتى تؤكد.</value>
+  </data>
+  <data name="HmDrives" xml:space="preserve">
+    <value>الأقراص</value>
+  </data>
+  <data name="HmFree" xml:space="preserve">
+    <value>{0} متاح من {1}</value>
+  </data>
+  <data name="HmBackups" xml:space="preserve">
+    <value>النسخ الاحتياطية</value>
+  </data>
+  <data name="HmBackupLast" xml:space="preserve">
+    <value>الأحدث: {0}، {1}</value>
+  </data>
+  <data name="HmBackupNone" xml:space="preserve">
+    <value>لا توجد نسخ احتياطية بعد.</value>
+  </data>
+  <data name="HmBackupNote" xml:space="preserve">
+    <value>يمكن إرجاع الملفات وبيانات السجل المحذوفة من صفحة «الاستعادة».</value>
+  </data>
+  <data name="HmSchedule" xml:space="preserve">
+    <value>التنظيف المجدول</value>
+  </data>
+  <data name="HmLastRun" xml:space="preserve">
+    <value>آخر تشغيل: {0}</value>
+  </data>
+  <data name="HmNeverRun" xml:space="preserve">
+    <value>لم يُشغَّل تنظيف مجدول بعد.</value>
+  </data>
+  <data name="HmQuick" xml:space="preserve">
+    <value>البدء السريع</value>
+  </data>
+  <data name="HmQuickNote" xml:space="preserve">
+    <value>يفتح الأداة فقط، ولا يبدأ شيء من تلقاء نفسه.</value>
+  </data>
+  <data name="AppTitleSelection" xml:space="preserve">
+    <value>CleanSuite — الملفات المهملة · محدد {0} من {1} ({2})</value>
+  </data>
+  <data name="Scan" xml:space="preserve">
+    <value>فحص</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="RemovalLabel" xml:space="preserve">
+    <value>طريقة الإزالة:</value>
+  </data>
+  <data name="RemovalRecycle" xml:space="preserve">
+    <value>نقل إلى سلة المحذوفات</value>
+  </data>
+  <data name="RemovalZip" xml:space="preserve">
+    <value>نسخ احتياطي zip ثم حذف</value>
+  </data>
+  <data name="RemovalPermanent" xml:space="preserve">
+    <value>حذف نهائي</value>
+  </data>
+  <data name="CleanSelected" xml:space="preserve">
+    <value>تنظيف المحدد</value>
+  </data>
+  <data name="RestoreBackup" xml:space="preserve">
+    <value>استعادة من نسخة احتياطية…</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>اللغة:</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>السمة:</value>
+  </data>
+  <data name="ThemeSystem" xml:space="preserve">
+    <value>حسب النظام</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>فاتحة</value>
+  </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>داكنة</value>
+  </data>
+  <data name="ScanOptions" xml:space="preserve">
+    <value>خيارات الفحص</value>
+  </data>
+  <data name="Drives" xml:space="preserve">
+    <value>الأقراص:</value>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>المجلدات:</value>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>إضافة مجلد…</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>إزالة</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>الخيارات:</value>
+  </data>
+  <data name="OptTemp" xml:space="preserve">
+    <value>تنظيف مجلدات Temp (موصى به)</value>
+  </data>
+  <data name="OptZero" xml:space="preserve">
+    <value>البحث عن الملفات ذات الحجم صفر</value>
+  </data>
+  <data name="OptIgnore" xml:space="preserve">
+    <value>استخدام قوائم التجاهل</value>
+  </data>
+  <data name="OptEmptyTemp" xml:space="preserve">
+    <value>حذف مجلدات Temp الفارغة</value>
+  </data>
+  <data name="OptRecent" xml:space="preserve">
+    <value>استثناء الملفات المعدلة خلال أسبوع</value>
+  </data>
+  <data name="OptTempAllIgnores" xml:space="preserve">
+    <value>تطبيق كل قوائم التجاهل داخل مجلدات Temp</value>
+  </data>
+  <data name="OptTempAllIgnoresTip" xml:space="preserve">
+    <value>معطّل افتراضيًا كما في البرنامج الأصلي: داخل مجلدات Temp تُطبَّق فقط أسطر التجاهل الموسومة بـ "/T".</value>
+  </data>
+  <data name="DriveFree" xml:space="preserve">
+    <value>{0} غيغابايت متاحة</value>
+  </data>
+  <data name="SettingsInfo" xml:space="preserve">
+    <value>الإعدادات: {0} · الملف الشخصي "{1}" ({2:نوع ملف|نوعان من الملفات|أنواع ملفات|نوعًا من الملفات}) · {3:مجلد مستثنى|مجلدان مستثنيان|مجلدات مستثناة|مجلدًا مستثنى} · قوائم التجاهل: {4}</value>
+  </data>
+  <data name="SettingsDefaults" xml:space="preserve">
+    <value>الافتراضية المدمجة</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>لا يوجد</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>تحديد الكل</value>
+  </data>
+  <data name="UncheckAll" xml:space="preserve">
+    <value>إلغاء تحديد الكل</value>
+  </data>
+  <data name="Invert" xml:space="preserve">
+    <value>عكس التحديد</value>
+  </data>
+  <data name="ColName" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="ColFolder" xml:space="preserve">
+    <value>المجلد</value>
+  </data>
+  <data name="ColSize" xml:space="preserve">
+    <value>الحجم (ك.ب)</value>
+  </data>
+  <data name="ColType" xml:space="preserve">
+    <value>النوع</value>
+  </data>
+  <data name="ColReason" xml:space="preserve">
+    <value>السبب</value>
+  </data>
+  <data name="MenuOpenFolder" xml:space="preserve">
+    <value>فتح المجلد</value>
+  </data>
+  <data name="MenuCheckHighlighted" xml:space="preserve">
+    <value>تحديد العناصر المظللة</value>
+  </data>
+  <data name="MenuUncheckHighlighted" xml:space="preserve">
+    <value>إلغاء تحديد العناصر المظللة</value>
+  </data>
+  <data name="MenuExcludeAlways" xml:space="preserve">
+    <value>استثناء دائم (لا تظهر مجددًا)</value>
+  </data>
+  <data name="GroupUser" xml:space="preserve">
+    <value>ملفات أضافها المستخدم</value>
+  </data>
+  <data name="GroupTemp" xml:space="preserve">
+    <value>ملفات مجلدات Temp</value>
+  </data>
+  <data name="GroupDisk" xml:space="preserve">
+    <value>ملفات مجموعة الأقراص {0}</value>
+  </data>
+  <data name="ReasonJunkType" xml:space="preserve">
+    <value>نوع ملف مهمل</value>
+  </data>
+  <data name="ReasonTemp" xml:space="preserve">
+    <value>ملف مؤقت داخل مجلد Temp</value>
+  </data>
+  <data name="ReasonZero" xml:space="preserve">
+    <value>ملف حجمه صفر</value>
+  </data>
+  <data name="ReasonAlwaysInclude" xml:space="preserve">
+    <value>داخل مجلد إدراج دائم</value>
+  </data>
+  <data name="ReasonEmptyTemp" xml:space="preserve">
+    <value>مجلد Temp فارغ</value>
+  </data>
+  <data name="Cat_Temp" xml:space="preserve">
+    <value>مؤقت</value>
+  </data>
+  <data name="Cat_Junk" xml:space="preserve">
+    <value>مهمل</value>
+  </data>
+  <data name="Cat_Backup" xml:space="preserve">
+    <value>نسخة احتياطية</value>
+  </data>
+  <data name="Cat_Log" xml:space="preserve">
+    <value>سجل</value>
+  </data>
+  <data name="StatusReady" xml:space="preserve">
+    <value>اختر الأقراص أو المجلدات ثم اضغط «فحص». الفحص لا يحذف أي شيء.</value>
+  </data>
+  <data name="SelectSomething" xml:space="preserve">
+    <value>اختر قرصًا أو مجلدًا واحدًا على الأقل، أو المجلدات المؤقتة.</value>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>جارٍ الفحص… (قراءة فقط)</value>
+  </data>
+  <data name="ScanFound" xml:space="preserve">
+    <value>وُجد {0:ملف مهمل|ملفان مهملان|ملفات مهملة|ملفًا مهملًا} ({1}) من أصل {2:ملف|ملفين|ملفات|ملفًا} · {3} متجاهَل · {4} قيد الاستخدام · {5:N1} ث</value>
+  </data>
+  <data name="ScanCancelled" xml:space="preserve">
+    <value>أُلغي الفحص.</value>
+  </data>
+  <data name="ScanFailed" xml:space="preserve">
+    <value>فشل الفحص: {0}</value>
+  </data>
+  <data name="HowRecycle" xml:space="preserve">
+    <value>تُنقل إلى سلة المحذوفات</value>
+  </data>
+  <data name="HowZip" xml:space="preserve">
+    <value>تُنسخ احتياطيًا في ملف zip ثم تُحذف</value>
+  </data>
+  <data name="HowPermanent" xml:space="preserve">
+    <value>تُحذف نهائيًا (لا يمكن التراجع)</value>
+  </data>
+  <data name="CleanConfirm" xml:space="preserve">
+    <value>{0:ملف|ملفان|ملفات|ملفًا}، بحجم {1}، {2}.&#xA;&#xA;هل تريد المتابعة؟</value>
+  </data>
+  <data name="CleanTitle" xml:space="preserve">
+    <value>تنظيف الملفات المحددة</value>
+  </data>
+  <data name="Cleaning" xml:space="preserve">
+    <value>جارٍ التنظيف…</value>
+  </data>
+  <data name="CleanStatus" xml:space="preserve">
+    <value>أُزيل {0:ملف|ملفان|ملفات|ملفًا}، وتحرر {1} · {2} لم يُزل · حُذف من Temp {3:مجلد فارغ|مجلدان فارغان|مجلدات فارغة|مجلدًا فارغًا}</value>
+  </data>
+  <data name="CleanReport" xml:space="preserve">
+    <value>أُزيل: {0:ملف|ملفان|ملفات|ملفًا} ({1})&#xA;لم يُزل: {2}&#xA;مجلدات Temp فارغة حُذفت: {3}</value>
+  </data>
+  <data name="CleanReportBackup" xml:space="preserve">
+    <value>النسخة الاحتياطية: {0}</value>
+  </data>
+  <data name="CleanReportJournal" xml:space="preserve">
+    <value>سجل العمليات: {0}</value>
+  </data>
+  <data name="FirstProblems" xml:space="preserve">
+    <value>أول المشكلات:</value>
+  </data>
+  <data name="CleanFinished" xml:space="preserve">
+    <value>اكتمل التنظيف</value>
+  </data>
+  <data name="CleanCancelled" xml:space="preserve">
+    <value>أُلغي التنظيف. الملفات التي عولجت مدوّنة في سجل العمليات.</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>فشل التنظيف: {0}</value>
+  </data>
+  <data name="AddFolderTitle" xml:space="preserve">
+    <value>إضافة مجلد للفحص</value>
+  </data>
+  <data name="ExcludedStatus" xml:space="preserve">
+    <value>أُضيف {0:عنصر|عنصران|عناصر|عنصرًا} إلى {1}</value>
+  </data>
+  <data name="SizeGB" xml:space="preserve">
+    <value>{0:N2} غيغابايت</value>
+  </data>
+  <data name="SizeMB" xml:space="preserve">
+    <value>{0:N1} ميغابايت</value>
+  </data>
+  <data name="SizeKB" xml:space="preserve">
+    <value>{0:N0} كيلوبايت</value>
+  </data>
+  <data name="SizeBytes" xml:space="preserve">
+    <value>{0} بايت</value>
+  </data>
+  <data name="RestoreTitle" xml:space="preserve">
+    <value>الاستعادة من نسخة احتياطية</value>
+  </data>
+  <data name="RestoreOpenTitle" xml:space="preserve">
+    <value>اختر نسخة احتياطية للملفات المهملة</value>
+  </data>
+  <data name="RestoreFilter" xml:space="preserve">
+    <value>نسخ الملفات المهملة (Jnk *.zip)|Jnk *.zip|ملفات zip (*.zip)|*.zip</value>
+  </data>
+  <data name="RestoreBackupFile" xml:space="preserve">
+    <value>النسخة:</value>
+  </data>
+  <data name="RestoreFormat" xml:space="preserve">
+    <value>الصيغة:</value>
+  </data>
+  <data name="FormatCleanSuite" xml:space="preserve">
+    <value>CleanSuite</value>
+  </data>
+  <data name="FormatAce" xml:space="preserve">
+    <value>Ace Utilities (الصيغة القديمة)</value>
+  </data>
+  <data name="RestoreSummary" xml:space="preserve">
+    <value>{0:ملف|ملفان|ملفات|ملفًا}، {1} · {2} لا يمكن استعادته</value>
+  </data>
+  <data name="ColOriginalPath" xml:space="preserve">
+    <value>الموقع الأصلي</value>
+  </data>
+  <data name="ColModified" xml:space="preserve">
+    <value>تاريخ التعديل</value>
+  </data>
+  <data name="ColStatus" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="StatusRestorable" xml:space="preserve">
+    <value>قابل للاستعادة</value>
+  </data>
+  <data name="StatusExistsNow" xml:space="preserve">
+    <value>يوجد ملف بالاسم نفسه</value>
+  </data>
+  <data name="OptOverwrite" xml:space="preserve">
+    <value>استبدال الملفات الموجودة</value>
+  </data>
+  <data name="OptOtherFolder" xml:space="preserve">
+    <value>الاستعادة إلى مجلد آخر:</value>
+  </data>
+  <data name="ChooseFolder" xml:space="preserve">
+    <value>اختيار…</value>
+  </data>
+  <data name="ChooseFolderTitle" xml:space="preserve">
+    <value>المجلد الذي تُستعاد إليه الملفات</value>
+  </data>
+  <data name="RestoreSelected" xml:space="preserve">
+    <value>استعادة المحدد</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="RestoreDone" xml:space="preserve">
+    <value>استُعيد {0:ملف|ملفان|ملفات|ملفًا}.</value>
+  </data>
+  <data name="RestoreSkipped" xml:space="preserve">
+    <value>لم يُستعد: {0}</value>
+  </data>
+  <data name="RestoreFailed" xml:space="preserve">
+    <value>فشلت الاستعادة: {0}</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>حدد ملفًا واحدًا على الأقل قابلًا للاستعادة.</value>
+  </data>
+  <data name="NeedFolder" xml:space="preserve">
+    <value>اختر المجلد الذي تُستعاد إليه الملفات.</value>
+  </data>
+  <data name="RestoreConfirmOverwrite" xml:space="preserve">
+    <value>سيُستبدل {0:ملف موجود|ملفان موجودان|ملفات موجودة|ملفًا موجودًا}.&#xA;&#xA;هل تريد المتابعة؟</value>
+  </data>
+  <data name="TabJunk" xml:space="preserve">
+    <value>الملفات المهملة</value>
+  </data>
+  <data name="TabStartup" xml:space="preserve">
+    <value>برامج بدء التشغيل</value>
+  </data>
+  <data name="StRefresh" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="StDisable" xml:space="preserve">
+    <value>تعطيل</value>
+  </data>
+  <data name="StEnable" xml:space="preserve">
+    <value>تفعيل</value>
+  </data>
+  <data name="StDelete" xml:space="preserve">
+    <value>حذف…</value>
+  </data>
+  <data name="StOpenLocation" xml:space="preserve">
+    <value>فتح موقع الملف</value>
+  </data>
+  <data name="StHideMicrosoft" xml:space="preserve">
+    <value>إخفاء عناصر Microsoft</value>
+  </data>
+  <data name="StColState" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="StColName" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="StColCommand" xml:space="preserve">
+    <value>الأمر</value>
+  </data>
+  <data name="StColLocation" xml:space="preserve">
+    <value>الموقع</value>
+  </data>
+  <data name="StColCompany" xml:space="preserve">
+    <value>الناشر</value>
+  </data>
+  <data name="StColNotes" xml:space="preserve">
+    <value>ملاحظات</value>
+  </data>
+  <data name="StEnabled" xml:space="preserve">
+    <value>مفعّل</value>
+  </data>
+  <data name="StDisabled" xml:space="preserve">
+    <value>معطّل</value>
+  </data>
+  <data name="StDisabledSince" xml:space="preserve">
+    <value>معطّل منذ {0}</value>
+  </data>
+  <data name="StNoteMissing" xml:space="preserve">
+    <value>الملف غير موجود</value>
+  </data>
+  <data name="StNoteReEnabled" xml:space="preserve">
+    <value>أعاد تفعيل نفسه بعد تعطيله</value>
+  </data>
+  <data name="StNoteLegacy" xml:space="preserve">
+    <value>عطّله Ace Utilities</value>
+  </data>
+  <data name="StLocUser" xml:space="preserve">
+    <value>المستخدم الحالي</value>
+  </data>
+  <data name="StLocMachine" xml:space="preserve">
+    <value>كل المستخدمين</value>
+  </data>
+  <data name="StLocFolder" xml:space="preserve">
+    <value>مجلد بدء التشغيل</value>
+  </data>
+  <data name="St32Bit" xml:space="preserve">
+    <value>(32 بت)</value>
+  </data>
+  <data name="StCount" xml:space="preserve">
+    <value>{0:عنصر|عنصران|عناصر|عنصرًا} · {1} مفعّل · {2} معطّل</value>
+  </data>
+  <data name="StReEnabledWarning" xml:space="preserve">
+    <value>أعاد {0:برنامج معطّل|برنامجان معطّلان|برامج معطّلة|برنامجًا معطّلًا} تفعيل نفسه.</value>
+  </data>
+  <data name="StDeleteConfirm" xml:space="preserve">
+    <value>حذف عنصر بدء التشغيل "{0}"؟&#xA;&#xA;تُحفظ نسخة احتياطية: عناصر السجل في ملف .reg، وملفات مجلد بدء التشغيل في مجلد النسخ.</value>
+  </data>
+  <data name="StDeleteTitle" xml:space="preserve">
+    <value>حذف عنصر بدء التشغيل</value>
+  </data>
+  <data name="StChanged" xml:space="preserve">
+    <value>تم: {0}</value>
+  </data>
+  <data name="StFailed" xml:space="preserve">
+    <value>تعذّر تغيير "{0}": {1}</value>
+  </data>
+  <data name="StNoSelection" xml:space="preserve">
+    <value>حدد عنصرًا أولًا.</value>
+  </data>
+  <data name="StAdminHint" xml:space="preserve">
+    <value>تغيير عناصر كل المستخدمين يحتاج صلاحيات المسؤول.</value>
+  </data>
+  <data name="TabRegistry" xml:space="preserve">
+    <value>السجل</value>
+  </data>
+  <data name="RgScan" xml:space="preserve">
+    <value>فحص السجل</value>
+  </data>
+  <data name="RgClean" xml:space="preserve">
+    <value>حذف المحدد…</value>
+  </data>
+  <data name="RgRestore" xml:space="preserve">
+    <value>استعادة نسخة احتياطية…</value>
+  </data>
+  <data name="RcOpen" xml:space="preserve">
+    <value>ضاغط السجل…</value>
+  </data>
+  <data name="RcTitle" xml:space="preserve">
+    <value>ضاغط السجل</value>
+  </data>
+  <data name="RcIntro" xml:space="preserve">
+    <value>يحفظ Windows السجل في ملفات خلايا لا يصغر حجمها حين تُحذف منها بيانات. يكتب التحليل نسخة مضغوطة من كل خلية في مجلد مؤقت، ويقارن الحجمين، ثم يحذف النسخ. لا يغيّر التحليل شيئًا في Windows ولا يحتاج إلى إعادة تشغيل. ولا يستبدل CleanSuite الخلايا: بخلاف البرنامج الأصلي، يكتفي بقياس المساحة التي يوفّرها الضغط.</value>
+  </data>
+  <data name="RcNeedsAdmin" xml:space="preserve">
+    <value>قراءة خلايا السجل تحتاج صلاحيات المسؤول. شغّل CleanSuite كمسؤول لإجراء التحليل.</value>
+  </data>
+  <data name="RcAnalyse" xml:space="preserve">
+    <value>تحليل</value>
+  </data>
+  <data name="RcSaveReport" xml:space="preserve">
+    <value>حفظ التقرير…</value>
+  </data>
+  <data name="RcColHive" xml:space="preserve">
+    <value>الخلية</value>
+  </data>
+  <data name="RcColFile" xml:space="preserve">
+    <value>الملف</value>
+  </data>
+  <data name="RcColCurrent" xml:space="preserve">
+    <value>الحجم الحالي</value>
+  </data>
+  <data name="RcColCompact" xml:space="preserve">
+    <value>الحجم بعد الضغط</value>
+  </data>
+  <data name="RcColSaving" xml:space="preserve">
+    <value>التوفير</value>
+  </data>
+  <data name="RcColStatus" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="RcProgress" xml:space="preserve">
+    <value>الخلية {0} من {1}: {2}</value>
+  </data>
+  <data name="RcSummary" xml:space="preserve">
+    <value>يمكن تقليص السجل بمقدار {0} (من {1} إلى {2}). لم يُغيَّر شيء.</value>
+  </data>
+  <data name="RcNothing" xml:space="preserve">
+    <value>لن تصغر أي خلية. لم يُغيَّر شيء.</value>
+  </data>
+  <data name="RcCancelled" xml:space="preserve">
+    <value>أُلغي التحليل. لم يُغيَّر شيء.</value>
+  </data>
+  <data name="RcSaved" xml:space="preserve">
+    <value>حُفظ التقرير: {0}</value>
+  </data>
+  <data name="RcReportFilter" xml:space="preserve">
+    <value>تقرير نصي</value>
+  </data>
+  <data name="RcSt_Measured" xml:space="preserve">
+    <value>قِيست</value>
+  </data>
+  <data name="RcSt_NoGain" xml:space="preserve">
+    <value>لن تصغر</value>
+  </data>
+  <data name="RcSt_SaveFailed" xml:space="preserve">
+    <value>فشل النسخ ({0})</value>
+  </data>
+  <data name="RcSt_Unreadable" xml:space="preserve">
+    <value>تعذرت قراءة الحجم</value>
+  </data>
+  <data name="RcSt_NoSpace" xml:space="preserve">
+    <value>لا توجد مساحة كافية</value>
+  </data>
+  <data name="RcSt_Cancelled" xml:space="preserve">
+    <value>أُلغي</value>
+  </data>
+  <data name="RcSkip_Volatile" xml:space="preserve">
+    <value>في الذاكرة فقط</value>
+  </data>
+  <data name="RcSkip_OtherNamespace" xml:space="preserve">
+    <value>خلية تطبيق</value>
+  </data>
+  <data name="RcSkip_Excluded" xml:space="preserve">
+    <value>محمية (لا تُمَس)</value>
+  </data>
+  <data name="RcSkip_UnmappedPath" xml:space="preserve">
+    <value>تعذر تحديد الموقع</value>
+  </data>
+  <data name="RcSkip_Small" xml:space="preserve">
+    <value>256 كيلوبايت أو أقل</value>
+  </data>
+  <data name="RgSelectAll" xml:space="preserve">
+    <value>تحديد الكل</value>
+  </data>
+  <data name="RgSelectNone" xml:space="preserve">
+    <value>إلغاء التحديد</value>
+  </data>
+  <data name="RgThorough" xml:space="preserve">
+    <value>فحص معمّق</value>
+  </data>
+  <data name="RgThoroughHint" xml:space="preserve">
+    <value>يفحص أيضًا أسماء القيم التي هي مسارات (يجد أكثر ويحتاج عناية أكبر)</value>
+  </data>
+  <data name="RgColCategory" xml:space="preserve">
+    <value>الفئة</value>
+  </data>
+  <data name="RgColProblem" xml:space="preserve">
+    <value>المشكلة</value>
+  </data>
+  <data name="RgColKey" xml:space="preserve">
+    <value>المفتاح</value>
+  </data>
+  <data name="RgColValue" xml:space="preserve">
+    <value>القيمة</value>
+  </data>
+  <data name="RgColData" xml:space="preserve">
+    <value>البيانات</value>
+  </data>
+  <data name="RgIntro" xml:space="preserve">
+    <value>الفحص يقرأ السجل فقط. لا يُحذف شيء حتى تحدد العناصر وتؤكد، وكل حذف يُصدَّر أولًا إلى نسخة احتياطية ‎.reg.</value>
+  </data>
+  <data name="RgScanning" xml:space="preserve">
+    <value>جارٍ فحص السجل…</value>
+  </data>
+  <data name="RgCount" xml:space="preserve">
+    <value>وُجدت {0:مشكلة|مشكلتان|مشكلات|مشكلة} · لم يُعرض {1:عنصر فيه|عنصران فيهما|عناصر فيها|عنصرًا فيها} كلمات تجاهل</value>
+  </data>
+  <data name="RgUnreadable" xml:space="preserve">
+    <value>تعذرت قراءة {0:مفتاح|مفتاحين|مفاتيح|مفتاحًا} (صلاحيات المسؤول)</value>
+  </data>
+  <data name="RgBackupAt" xml:space="preserve">
+    <value>النسخة الاحتياطية: {0}</value>
+  </data>
+  <data name="RgWarning" xml:space="preserve">
+    <value>راجع قبل الحذف: يُحكم على العناصر بوجود الملفات التي تذكرها. البرامج الموجودة على أقراص غير موصولة قد تبدو غير صالحة.</value>
+  </data>
+  <data name="RgConfirm" xml:space="preserve">
+    <value>حذف {0:عنصر|عنصرين|عناصر|عنصرًا} من السجل؟&#xA;&#xA;كل ما يُحذف يُصدَّر أولًا إلى نسخة احتياطية ‎.reg يمكنك استعادتها.</value>
+  </data>
+  <data name="RgConfirmTitle" xml:space="preserve">
+    <value>حذف عناصر السجل</value>
+  </data>
+  <data name="RgCleaned" xml:space="preserve">
+    <value>حُذف {0:عنصر|عنصران|عناصر|عنصرًا}.</value>
+  </data>
+  <data name="RgSkipped" xml:space="preserve">
+    <value>تُرك {0:عنصر|عنصران|عناصر|عنصرًا} (تغيّر بعد الفحص أو اختفى).</value>
+  </data>
+  <data name="RgFailed" xml:space="preserve">
+    <value>تعذر حذف {0:عنصر|عنصرين|عناصر|عنصرًا}: {1}</value>
+  </data>
+  <data name="RgRegFilter" xml:space="preserve">
+    <value>نسخة احتياطية للسجل</value>
+  </data>
+  <data name="RgRestoreConfirm" xml:space="preserve">
+    <value>كتابة محتوى هذه النسخة الاحتياطية في السجل؟&#xA;&#xA;{0}</value>
+  </data>
+  <data name="RgRestored" xml:space="preserve">
+    <value>استُعيدت {0:قيمة|قيمتان|قيم|قيمة}.</value>
+  </data>
+  <data name="RgRestoreFailed" xml:space="preserve">
+    <value>فشلت الاستعادة: {0}</value>
+  </data>
+  <data name="RgWholeKey" xml:space="preserve">
+    <value>(المفتاح كاملًا)</value>
+  </data>
+  <data name="RgDefaultValue" xml:space="preserve">
+    <value>(افتراضي)</value>
+  </data>
+  <data name="RgIgnoredBy" xml:space="preserve">
+    <value>يحتوي كلمة التجاهل "{0}"</value>
+  </data>
+  <data name="Rc_UserEntries" xml:space="preserve">
+    <value>عناصر المستخدم</value>
+  </data>
+  <data name="Rc_AllUsersEntries" xml:space="preserve">
+    <value>عناصر كل المستخدمين</value>
+  </data>
+  <data name="Rc_StartMenu" xml:space="preserve">
+    <value>قائمة ابدأ</value>
+  </data>
+  <data name="Rc_ObsoleteSoftware" xml:space="preserve">
+    <value>برامج قديمة</value>
+  </data>
+  <data name="Rc_FileExtensions" xml:space="preserve">
+    <value>امتدادات الملفات</value>
+  </data>
+  <data name="Rc_FileAssociations" xml:space="preserve">
+    <value>اقترانات الملفات</value>
+  </data>
+  <data name="Rc_ActiveXCom" xml:space="preserve">
+    <value>ActiveX و COM</value>
+  </data>
+  <data name="Rc_SystemEntries" xml:space="preserve">
+    <value>عناصر النظام</value>
+  </data>
+  <data name="Rc_ApplicationPaths" xml:space="preserve">
+    <value>مسارات التطبيقات</value>
+  </data>
+  <data name="Rc_AddRemoveEntries" xml:space="preserve">
+    <value>إضافة/إزالة البرامج</value>
+  </data>
+  <data name="Rc_SharedDlls" xml:space="preserve">
+    <value>المكتبات المشتركة</value>
+  </data>
+  <data name="Rc_Fonts" xml:space="preserve">
+    <value>الخطوط</value>
+  </data>
+  <data name="Rc_HelpFiles" xml:space="preserve">
+    <value>ملفات التعليمات</value>
+  </data>
+  <data name="Rc_IeContextMenu" xml:space="preserve">
+    <value>قائمة IE</value>
+  </data>
+  <data name="Rc_IeToolbarButtons" xml:space="preserve">
+    <value>أزرار شريط IE</value>
+  </data>
+  <data name="Rc_BrowserHelperObjects" xml:space="preserve">
+    <value>إضافات المتصفح المساعدة</value>
+  </data>
+  <data name="Rc_ShellExtensions" xml:space="preserve">
+    <value>امتدادات الواجهة</value>
+  </data>
+  <data name="Rc_Sounds" xml:space="preserve">
+    <value>الأصوات</value>
+  </data>
+  <data name="Rc_HistoryLists" xml:space="preserve">
+    <value>قوائم السجل</value>
+  </data>
+  <data name="Rc_SharedFolders" xml:space="preserve">
+    <value>المجلدات المشتركة</value>
+  </data>
+  <data name="Rr_InvalidPath" xml:space="preserve">
+    <value>المسار غير موجود</value>
+  </data>
+  <data name="Rr_InvalidEntry" xml:space="preserve">
+    <value>الاسم مسار غير موجود</value>
+  </data>
+  <data name="Rr_InvalidStartupReference" xml:space="preserve">
+    <value>موافقة بدء تشغيل بلا برنامج</value>
+  </data>
+  <data name="Rr_InvalidNotification" xml:space="preserve">
+    <value>إشعار لبرنامج محذوف</value>
+  </data>
+  <data name="Rr_EmptyUselessKey" xml:space="preserve">
+    <value>مفتاح فارغ</value>
+  </data>
+  <data name="Rr_ObsoleteStartMenuItem" xml:space="preserve">
+    <value>عنصر قائمة ابدأ لم يعد موجودًا</value>
+  </data>
+  <data name="Rr_ObsoleteKey" xml:space="preserve">
+    <value>مفتاح برنامج فارغ</value>
+  </data>
+  <data name="Rr_EmptyKey" xml:space="preserve">
+    <value>مفتاح فارغ</value>
+  </data>
+  <data name="Rr_OpenWithAppMissing" xml:space="preserve">
+    <value>برنامج "فتح باستخدام" مفقود</value>
+  </data>
+  <data name="Rr_InvalidProgid" xml:space="preserve">
+    <value>نوع ملف غير مسجل</value>
+  </data>
+  <data name="Rr_EmptyIconPath" xml:space="preserve">
+    <value>مسار أيقونة فارغ</value>
+  </data>
+  <data name="Rr_InvalidIconPath" xml:space="preserve">
+    <value>ملف الأيقونة مفقود</value>
+  </data>
+  <data name="Rr_UselessFileExtension" xml:space="preserve">
+    <value>امتداد ملف غير مستخدم</value>
+  </data>
+  <data name="Rr_MissingProgid" xml:space="preserve">
+    <value>امتداد يشير إلى نوع ملف مفقود</value>
+  </data>
+  <data name="Rr_EmptyShellKey" xml:space="preserve">
+    <value>مفتاح أوامر فارغ</value>
+  </data>
+  <data name="Rr_EmptyCommandKey" xml:space="preserve">
+    <value>أمر فارغ</value>
+  </data>
+  <data name="Rr_InvalidCommand" xml:space="preserve">
+    <value>برنامج الأمر مفقود</value>
+  </data>
+  <data name="Rr_InvalidDropTarget" xml:space="preserve">
+    <value>معالج إفلات غير مسجل</value>
+  </data>
+  <data name="Rr_EmptyShellexKey" xml:space="preserve">
+    <value>مفتاح امتداد واجهة فارغ</value>
+  </data>
+  <data name="Rr_InvalidShellext" xml:space="preserve">
+    <value>امتداد واجهة غير مسجل</value>
+  </data>
+  <data name="Rr_InvalidShellexKey" xml:space="preserve">
+    <value>مفتاح امتداد واجهة غير مسجل</value>
+  </data>
+  <data name="Rr_UselessOpenWithApp" xml:space="preserve">
+    <value>مفتاح "فتح باستخدام" غير مستخدم</value>
+  </data>
+  <data name="Rr_UselessKey" xml:space="preserve">
+    <value>مفتاح تطبيق غير مستخدم</value>
+  </data>
+  <data name="Rr_InvalidFirewallRule" xml:space="preserve">
+    <value>قاعدة جدار حماية لبرنامج مفقود</value>
+  </data>
+  <data name="Rr_ObsoleteUninstallEntry" xml:space="preserve">
+    <value>بيانات مخزنة لبرنامج أزيل</value>
+  </data>
+  <data name="Rr_InvalidInstallerReference" xml:space="preserve">
+    <value>مجلد مثبّت مفقود</value>
+  </data>
+  <data name="Rr_InvalidApprovedShellExt" xml:space="preserve">
+    <value>امتداد واجهة معتمد غير مسجل</value>
+  </data>
+  <data name="Rr_FileMissing" xml:space="preserve">
+    <value>الملف غير موجود</value>
+  </data>
+  <data name="Rr_FileDamaged" xml:space="preserve">
+    <value>ملف تالف (حجمه صفر)</value>
+  </data>
+  <data name="Rr_InvalidDeviceDriver" xml:space="preserve">
+    <value>ملف التعريف مفقود</value>
+  </data>
+  <data name="Rr_InvalidSound" xml:space="preserve">
+    <value>ملف الصوت مفقود</value>
+  </data>
+  <data name="Rr_InvalidFile" xml:space="preserve">
+    <value>البرنامج مفقود</value>
+  </data>
+  <data name="Rr_InvalidAutoplayEventHandler" xml:space="preserve">
+    <value>معالج التشغيل التلقائي غير مسجل</value>
+  </data>
+  <data name="Rr_InvalidAutoplayHandler" xml:space="preserve">
+    <value>برنامج التشغيل التلقائي مفقود</value>
+  </data>
+  <data name="Rr_InvalidHistory" xml:space="preserve">
+    <value>سجل لملف مفقود</value>
+  </data>
+  <data name="TabHistory" xml:space="preserve">
+    <value>مسح الآثار</value>
+  </data>
+  <data name="HsAnalyse" xml:space="preserve">
+    <value>تحليل</value>
+  </data>
+  <data name="HsClean" xml:space="preserve">
+    <value>تنظيف المحدد…</value>
+  </data>
+  <data name="HsSelectAll" xml:space="preserve">
+    <value>تحديد الكل</value>
+  </data>
+  <data name="HsSelectNone" xml:space="preserve">
+    <value>إلغاء التحديد</value>
+  </data>
+  <data name="HsAllUsers" xml:space="preserve">
+    <value>ملفات المتصفح لكل المستخدمين</value>
+  </data>
+  <data name="HsAllUsersHint" xml:space="preserve">
+    <value>تنظيف ملفات Firefox لحسابات المستخدمين الآخرين أيضًا (يحتاج صلاحيات المسؤول)</value>
+  </data>
+  <data name="HsGroupWindows" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="HsGroupStart" xml:space="preserve">
+    <value>قائمة ابدأ</value>
+  </data>
+  <data name="HsGroupFirefox" xml:space="preserve">
+    <value>Firefox وWaterfox وPale Moon وSeaMonkey</value>
+  </data>
+  <data name="HsGroupUnavailable" xml:space="preserve">
+    <value>غير متاح</value>
+  </data>
+  <data name="HsChromium" xml:space="preserve">
+    <value>Chrome وEdge وOpera ومتصفحات Chromium الأخرى</value>
+  </data>
+  <data name="HsPlugins" xml:space="preserve">
+    <value>إضافات البرامج (applications.ini)</value>
+  </data>
+  <data name="HsBlockedTip" xml:space="preserve">
+    <value>غير منفّذ: أوقف نظام الأمان الآلي تحليل هذا الجزء.</value>
+  </data>
+  <data name="HsUnavailableNote" xml:space="preserve">
+    <value>هذه الأجزاء من البرنامج الأصلي لم يُعَد تنفيذها.</value>
+  </data>
+  <data name="HsColItem" xml:space="preserve">
+    <value>العنصر</value>
+  </data>
+  <data name="HsColAction" xml:space="preserve">
+    <value>الإجراء</value>
+  </data>
+  <data name="HsColTarget" xml:space="preserve">
+    <value>الهدف</value>
+  </data>
+  <data name="HsColSize" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="HsIntro" xml:space="preserve">
+    <value>اختر العناصر واضغط «تحليل». التحليل للقراءة فقط، ولا يُحذف شيء حتى تؤكد. بيانات السجل تُنسخ أولًا إلى ملف ‎.reg.</value>
+  </data>
+  <data name="HsAnalysing" xml:space="preserve">
+    <value>جارٍ التحليل…</value>
+  </data>
+  <data name="HsCount" xml:space="preserve">
+    <value>{0:إجراء|إجراءان|إجراءات|إجراءً} · {1}</value>
+  </data>
+  <data name="HsDone" xml:space="preserve">
+    <value>تم: {0:إجراء|إجراءان|إجراءات|إجراءً}، وتحرير {1}</value>
+  </data>
+  <data name="HsFailed" xml:space="preserve">
+    <value>فشل {0:إجراء|إجراءان|إجراءات|إجراءً}: {1}</value>
+  </data>
+  <data name="HsConfirm" xml:space="preserve">
+    <value>تنفيذ {0:إجراء|إجراءين|إجراءات|إجراءً} ({1})؟&#xA;&#xA;الملفات تُحذف نهائيًا، وبيانات السجل تُنسخ أولًا إلى ملف ‎.reg.</value>
+  </data>
+  <data name="HsConfirmTitle" xml:space="preserve">
+    <value>مسح الآثار</value>
+  </data>
+  <data name="HsBrowserRunning" xml:space="preserve">
+    <value>تُخطّي لأن المتصفح يعمل: {0}</value>
+  </data>
+  <data name="HsAdminHint" xml:space="preserve">
+    <value>بعض العناصر المحددة تحتاج صلاحيات المسؤول، ودونها تُتخطّى تلك الأجزاء.</value>
+  </data>
+  <data name="HsAdminMark" xml:space="preserve">
+    <value>(مسؤول)</value>
+  </data>
+  <data name="Hi_win_opensave" xml:space="preserve">
+    <value>سجل نوافذ الفتح والحفظ</value>
+  </data>
+  <data name="Hi_win_clipboard" xml:space="preserve">
+    <value>الحافظة</value>
+  </data>
+  <data name="Hi_win_mapdrives" xml:space="preserve">
+    <value>سجل تعيين محركات الشبكة</value>
+  </data>
+  <data name="Hi_win_emptytemp" xml:space="preserve">
+    <value>المجلدات الفارغة في Temp</value>
+  </data>
+  <data name="Hi_win_prefetch" xml:space="preserve">
+    <value>ملفات Prefetch</value>
+  </data>
+  <data name="Hi_win_spool" xml:space="preserve">
+    <value>ملفات طابور الطباعة</value>
+  </data>
+  <data name="Hi_win_trayicons" xml:space="preserve">
+    <value>سجل أيقونات منطقة الإشعارات</value>
+  </data>
+  <data name="Hi_win_windowpos" xml:space="preserve">
+    <value>أحجام النوافذ ومواضعها</value>
+  </data>
+  <data name="Hi_win_outlooknk2" xml:space="preserve">
+    <value>قائمة الإكمال التلقائي في Outlook</value>
+  </data>
+  <data name="Hi_win_outlooktemp" xml:space="preserve">
+    <value>ملفات Outlook المؤقتة</value>
+  </data>
+  <data name="Hi_win_miscmru" xml:space="preserve">
+    <value>قوائم حديثة أخرى</value>
+  </data>
+  <data name="Hi_win_ftp" xml:space="preserve">
+    <value>سجل حسابات FTP</value>
+  </data>
+  <data name="Hi_win_dumps" xml:space="preserve">
+    <value>ملفات تفريغ الذاكرة</value>
+  </data>
+  <data name="Hi_win_logs" xml:space="preserve">
+    <value>ملفات سجلات Windows</value>
+  </data>
+  <data name="Hi_win_wer" xml:space="preserve">
+    <value>تقارير أخطاء Windows</value>
+  </data>
+  <data name="Hi_win_fontcache" xml:space="preserve">
+    <value>ذاكرة الخطوط المؤقتة</value>
+  </data>
+  <data name="Hi_win_iislogs" xml:space="preserve">
+    <value>ملفات سجلات IIS</value>
+  </data>
+  <data name="Hi_win_thumbcache" xml:space="preserve">
+    <value>ذاكرة الصور المصغّرة</value>
+  </data>
+  <data name="Hi_win_appcompat" xml:space="preserve">
+    <value>سجل توافق البرامج</value>
+  </data>
+  <data name="Hi_win_eventlogs" xml:space="preserve">
+    <value>سجلات الأحداث</value>
+  </data>
+  <data name="Hi_start_runmru" xml:space="preserve">
+    <value>سجل نافذة «تشغيل»</value>
+  </data>
+  <data name="Hi_start_recentdocs" xml:space="preserve">
+    <value>المستندات الأخيرة</value>
+  </data>
+  <data name="Hi_start_findfiles" xml:space="preserve">
+    <value>سجل البحث عن الملفات</value>
+  </data>
+  <data name="Hi_start_findcomputer" xml:space="preserve">
+    <value>سجل البحث عن الأجهزة</value>
+  </data>
+  <data name="Hi_start_userassist_invalid" xml:space="preserve">
+    <value>قائمة استخدام البرامج: البرامج المفقودة فقط</value>
+  </data>
+  <data name="Hi_start_netrecent" xml:space="preserve">
+    <value>مواقع الشبكة الأخيرة</value>
+  </data>
+  <data name="Hi_start_menuorder" xml:space="preserve">
+    <value>ترتيب قائمة ابدأ</value>
+  </data>
+  <data name="Hi_start_userassist_all" xml:space="preserve">
+    <value>قائمة استخدام البرامج: كل العناصر</value>
+  </data>
+  <data name="Hi_start_jumplists" xml:space="preserve">
+    <value>قوائم الانتقال</value>
+  </data>
+  <data name="Hf_History" xml:space="preserve">
+    <value>سجل التصفح</value>
+  </data>
+  <data name="Hf_Cache" xml:space="preserve">
+    <value>الذاكرة المؤقتة</value>
+  </data>
+  <data name="Hf_Cookies" xml:space="preserve">
+    <value>الكوكيز (مع حفظ القائمة البيضاء)</value>
+  </data>
+  <data name="Hf_Forms" xml:space="preserve">
+    <value>سجل النماذج</value>
+  </data>
+  <data name="Hf_SearchHistory" xml:space="preserve">
+    <value>سجل شريط البحث</value>
+  </data>
+  <data name="Hf_Downloads" xml:space="preserve">
+    <value>سجل التنزيلات</value>
+  </data>
+  <data name="Hf_Passwords" xml:space="preserve">
+    <value>كلمات المرور المحفوظة</value>
+  </data>
+  <data name="Hf_Sessions" xml:space="preserve">
+    <value>الجلسات المحفوظة</value>
+  </data>
+  <data name="Hf_SitePreferences" xml:space="preserve">
+    <value>تفضيلات المواقع وأذوناتها</value>
+  </data>
+  <data name="Hf_CrashReports" xml:space="preserve">
+    <value>تقارير الأعطال</value>
+  </data>
+  <data name="Hf_Compact" xml:space="preserve">
+    <value>ضغط قواعد البيانات</value>
+  </data>
+  <data name="Hfk_firefox_history" xml:space="preserve">
+    <value>Firefox: السجل</value>
+  </data>
+  <data name="Hfk_firefox_cache" xml:space="preserve">
+    <value>Firefox: الذاكرة المؤقتة</value>
+  </data>
+  <data name="Hfk_firefox_cookies" xml:space="preserve">
+    <value>Firefox: الكوكيز</value>
+  </data>
+  <data name="Hfk_firefox_forms" xml:space="preserve">
+    <value>Firefox: النماذج</value>
+  </data>
+  <data name="Hfk_firefox_search" xml:space="preserve">
+    <value>Firefox: البحث</value>
+  </data>
+  <data name="Hfk_firefox_passwords" xml:space="preserve">
+    <value>Firefox: كلمات المرور</value>
+  </data>
+  <data name="Hfk_firefox_downloads" xml:space="preserve">
+    <value>Firefox: التنزيلات</value>
+  </data>
+  <data name="Hfk_firefox_sessions" xml:space="preserve">
+    <value>Firefox: الجلسات</value>
+  </data>
+  <data name="Hfk_firefox_siteprefs" xml:space="preserve">
+    <value>Firefox: تفضيلات المواقع</value>
+  </data>
+  <data name="Hfk_firefox_crash" xml:space="preserve">
+    <value>Firefox: تقارير الأعطال</value>
+  </data>
+  <data name="Hfk_firefox_compact" xml:space="preserve">
+    <value>Firefox: ضغط</value>
+  </data>
+  <data name="Hk_delete" xml:space="preserve">
+    <value>حذف ملف</value>
+  </data>
+  <data name="Hk_rmdir" xml:space="preserve">
+    <value>حذف مجلد</value>
+  </data>
+  <data name="Hk_rmdir_empty" xml:space="preserve">
+    <value>حذف المجلدات الفارغة</value>
+  </data>
+  <data name="Hk_ini" xml:space="preserve">
+    <value>حذف عنصر INI</value>
+  </data>
+  <data name="Hk_filter_lines" xml:space="preserve">
+    <value>حذف أسطر</value>
+  </data>
+  <data name="Hk_reg_delete_key" xml:space="preserve">
+    <value>حذف مفتاح سجل</value>
+  </data>
+  <data name="Hk_reg_empty_key" xml:space="preserve">
+    <value>تفريغ مفتاح سجل</value>
+  </data>
+  <data name="Hk_reg_delete_value" xml:space="preserve">
+    <value>حذف قيمة سجل</value>
+  </data>
+  <data name="Hk_clipboard" xml:space="preserve">
+    <value>مسح الحافظة</value>
+  </data>
+  <data name="Hk_eventlog" xml:space="preserve">
+    <value>مسح سجل الأحداث</value>
+  </data>
+  <data name="Hk_explorer_stop" xml:space="preserve">
+    <value>إيقاف المستكشف</value>
+  </data>
+  <data name="Hk_explorer_start" xml:space="preserve">
+    <value>إعادة تشغيل المستكشف</value>
+  </data>
+  <data name="Hk_sql" xml:space="preserve">
+    <value>تنظيف قاعدة بيانات</value>
+  </data>
+  <data name="Hk_sql_delete" xml:space="preserve">
+    <value>حذف صفوف من قاعدة بيانات</value>
+  </data>
+  <data name="Hk_vacuum" xml:space="preserve">
+    <value>ضغط قاعدة بيانات</value>
+  </data>
+  <data name="Hk_wal_checkpoint" xml:space="preserve">
+    <value>دمج سجل قاعدة البيانات</value>
+  </data>
+  <data name="TabDuplicates" xml:space="preserve">
+    <value>الملفات المكررة</value>
+  </data>
+  <data name="DpScan" xml:space="preserve">
+    <value>فحص</value>
+  </data>
+  <data name="DpDelete" xml:space="preserve">
+    <value>حذف المحدد…</value>
+  </data>
+  <data name="DpCheckOne" xml:space="preserve">
+    <value>تحديد ملف واحد في كل مجموعة</value>
+  </data>
+  <data name="DpCheckOneTip" xml:space="preserve">
+    <value>يحدد أول ملف في كل مجموعة، وتبقى النسخ الأخرى غير محددة.</value>
+  </data>
+  <data name="DpUncheckAll" xml:space="preserve">
+    <value>إلغاء تحديد الكل</value>
+  </data>
+  <data name="DpWhere" xml:space="preserve">
+    <value>المجلدات والأقراص المراد فحصها</value>
+  </data>
+  <data name="DpCompare" xml:space="preserve">
+    <value>تُعدّ الملفات مكررة إذا تطابق فيها</value>
+  </data>
+  <data name="DpSameName" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="DpSameSize" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="DpSameDate" xml:space="preserve">
+    <value>وقت التعديل (بالدقيقة)</value>
+  </data>
+  <data name="DpContent" xml:space="preserve">
+    <value>المحتوى:</value>
+  </data>
+  <data name="DpContentNone" xml:space="preserve">
+    <value>بلا مقارنة</value>
+  </data>
+  <data name="DpMinSize" xml:space="preserve">
+    <value>تجاهل الملفات الأصغر من</value>
+  </data>
+  <data name="DpFileTypes" xml:space="preserve">
+    <value>أنواع الملفات</value>
+  </data>
+  <data name="DpNote" xml:space="preserve">
+    <value>مقارنة المحتوى وحدها تجد المكررات الحقيقية. لا تُفحص أبدًا ملفات النظام ولا الملفات الفارغة ولا الروابط ولا المجلدات المستثناة، مثل مجلد Windows وProgram Files وAppData.</value>
+  </data>
+  <data name="DpColSize" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="DpColModified" xml:space="preserve">
+    <value>تاريخ التعديل</value>
+  </data>
+  <data name="DpIntro" xml:space="preserve">
+    <value>اختر المجلدات أو الأقراص واضغط «فحص». الفحص لا يغيّر شيئًا، ولا يُحدَّد أي ملف للحذف حتى تحدده بنفسك.</value>
+  </data>
+  <data name="DpScanning" xml:space="preserve">
+    <value>جارٍ الفحص…</value>
+  </data>
+  <data name="DpScanningCount" xml:space="preserve">
+    <value>جارٍ الفحص… {0:ملف|ملفان|ملفات|ملفًا}</value>
+  </data>
+  <data name="DpHashing" xml:space="preserve">
+    <value>مقارنة المحتوى… {0}%</value>
+  </data>
+  <data name="DpElapsed" xml:space="preserve">
+    <value>{0} ث</value>
+  </data>
+  <data name="DpResult" xml:space="preserve">
+    <value>فُحص {0:ملف|ملفان|ملفات|ملفًا} · {1:مجموعة مكررة|مجموعتان مكررتان|مجموعات مكررة|مجموعة مكررة} · {2:ملف|ملفان|ملفات|ملفًا} · يمكن تحرير {3}</value>
+  </data>
+  <data name="DpGroupTitle" xml:space="preserve">
+    <value>المجموعة المكررة {0} · {1:ملف|ملفان|ملفات|ملفًا} · يمكن تحرير {2}</value>
+  </data>
+  <data name="DpNotVerified" xml:space="preserve">
+    <value>لم يُقارَن المحتوى: قد تختلف ملفات المجموعة. قارن المحتوى (MD5) قبل الحذف.</value>
+  </data>
+  <data name="DpUnreadable" xml:space="preserve">
+    <value>تعذرت قراءة {0:ملف|ملفين|ملفات|ملفًا}، فاستُبعد من النتائج.</value>
+  </data>
+  <data name="DpNoRoots" xml:space="preserve">
+    <value>حدد مجلدًا أو قرصًا واحدًا على الأقل.</value>
+  </data>
+  <data name="DpExcluded" xml:space="preserve">
+    <value>هذا المجلد في قائمة الاستثناء وسيُتخطّى:&#xA;&#xA;{0}</value>
+  </data>
+  <data name="DpCheckOneWarning" xml:space="preserve">
+    <value>لم يقارن الفحص المحتوى.&#xA;تحديد ملف في كل مجموعة وحذفه قد يحذف ملفات ليست مكررة فعلًا. هل تريد المتابعة؟</value>
+  </data>
+  <data name="DpWholeGroups" xml:space="preserve">
+    <value>كل ملفات {0:مجموعة|مجموعتين|مجموعات|مجموعة} محددة.&#xA;حذفها لا يُبقي أي نسخة من تلك الملفات.&#xA;&#xA;هل تحذفها رغم ذلك؟</value>
+  </data>
+  <data name="DpWholeGroupsTitle" xml:space="preserve">
+    <value>لن تبقى أي نسخة</value>
+  </data>
+  <data name="DpConfirm" xml:space="preserve">
+    <value>{0:ملف|ملفان|ملفات|ملفًا}، بحجم {1}، {2}.&#xA;&#xA;هل تريد المتابعة؟</value>
+  </data>
+  <data name="DpConfirmTitle" xml:space="preserve">
+    <value>حذف الملفات المكررة</value>
+  </data>
+  <data name="DpRemoved" xml:space="preserve">
+    <value>حُذف {0:ملف|ملفان|ملفات|ملفًا}، وحُرّر {1}.</value>
+  </data>
+  <data name="DpNotRemoved" xml:space="preserve">
+    <value>لم يُحذف {0:ملف|ملفان|ملفات|ملفًا}: {1}</value>
+  </data>
+  <data name="DpProf_Default" xml:space="preserve">
+    <value>الافتراضي (برامج، موسيقى، فيديو، أرشيف…)</value>
+  </data>
+  <data name="DpProf_AllFiles" xml:space="preserve">
+    <value>كل الملفات</value>
+  </data>
+  <data name="DpProf_Audio" xml:space="preserve">
+    <value>الصوت</value>
+  </data>
+  <data name="DpProf_Video" xml:space="preserve">
+    <value>الفيديو</value>
+  </data>
+  <data name="DpProf_Zip" xml:space="preserve">
+    <value>الأرشيف</value>
+  </data>
+  <data name="DpProf_Image" xml:space="preserve">
+    <value>الصور</value>
+  </data>
+  <data name="DpProf_Document" xml:space="preserve">
+    <value>المستندات</value>
+  </data>
+  <data name="TabDisk" xml:space="preserve">
+    <value>تحليل القرص</value>
+  </data>
+  <data name="DaAnalyze" xml:space="preserve">
+    <value>تحليل</value>
+  </data>
+  <data name="DaOpen" xml:space="preserve">
+    <value>فتح في المستكشف</value>
+  </data>
+  <data name="DaDelete" xml:space="preserve">
+    <value>نقل إلى سلة المحذوفات…</value>
+  </data>
+  <data name="DaReport" xml:space="preserve">
+    <value>حفظ تقرير…</value>
+  </data>
+  <data name="DaAnalyzingCount" xml:space="preserve">
+    <value>جارٍ التحليل… {0:ملف|ملفان|ملفات|ملفًا}</value>
+  </data>
+  <data name="DaDone" xml:space="preserve">
+    <value>{0:ملف|ملفان|ملفات|ملفًا} في {1:مجلد|مجلدين|مجلدات|مجلدًا} · {2}</value>
+  </data>
+  <data name="DaContents" xml:space="preserve">
+    <value>محتويات المجلد</value>
+  </data>
+  <data name="DaTypes" xml:space="preserve">
+    <value>أنواع الملفات</value>
+  </data>
+  <data name="DaTop" xml:space="preserve">
+    <value>أكبر 100 ملف</value>
+  </data>
+  <data name="DaColSize" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="DaColShare" xml:space="preserve">
+    <value>النسبة</value>
+  </data>
+  <data name="DaColItems" xml:space="preserve">
+    <value>العناصر</value>
+  </data>
+  <data name="DaColFiles" xml:space="preserve">
+    <value>الملفات</value>
+  </data>
+  <data name="DaColFolders" xml:space="preserve">
+    <value>المجلدات</value>
+  </data>
+  <data name="DaColAttrib" xml:space="preserve">
+    <value>الخصائص</value>
+  </data>
+  <data name="DaColModified" xml:space="preserve">
+    <value>تاريخ التعديل</value>
+  </data>
+  <data name="DaColType" xml:space="preserve">
+    <value>النوع</value>
+  </data>
+  <data name="DaColExtension" xml:space="preserve">
+    <value>الامتداد</value>
+  </data>
+  <data name="DaColCount" xml:space="preserve">
+    <value>العدد</value>
+  </data>
+  <data name="DaColLocation" xml:space="preserve">
+    <value>الموقع</value>
+  </data>
+  <data name="DaNoExtension" xml:space="preserve">
+    <value>(بلا امتداد)</value>
+  </data>
+  <data name="DaInaccessible" xml:space="preserve">
+    <value>تعذّر الوصول</value>
+  </data>
+  <data name="DaEmpty" xml:space="preserve">
+    <value>المجلدات الفارغة</value>
+  </data>
+  <data name="DaFindEmpty" xml:space="preserve">
+    <value>بحث عن المجلدات الفارغة</value>
+  </data>
+  <data name="DaDeleteEmpty" xml:space="preserve">
+    <value>نقل المحدد إلى سلة المحذوفات…</value>
+  </data>
+  <data name="DaEmptyNote" xml:space="preserve">
+    <value>مجلدات لا تحوي أي ملف في أي مستوى. تُتخطّى المجلدات المخفية والنظامية وللقراءة فقط ومجلدات Windows.</value>
+  </data>
+  <data name="DaFindingEmpty" xml:space="preserve">
+    <value>جارٍ البحث عن المجلدات الفارغة…</value>
+  </data>
+  <data name="DaEmptyFound" xml:space="preserve">
+    <value>وُجد {0:مجلد فارغ|مجلدان فارغان|مجلدات فارغة|مجلدًا فارغًا}</value>
+  </data>
+  <data name="DaDeleteEmptyConfirm" xml:space="preserve">
+    <value>نقل {0:مجلد فارغ|مجلدين فارغين|مجلدات فارغة|مجلدًا فارغًا} إلى سلة المحذوفات؟</value>
+  </data>
+  <data name="DaNoLongerEmpty" xml:space="preserve">
+    <value>تُرك {0:مجلد|مجلدان|مجلدات|مجلدًا} لم يعد فارغًا.</value>
+  </data>
+  <data name="DaCat_Music" xml:space="preserve">
+    <value>الصوت</value>
+  </data>
+  <data name="DaCat_Video" xml:space="preserve">
+    <value>الفيديو</value>
+  </data>
+  <data name="DaCat_Archives" xml:space="preserve">
+    <value>الأرشيف</value>
+  </data>
+  <data name="DaCat_Images" xml:space="preserve">
+    <value>الصور</value>
+  </data>
+  <data name="DaCat_Documents" xml:space="preserve">
+    <value>المستندات</value>
+  </data>
+  <data name="DaCat_Others" xml:space="preserve">
+    <value>أخرى</value>
+  </data>
+  <data name="DaDeleteConfirm" xml:space="preserve">
+    <value>نقل {0:عنصر|عنصرين|عناصر|عنصرًا} ({1}) إلى سلة المحذوفات؟</value>
+  </data>
+  <data name="DaDeleteTitle" xml:space="preserve">
+    <value>نقل إلى سلة المحذوفات</value>
+  </data>
+  <data name="DaDeleteBlocked" xml:space="preserve">
+    <value>لا يمكن حذف هذا العنصر من هنا (قرص، أو عنصر نظام مخفي، أو سلة المحذوفات):&#xA;&#xA;{0}</value>
+  </data>
+  <data name="DaDeleted" xml:space="preserve">
+    <value>نُقل {0:عنصر|عنصران|عناصر|عنصرًا} إلى سلة المحذوفات.</value>
+  </data>
+  <data name="DaNotDeleted" xml:space="preserve">
+    <value>لم يُحذف {0:عنصر|عنصران|عناصر|عنصرًا}: {1}</value>
+  </data>
+  <data name="DaReportFilter" xml:space="preserve">
+    <value>تقرير نصي</value>
+  </data>
+  <data name="TabRestore" xml:space="preserve">
+    <value>الاستعادة</value>
+  </data>
+  <data name="RsRestore" xml:space="preserve">
+    <value>استعادة…</value>
+  </data>
+  <data name="RsOpenFolder" xml:space="preserve">
+    <value>إظهار في المجلد</value>
+  </data>
+  <data name="RsDelete" xml:space="preserve">
+    <value>حذف النسخة الاحتياطية…</value>
+  </data>
+  <data name="RsAddFolder" xml:space="preserve">
+    <value>إضافة مجلد نسخ احتياطية…</value>
+  </data>
+  <data name="RsColType" xml:space="preserve">
+    <value>النوع</value>
+  </data>
+  <data name="RsColCreated" xml:space="preserve">
+    <value>تاريخ الإنشاء</value>
+  </data>
+  <data name="RsColSize" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="RsColSource" xml:space="preserve">
+    <value>أنشأها</value>
+  </data>
+  <data name="RsKind_JunkFiles" xml:space="preserve">
+    <value>الملفات المهملة</value>
+  </data>
+  <data name="RsKind_DuplicateFiles" xml:space="preserve">
+    <value>الملفات المكررة</value>
+  </data>
+  <data name="RsKind_Registry" xml:space="preserve">
+    <value>السجل (‎.reg)‏</value>
+  </data>
+  <data name="RsKind_RegistryZip" xml:space="preserve">
+    <value>السجل (zip)‏</value>
+  </data>
+  <data name="RsFromOriginal" xml:space="preserve">
+    <value>Ace Utilities</value>
+  </data>
+  <data name="RsFromCleanSuite" xml:space="preserve">
+    <value>CleanSuite</value>
+  </data>
+  <data name="RsCount" xml:space="preserve">
+    <value>{0:نسخة احتياطية|نسختان احتياطيتان|نسخ احتياطية|نسخة احتياطية}</value>
+  </data>
+  <data name="RsRegConfirm" xml:space="preserve">
+    <value>إعادة كتابة بيانات السجل في هذه النسخة؟&#xA;&#xA;{0}&#xA;&#xA;تُستبدل القيم الموجودة بالاسم نفسه، ولا يُحذف شيء.</value>
+  </data>
+  <data name="RsRegZipConfirm" xml:space="preserve">
+    <value>استعادة كل عناصر السجل ({0}) في هذه النسخة؟&#xA;&#xA;{1}&#xA;&#xA;تُستبدل القيم الموجودة بالاسم نفسه، ولا يُحذف شيء.</value>
+  </data>
+  <data name="RsRegDone" xml:space="preserve">
+    <value>استُعيدت {0:قيمة|قيمتان|قيم|قيمة} في السجل.</value>
+  </data>
+  <data name="RsRegErrors" xml:space="preserve">
+    <value>تعذرت استعادة {0:جزء|جزأين|أجزاء|جزءًا}: {1}</value>
+  </data>
+  <data name="RsInvalid" xml:space="preserve">
+    <value>تعذرت قراءة هذه النسخة:&#xA;&#xA;{0}&#xA;&#xA;{1}</value>
+  </data>
+  <data name="RsDeleteConfirm" xml:space="preserve">
+    <value>نقل {0:نسخة احتياطية|نسختين احتياطيتين|نسخ احتياطية|نسخة احتياطية} إلى سلة المحذوفات؟ لن يمكن استعادتها من هنا بعد ذلك.</value>
+  </data>
+  <data name="RsDeleteFailed" xml:space="preserve">
+    <value>تعذر حذف {0:نسخة احتياطية|نسختين احتياطيتين|نسخ احتياطية|نسخة احتياطية}.</value>
+  </data>
+  <data name="RsDeleted" xml:space="preserve">
+    <value>نُقلت {0:نسخة احتياطية|نسختان احتياطيتان|نسخ احتياطية|نسخة احتياطية} إلى سلة المحذوفات</value>
+  </data>
+  <data name="TabScheduler" xml:space="preserve">
+    <value>الجدولة</value>
+  </data>
+  <data name="SdIntro" xml:space="preserve">
+    <value>اختر الأدوات ووقت تشغيلها، فيشغّل «مجدول مهام Windows» برنامج CleanSuite في ذلك الوقت، فقط أثناء تسجيل دخولك وحين لا يعمل الجهاز على البطارية.</value>
+  </data>
+  <data name="SdTasksHeader" xml:space="preserve">
+    <value>المهام المطلوب تشغيلها</value>
+  </data>
+  <data name="SdWhenHeader" xml:space="preserve">
+    <value>متى</value>
+  </data>
+  <data name="SdOnce" xml:space="preserve">
+    <value>مرة واحدة، في</value>
+  </data>
+  <data name="SdDaily" xml:space="preserve">
+    <value>يوميًا، كل</value>
+  </data>
+  <data name="SdDays" xml:space="preserve">
+    <value>يوم</value>
+  </data>
+  <data name="SdWeekly" xml:space="preserve">
+    <value>أسبوعيًا، كل</value>
+  </data>
+  <data name="SdWeeksOn" xml:space="preserve">
+    <value>أسبوع، يوم</value>
+  </data>
+  <data name="SdMonthly" xml:space="preserve">
+    <value>شهريًا، في اليوم</value>
+  </data>
+  <data name="SdMonthNote" xml:space="preserve">
+    <value>تُتخطّى الأشهر التي ليس فيها هذا اليوم.</value>
+  </data>
+  <data name="SdStartup" xml:space="preserve">
+    <value>عند بدء تشغيل Windows (بعد دقيقتين من تسجيل دخولي)</value>
+  </data>
+  <data name="SdLogon" xml:space="preserve">
+    <value>عند تسجيل دخولي</value>
+  </data>
+  <data name="SdTime" xml:space="preserve">
+    <value>الوقت:</value>
+  </data>
+  <data name="SdDateTip" xml:space="preserve">
+    <value>التاريخ بصيغة سنة-شهر-يوم</value>
+  </data>
+  <data name="SdSave" xml:space="preserve">
+    <value>حفظ الجدولة</value>
+  </data>
+  <data name="SdRemove" xml:space="preserve">
+    <value>إزالة الجدولة…</value>
+  </data>
+  <data name="SdNone" xml:space="preserve">
+    <value>لا توجد جدولة.</value>
+  </data>
+  <data name="SdNext" xml:space="preserve">
+    <value>التشغيل التالي: {0}</value>
+  </data>
+  <data name="SdNextStartup" xml:space="preserve">
+    <value>التشغيل التالي: بعد دقيقتين من تسجيل دخولك القادم</value>
+  </data>
+  <data name="SdNextLogon" xml:space="preserve">
+    <value>التشغيل التالي: عند تسجيل دخولك القادم</value>
+  </data>
+  <data name="SdNextNone" xml:space="preserve">
+    <value>لا يذكر مجدول المهام موعدًا قادمًا.</value>
+  </data>
+  <data name="SdForeign" xml:space="preserve">
+    <value>توجد مهمة باسم «{0}» لا يستطيع هذا البرنامج قراءتها، والحفظ يستبدلها.</value>
+  </data>
+  <data name="SdWhat" xml:space="preserve">
+    <value>التشغيل المجدول يستخدم الخيارات التي يبدأ بها كل تبويب، ويحذف ما كان التبويب سيحدده بعد الفحص. الملفات المهملة والاختصارات المعطوبة تُنقل إلى سلة المحذوفات، ولا يُنظَّف من السجل إلا الفئات منخفضة الخطورة (قوائم العناصر الأخيرة، والأصوات، وملفات التعليمات، والخطوط، ومسارات البرامج، وقائمة ابدأ) بعد تصدير بياناتها إلى نسخة احتياطية ‎.reg (انظر تبويب «الاستعادة»)، وتُنظَّف عناصر الآثار المحددة افتراضيًا وتُحذف ملفاتها نهائيًا. ويُتخطّى التشغيل إن كان CleanSuite مفتوحًا. ويُسجَّل كل تشغيل في {0}.</value>
+  </data>
+  <data name="SdSaved" xml:space="preserve">
+    <value>حُفظت الجدولة.</value>
+  </data>
+  <data name="SdRemoved" xml:space="preserve">
+    <value>أُزيلت الجدولة.</value>
+  </data>
+  <data name="SdRemoveConfirm" xml:space="preserve">
+    <value>إزالة المهمة المجدولة «{0}»؟</value>
+  </data>
+  <data name="SdNoTasks" xml:space="preserve">
+    <value>اختر مهمة واحدة على الأقل.</value>
+  </data>
+  <data name="SdBadInterval" xml:space="preserve">
+    <value>أدخل عددًا صحيحًا من 1 إلى {0}.</value>
+  </data>
+  <data name="SdBadDate" xml:space="preserve">
+    <value>أدخل التاريخ بصيغة سنة-شهر-يوم، مثل {0}.</value>
+  </data>
+  <data name="SdPast" xml:space="preserve">
+    <value>هذا الوقت مضى. يجب أن يكون موعد التشغيل لمرة واحدة في المستقبل.</value>
+  </data>
+  <data name="SdFailed" xml:space="preserve">
+    <value>لم يقبل مجدول المهام الجدولة:&#xA;&#xA;{0}</value>
+  </data>
+  <data name="SdUnavailable" xml:space="preserve">
+    <value>مجدول المهام غير متاح: {0}</value>
+  </data>
+  <data name="Day_Sunday" xml:space="preserve">
+    <value>الأحد</value>
+  </data>
+  <data name="Day_Monday" xml:space="preserve">
+    <value>الاثنين</value>
+  </data>
+  <data name="Day_Tuesday" xml:space="preserve">
+    <value>الثلاثاء</value>
+  </data>
+  <data name="Day_Wednesday" xml:space="preserve">
+    <value>الأربعاء</value>
+  </data>
+  <data name="Day_Thursday" xml:space="preserve">
+    <value>الخميس</value>
+  </data>
+  <data name="Day_Friday" xml:space="preserve">
+    <value>الجمعة</value>
+  </data>
+  <data name="Day_Saturday" xml:space="preserve">
+    <value>السبت</value>
+  </data>
+  <data name="SrTitle" xml:space="preserve">
+    <value>CleanSuite — تنظيف مجدول</value>
+  </data>
+  <data name="SrRunning" xml:space="preserve">
+    <value>جارٍ التشغيل: {0}…</value>
+  </data>
+  <data name="SrFinished" xml:space="preserve">
+    <value>اكتملت المهام</value>
+  </data>
+  <data name="SrCancelled" xml:space="preserve">
+    <value>أُلغي</value>
+  </data>
+  <data name="SrJunk" xml:space="preserve">
+    <value>الملفات المهملة: حُذف {0}، وتحرّر {1}</value>
+  </data>
+  <data name="SrRegistry" xml:space="preserve">
+    <value>السجل: أُصلح {0:عنصر|عنصران|عناصر|عنصرًا}</value>
+  </data>
+  <data name="SrHistory" xml:space="preserve">
+    <value>مسح الآثار: نُظّف {0:عنصر|عنصران|عناصر|عنصرًا}، وتحرّر {1}</value>
+  </data>
+  <data name="SrShortcuts" xml:space="preserve">
+    <value>الاختصارات المعطوبة: حُذف {0}</value>
+  </data>
+  <data name="SrNothing" xml:space="preserve">
+    <value>{0}: لا شيء للتنظيف</value>
+  </data>
+  <data name="SrFailedPart" xml:space="preserve">
+    <value> (تعذّرت معالجة {0})</value>
+  </data>
+  <data name="SrError" xml:space="preserve">
+    <value>{0}: توقف بخطأ: {1}</value>
+  </data>
+  <data name="SrLog" xml:space="preserve">
+    <value>سُجّل في {0}</value>
+  </data>
+  <data name="DaReportSaved" xml:space="preserve">
+    <value>حُفظ التقرير:&#xA;{0}</value>
+  </data>
+  <data name="R_NoCopyKept" xml:space="preserve">
+    <value>لن تبقى أي نسخة من هذا الملف</value>
+  </data>
+  <data name="TabShortcuts" xml:space="preserve">
+    <value>الاختصارات المعطوبة</value>
+  </data>
+  <data name="ScScan" xml:space="preserve">
+    <value>فحص</value>
+  </data>
+  <data name="ScDelete" xml:space="preserve">
+    <value>نقل المحدد إلى سلة المحذوفات…</value>
+  </data>
+  <data name="ScRetarget" xml:space="preserve">
+    <value>تغيير الهدف…</value>
+  </data>
+  <data name="ScOpenFolder" xml:space="preserve">
+    <value>فتح المجلد</value>
+  </data>
+  <data name="ScModeStartMenu" xml:space="preserve">
+    <value>قائمة ابدأ وسطح المكتب والعناصر الأخيرة</value>
+  </data>
+  <data name="ScModeDrives" xml:space="preserve">
+    <value>كل الأقراص الثابتة</value>
+  </data>
+  <data name="ScEmptyFolders" xml:space="preserve">
+    <value>تضمين مجلدات قائمة ابدأ الفارغة</value>
+  </data>
+  <data name="ScIncludeRemovable" xml:space="preserve">
+    <value>فحص الأقراص القابلة للإزالة</value>
+  </data>
+  <data name="ScColName" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="ScColFolder" xml:space="preserve">
+    <value>المجلد</value>
+  </data>
+  <data name="ScColTarget" xml:space="preserve">
+    <value>الهدف المفقود</value>
+  </data>
+  <data name="ScColReason" xml:space="preserve">
+    <value>السبب</value>
+  </data>
+  <data name="ScReasonTarget" xml:space="preserve">
+    <value>الهدف غير موجود</value>
+  </data>
+  <data name="ScReasonArgs" xml:space="preserve">
+    <value>ملف في المعاملات غير موجود</value>
+  </data>
+  <data name="ScReasonEmpty" xml:space="preserve">
+    <value>مجلد فارغ</value>
+  </data>
+  <data name="ScReady" xml:space="preserve">
+    <value>اضغط «فحص». الفحص لا يغيّر أي شيء.</value>
+  </data>
+  <data name="ScScanning" xml:space="preserve">
+    <value>جارٍ فحص الاختصارات…</value>
+  </data>
+  <data name="ScResult" xml:space="preserve">
+    <value>عُثر على {0:عنصر|عنصرين|عناصر|عنصرًا} · فُحص {1:اختصار|اختصاران|اختصارات|اختصارًا} في {2:ملف|ملفين|ملفات|ملفًا}</value>
+  </data>
+  <data name="ScDeleteConfirm" xml:space="preserve">
+    <value>نقل العناصر المحددة ({0}) إلى سلة المحذوفات؟&#xA;&#xA;يمكن استعادتها من سلة المحذوفات.</value>
+  </data>
+  <data name="ScDeleteTitle" xml:space="preserve">
+    <value>حذف الاختصارات المعطوبة</value>
+  </data>
+  <data name="ScDeleted" xml:space="preserve">
+    <value>نُقل {0:عنصر|عنصران|عناصر|عنصرًا} إلى سلة المحذوفات · تُخطي {1}</value>
+  </data>
+  <data name="ScRetargetPick" xml:space="preserve">
+    <value>اختر الهدف الجديد</value>
+  </data>
+  <data name="ScRetargetDone" xml:space="preserve">
+    <value>«{0}» يشير الآن إلى الملف المختار. حُفظ الاختصار القديم في مجلد النسخ الاحتياطية.</value>
+  </data>
+  <data name="ScRetargetFailed" xml:space="preserve">
+    <value>تعذّر تغيير الاختصار «{0}»: {1}</value>
+  </data>
+  <data name="ScRetargetOnlyShortcut" xml:space="preserve">
+    <value>اختر اختصارًا (لا مجلدًا) أولًا.</value>
+  </data>
+  <data name="TabUninstall" xml:space="preserve">
+    <value>البرامج المثبتة</value>
+  </data>
+  <data name="UnRefresh" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="UnSearch" xml:space="preserve">
+    <value>بحث:</value>
+  </data>
+  <data name="UnShowUpdates" xml:space="preserve">
+    <value>إظهار التحديثات</value>
+  </data>
+  <data name="UnUninstall" xml:space="preserve">
+    <value>إلغاء التثبيت…</value>
+  </data>
+  <data name="UnModify" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="UnRepair" xml:space="preserve">
+    <value>إصلاح</value>
+  </data>
+  <data name="UnRemoveEntry" xml:space="preserve">
+    <value>إزالة العنصر من القائمة…</value>
+  </data>
+  <data name="UnWebsite" xml:space="preserve">
+    <value>موقع البرنامج</value>
+  </data>
+  <data name="UnReport" xml:space="preserve">
+    <value>حفظ القائمة…</value>
+  </data>
+  <data name="UnColName" xml:space="preserve">
+    <value>البرنامج</value>
+  </data>
+  <data name="UnColPublisher" xml:space="preserve">
+    <value>الناشر</value>
+  </data>
+  <data name="UnColDate" xml:space="preserve">
+    <value>تاريخ التثبيت</value>
+  </data>
+  <data name="UnColSize" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="UnColVersion" xml:space="preserve">
+    <value>الإصدار</value>
+  </data>
+  <data name="UnColNotes" xml:space="preserve">
+    <value>ملاحظات</value>
+  </data>
+  <data name="UnNoteInvalid" xml:space="preserve">
+    <value>قد يكون غير صالح: برنامج الإزالة غير موجود</value>
+  </data>
+  <data name="UnNote32" xml:space="preserve">
+    <value>‏32-بت</value>
+  </data>
+  <data name="UnNoteMsi" xml:space="preserve">
+    <value>Windows Installer</value>
+  </data>
+  <data name="UnNoteUser" xml:space="preserve">
+    <value>للمستخدم الحالي فقط</value>
+  </data>
+  <data name="UnCount" xml:space="preserve">
+    <value>{0:برنامج|برنامجان|برامج|برنامجًا} · {1} قد يكون غير صالح</value>
+  </data>
+  <data name="UnUninstallConfirm" xml:space="preserve">
+    <value>تشغيل برنامج إزالة «{0}»؟</value>
+  </data>
+  <data name="UnUninstallTitle" xml:space="preserve">
+    <value>إلغاء التثبيت</value>
+  </data>
+  <data name="UnSelf" xml:space="preserve">
+    <value>لا يستطيع CleanSuite إزالة نفسه. استخدم إعدادات Windows لذلك.</value>
+  </data>
+  <data name="UnRemoveConfirm" xml:space="preserve">
+    <value>إزالة «{0}» من قائمة البرامج المثبتة؟&#xA;&#xA;تُزال من القائمة فقط، وتبقى ملفات البرنامج على القرص. استخدم هذا فقط إن لم يعد برنامج الإزالة الخاص به يعمل. تُحفظ نسخة ‎.reg احتياطية.</value>
+  </data>
+  <data name="UnRemoveTitle" xml:space="preserve">
+    <value>إزالة عنصر</value>
+  </data>
+  <data name="UnMsiNoRemove" xml:space="preserve">
+    <value>لا يمكن إزالة عناصر Windows Installer من القائمة.</value>
+  </data>
+  <data name="UnStarted" xml:space="preserve">
+    <value>بدأ التشغيل: {0}</value>
+  </data>
+  <data name="UnFailed" xml:space="preserve">
+    <value>تعذّر تشغيل الأمر الخاص بـ «{0}»: {1}</value>
+  </data>
+  <data name="UnRemoved" xml:space="preserve">
+    <value>أُزيل العنصر. النسخة الاحتياطية: {0}</value>
+  </data>
+  <data name="UnReportSaved" xml:space="preserve">
+    <value>حُفظت القائمة: {0}</value>
+  </data>
+  <data name="UnReportFilter" xml:space="preserve">
+    <value>تقرير نصي|*.txt|نص مفصول بعلامات جدولة|*.txt</value>
+  </data>
+  <data name="UnAdminHint" xml:space="preserve">
+    <value>قد تطلب البرامج المثبتة لكل المستخدمين صلاحيات المسؤول.</value>
+  </data>
+  <data name="R_NoLongerExists" xml:space="preserve">
+    <value>لم يعد موجودًا</value>
+  </data>
+  <data name="R_ReparsePoint" xml:space="preserve">
+    <value>رابط أو نقطة وصل (تُخطّي)</value>
+  </data>
+  <data name="R_Changed" xml:space="preserve">
+    <value>تغيّر بعد الفحص</value>
+  </data>
+  <data name="R_NotRecycled" xml:space="preserve">
+    <value>تعذّر نقله إلى السلة</value>
+  </data>
+  <data name="R_NotArchived" xml:space="preserve">
+    <value>تعذّرت أرشفته</value>
+  </data>
+  <data name="R_StillExists" xml:space="preserve">
+    <value>ما زال موجودًا</value>
+  </data>
+  <data name="R_ProtectedSystem" xml:space="preserve">
+    <value>مجلد نظام محمي</value>
+  </data>
+  <data name="R_Protected" xml:space="preserve">
+    <value>مجلد محمي</value>
+  </data>
+  <data name="R_DriveRoot" xml:space="preserve">
+    <value>جذر القرص</value>
+  </data>
+  <data name="R_InvalidPath" xml:space="preserve">
+    <value>مسار غير صالح</value>
+  </data>
+  <data name="R_Exists" xml:space="preserve">
+    <value>موجود مسبقًا</value>
+  </data>
+  <data name="R_EntryMissing" xml:space="preserve">
+    <value>غير موجود في الأرشيف</value>
+  </data>
+  <data name="R_UnknownRelative" xml:space="preserve">
+    <value>الموقع الأصلي غير معروف (اسم بلا مجلد)</value>
+  </data>
+  <data name="R_Unknown" xml:space="preserve">
+    <value>الموقع الأصلي غير معروف</value>
+  </data>
+  <data name="R_Traversal" xml:space="preserve">
+    <value>مسار غير آمن ('..')</value>
+  </data>
+  <data name="R_Device" xml:space="preserve">
+    <value>مسار جهاز (غير مسموح)</value>
+  </data>
+  <data name="R_NotFile" xml:space="preserve">
+    <value>ليس اسم ملف</value>
+  </data>
+  <data name="R_NotBackup" xml:space="preserve">
+    <value>ليس نسخة احتياطية للملفات المهملة</value>
+  </data>
+  <data name="R_Admin" xml:space="preserve">
+    <value>يحتاج صلاحيات المسؤول</value>
+  </data>
+  <data name="DaBack" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="DaForward" xml:space="preserve">
+    <value>تقدّم</value>
+  </data>
+  <data name="DaUp" xml:space="preserve">
+    <value>لأعلى</value>
+  </data>
+  <data name="DaAnalyzeTip" xml:space="preserve">
+    <value>إعادة تحليل القرص أو المجلد المحدد (F5). مع «هذا الكمبيوتر»: إعادة قراءة الأقراص.</value>
+  </data>
+  <data name="DaFolderPane" xml:space="preserve">
+    <value>المجلدات</value>
+  </data>
+  <data name="DaOverview" xml:space="preserve">
+    <value>نظرة عامة</value>
+  </data>
+  <data name="DaComputer" xml:space="preserve">
+    <value>هذا الكمبيوتر</value>
+  </data>
+  <data name="DaLocalDisk" xml:space="preserve">
+    <value>القرص المحلي</value>
+  </data>
+  <data name="DaRemovable" xml:space="preserve">
+    <value>قرص قابل للإزالة</value>
+  </data>
+  <data name="DaNetworkDrive" xml:space="preserve">
+    <value>محرك أقراص شبكة</value>
+  </data>
+  <data name="DaCdDrive" xml:space="preserve">
+    <value>محرك أقراص مضغوطة</value>
+  </data>
+  <data name="DaColCapacity" xml:space="preserve">
+    <value>السعة</value>
+  </data>
+  <data name="DaColUsed" xml:space="preserve">
+    <value>المستخدم</value>
+  </data>
+  <data name="DaLargest" xml:space="preserve">
+    <value>أكبر المجلدات والملفات</value>
+  </data>
+  <data name="DaPath" xml:space="preserve">
+    <value>المسار</value>
+  </data>
+  <data name="DaSizeLabel" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="DaOccupied" xml:space="preserve">
+    <value>المساحة المشغولة</value>
+  </data>
+  <data name="DaTotalSize" xml:space="preserve">
+    <value>الحجم الكلي</value>
+  </data>
+  <data name="DaDrivesLabel" xml:space="preserve">
+    <value>الأقراص</value>
+  </data>
+  <data name="DaOccupiedValue" xml:space="preserve">
+    <value>‎{0}%‎ · {1:ملف|ملفان|ملفات|ملفًا}، {2:مجلد|مجلدان|مجلدات|مجلدًا}</value>
+  </data>
+  <data name="DaUsedValue" xml:space="preserve">
+    <value>{0} (‎{1}%‎)</value>
+  </data>
+  <data name="DaFreeTotal" xml:space="preserve">
+    <value>المتاح: {0}   |   الكلي: {1}</value>
+  </data>
+  <data name="DaUsedSlice" xml:space="preserve">
+    <value>مستخدم</value>
+  </data>
+  <data name="DaFreeSlice" xml:space="preserve">
+    <value>متاح</value>
+  </data>
+  <data name="DaFilesShort" xml:space="preserve">
+    <value>{0:ملف|ملفان|ملفات|ملفًا}</value>
+  </data>
+  <data name="DaOtherItems" xml:space="preserve">
+    <value>أخرى ({0:عنصر|عنصران|عناصر|عنصرًا})</value>
+  </data>
+  <data name="DaComputerStatus" xml:space="preserve">
+    <value>اختر قرصًا لتحليله. التحليل للقراءة فقط، ويمكنك تصفح الأقراص الأخرى أثناءه.</value>
+  </data>
+  <data name="DaPendingStart" xml:space="preserve">
+    <value>جارٍ تحليل هذا القرص… التحليل للقراءة فقط، ويمكنك تصفح الأقراص الأخرى أثناءه.</value>
+  </data>
+  <data name="DaPendingCount" xml:space="preserve">
+    <value>جارٍ التحليل… {0:ملف|ملفان|ملفات|ملفًا} حتى الآن.</value>
+  </data>
+  <data name="DaPendingStopped" xml:space="preserve">
+    <value>توقف التحليل. اضغط «تحليل» لإعادته.</value>
+  </data>
+  <data name="DaAnalyzingShort" xml:space="preserve">
+    <value>جارٍ التحليل…</value>
+  </data>
+  <data name="DaDoneTime" xml:space="preserve">
+    <value>اكتمل التحليل: {0:ملف|ملفان|ملفات|ملفًا} في {1:مجلد|مجلدين|مجلدات|مجلدًا} · {2} · {3} ث</value>
+  </data>
+  <data name="DaInaccessibleFolder" xml:space="preserve">
+    <value>تعذّرت قراءة هذا المجلد (رُفض الوصول)، فيُحسب فارغًا.</value>
+  </data>
+  <data name="DaAttr_Hidden" xml:space="preserve">
+    <value>مخفي</value>
+  </data>
+  <data name="DaAttr_System" xml:space="preserve">
+    <value>نظام</value>
+  </data>
+  <data name="DaAttr_ReadOnly" xml:space="preserve">
+    <value>للقراءة فقط</value>
+  </data>
+  <data name="EmDiskFolder" xml:space="preserve">
+    <value>هذا المجلد لا يحوي شيئًا.</value>
+  </data>
+  <data name="EmDiskTypes" xml:space="preserve">
+    <value>لا توجد ملفات من هذا النوع هنا.</value>
+  </data>
+  <data name="EmDiskEmpty" xml:space="preserve">
+    <value>اضغط «بحث عن المجلدات الفارغة» للبحث في القرص أو المجلد المحدد.</value>
+  </data>
+  <data name="R_ProtectedLink" xml:space="preserve">
+    <value>موقع محمي (يُوصَل إليه عبر رابط أو اسم مختصر)</value>
+  </data>
+  <data name="R_ContainsProtected" xml:space="preserve">
+    <value>يحوي مجلدًا محميًا</value>
+  </data>
+  <data name="R_NoSameCopy" xml:space="preserve">
+    <value>لن تبقى نسخة أخرى بالمحتوى نفسه</value>
+  </data>
+  <data name="R_NoBinNetworkPath" xml:space="preserve">
+    <value>موقع شبكة بلا سلة محذوفات (لم يُحذف)</value>
+  </data>
+  <data name="R_NoBinRemovable" xml:space="preserve">
+    <value>قرص قابل للإزالة بلا سلة محذوفات (لم يُحذف)</value>
+  </data>
+  <data name="R_NoBinNetwork" xml:space="preserve">
+    <value>محرك شبكة بلا سلة محذوفات (لم يُحذف)</value>
+  </data>
+  <data name="R_NoBinCd" xml:space="preserve">
+    <value>محرك أقراص مضغوطة (لم يُحذف)</value>
+  </data>
+  <data name="R_DriveUnavailable" xml:space="preserve">
+    <value>القرص غير متاح (لم يُحذف)</value>
+  </data>
+  <data name="R_NoBin" xml:space="preserve">
+    <value>قرص بلا سلة محذوفات (لم يُحذف)</value>
+  </data>
+  <data name="R_BinOff" xml:space="preserve">
+    <value>سلة المحذوفات معطّلة لهذا القرص (لم يُحذف)</value>
+  </data>
+  <data name="R_HiddenSystem" xml:space="preserve">
+    <value>عنصر نظام مخفي</value>
+  </data>
+  <data name="R_BinFolder" xml:space="preserve">
+    <value>مجلد سلة المحذوفات</value>
+  </data>
+  <data name="R_StartupFolder" xml:space="preserve">
+    <value>مجلد بدء التشغيل (ما يوضع فيه يعمل عند كل تسجيل دخول)</value>
+  </data>
+  <data name="R_ProgramFolder" xml:space="preserve">
+    <value>مجلد البرامج (النسخة ليست من CleanSuite)</value>
+  </data>
+  <data name="R_NotEmpty" xml:space="preserve">
+    <value>لم يعد فارغًا</value>
+  </data>
+  <data name="R_AutoStart" xml:space="preserve">
+    <value>مفتاح يشغّل البرامج، فلا يُستعاد من نسخة لم يُنشئها CleanSuite</value>
+  </data>
+  <data name="R_TopLevelKey" xml:space="preserve">
+    <value>لا يُحذف مفتاح رئيسي أبدًا</value>
+  </data>
+  <data name="R_ExplorerOpen" xml:space="preserve">
+    <value>لم يُغلَق المستكشف</value>
+  </data>
+  <data name="R_BackupFailed" xml:space="preserve">
+    <value>تعذّر التحقق من النسخة الاحتياطية، فلم يُحذف شيء</value>
+  </data>
+  <data name="R_WindowsInstaller" xml:space="preserve">
+    <value>لا يمكن إزالة عناصر Windows Installer</value>
+  </data>
+  <data name="R_NotAllowed" xml:space="preserve">
+    <value>غير مسموح لهذا البرنامج</value>
+  </data>
+  <data name="R_NoCommand" xml:space="preserve">
+    <value>لا يوفّر البرنامج أمرًا لذلك</value>
+  </data>
+  <data name="R_Drive" xml:space="preserve">
+    <value>لا يمكن حذف قرص كامل</value>
+  </data>
+  <data name="ScanningCount" xml:space="preserve">
+    <value>جارٍ الفحص (قراءة فقط)… فُحص {0:ملف|ملفان|ملفات|ملفًا}</value>
+  </data>
+  <data name="DpSelected" xml:space="preserve">
+    <value>محدد: {0} ({1})</value>
+  </data>
+  <data name="RgRestoreRefused" xml:space="preserve">
+    <value>لم يُستعد {0:مفتاح|مفتاحان|مفاتيح|مفتاحًا}: هذا الملف ليس نسخة أنشأها CleanSuite، وهذه المفاتيح تشغّل البرامج:</value>
+  </data>
+  <data name="RsKeyRefused" xml:space="preserve">
+    <value>(لن يُستعاد: يشغّل البرامج)</value>
+  </data>
+  <data name="RsKeysRefused" xml:space="preserve">
+    <value>لن يُستعاد {0:مفتاح يشغّل البرامج|مفتاحان يشغّلان البرامج|مفاتيح تشغّل البرامج|مفتاحًا يشغّل البرامج} لأن هذه النسخة لم يُنشئها CleanSuite.</value>
+  </data>
+  <data name="StKeyRun" xml:space="preserve">
+    <value>Run (عند كل تسجيل دخول)</value>
+  </data>
+  <data name="StKeyRunOnce" xml:space="preserve">
+    <value>RunOnce (عند تسجيل الدخول التالي فقط)</value>
+  </data>
+  <data name="StKeyRunServices" xml:space="preserve">
+    <value>RunServices (عند بدء Windows)</value>
+  </data>
+  <data name="StKeyRunServicesOnce" xml:space="preserve">
+    <value>RunServicesOnce (عند بدء Windows التالي فقط)</value>
+  </data>
+  <data name="StKeyPolicies" xml:space="preserve">
+    <value>{0}، مضبوط بسياسة</value>
+  </data>
+  <data name="StKeyTerminalServer" xml:space="preserve">
+    <value>{0}، خادم المحطة الطرفية</value>
+  </data>
+  <data name="EmStartup" xml:space="preserve">
+    <value>لم يُعثر على برامج بدء تشغيل في مفاتيح Run ومجلدات بدء التشغيل.</value>
+  </data>
+  <data name="EmUninstall" xml:space="preserve">
+    <value>لا توجد برامج مثبتة مطابقة.</value>
+  </data>
+  <data name="HsNotProfile" xml:space="preserve">
+    <value>{0}: ليس مجلد ملف تعريف للمتصفح (يذكره profiles.ini)، فتُرك دون تغيير.</value>
+  </data>
+  <data name="NavMenu" xml:space="preserve">
+    <value>إظهار أسماء الصفحات أو إخفاؤها</value>
+  </data>
+  <data name="SizeTB" xml:space="preserve">
+    <value>{0:N2} تيرابايت</value>
+  </data>
+</root>

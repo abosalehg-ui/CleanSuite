@@ -1,3 +1,4 @@
+﻿using CleanSuite.Safety;
 using CleanSuite.Junk;
 using Microsoft.Win32;
 

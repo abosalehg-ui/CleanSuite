@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace CleanSuite.App.ViewModels;
 
@@ -8,34 +8,42 @@ public interface ISelectableRow : INotifyPropertyChanged
     bool Selected { get; set; }
 }
 
+/// <summary>The commands the main window's keyboard shortcuts reach on any scan → review → clean page (Ctrl+A, Delete).</summary>
+public interface IScanCleanCommands
+{
+    System.Windows.Input.ICommand SelectAllCommand { get; }
+    System.Windows.Input.ICommand CleanCommand { get; }
+}
+
 /// <summary>
-/// The scan → review → clean pattern shared by the tool pages. One busy flag covers every operation, so a scan and a clean
-/// (or two cleans) can never run at the same time on the same rows, and selection changes are refused while one runs.
-/// Errors never escape: they are passed to <see cref="Error"/> and the page returns to a usable state.
+/// The scan → review → clean pattern shared by the tool pages (junk files, duplicates, erase history, shortcuts, registry).
+/// One busy flag covers every operation, so a scan and a clean (or two cleans) can never run at the same time on the same rows,
+/// and selection changes are refused while one runs. The number of checked rows is kept as rows change, so checking 50,000
+/// rows one by one ("Check all") stays linear.
 /// </summary>
-public abstract class ScanCleanViewModel<TRow> : ViewModelBase where TRow : ISelectableRow
+public abstract class ScanCleanViewModel<TRow> : ToolViewModel, IScanCleanCommands where TRow : ISelectableRow
 {
     private IReadOnlyList<TRow> _rows = Array.Empty<TRow>();
-    private bool _isBusy, _isChanging;
-    private CancellationTokenSource? _cts;
+    private int _selectedCount;
+    private int _bulk;
 
     protected ScanCleanViewModel()
     {
         ScanCommand = new AsyncRelayCommand(() => Run(ScanAsync, changing: false), () => !IsBusy);
         CleanCommand = new AsyncRelayCommand(CleanSelectedAsync, () => CanClean);
-        SelectAllCommand = new RelayCommand(() => SetAll(true), () => !IsBusy && _rows.Count > 0);
-        SelectNoneCommand = new RelayCommand(() => SetAll(false), () => !IsBusy && _rows.Count > 0);
-        CancelCommand = new RelayCommand(() => _cts?.Cancel(), () => IsBusy && CanCancel);
+        SelectAllCommand = new RelayCommand(() => SetAll(_ => true), () => !IsBusy && _rows.Count > 0);
+        SelectNoneCommand = new RelayCommand(() => SetAll(_ => false), () => !IsBusy && _rows.Count > 0);
+        InvertCommand = new RelayCommand(() => SetAll(r => !r.Selected), () => !IsBusy && _rows.Count > 0);
     }
 
     public AsyncRelayCommand ScanCommand { get; }
     public AsyncRelayCommand CleanCommand { get; }
     public RelayCommand SelectAllCommand { get; }
     public RelayCommand SelectNoneCommand { get; }
-    public RelayCommand CancelCommand { get; }
+    public RelayCommand InvertCommand { get; }
 
-    /// <summary>Called with every unexpected error (the page shows it).</summary>
-    public event Action<Exception>? Error;
+    System.Windows.Input.ICommand IScanCleanCommands.SelectAllCommand => SelectAllCommand;
+    System.Windows.Input.ICommand IScanCleanCommands.CleanCommand => CleanCommand;
 
     /// <summary>Asked before a clean with the rows to remove; false cancels (the page shows its confirmation dialog).</summary>
     public Func<IReadOnlyList<TRow>, bool>? Confirm { get; set; }
@@ -47,33 +55,33 @@ public abstract class ScanCleanViewModel<TRow> : ViewModelBase where TRow : ISel
         {
             foreach (var r in _rows) r.PropertyChanged -= RowChanged;
             _rows = value;
-            foreach (var r in _rows) r.PropertyChanged += RowChanged;
+            _selectedCount = 0;
+            foreach (var r in _rows)
+            {
+                r.PropertyChanged += RowChanged;
+                if (r.Selected) _selectedCount++;
+            }
+            RowsReplaced();
             Raise();
+            Raise(nameof(SelectedCount));
             Requery();
         }
     }
 
-    public bool IsBusy
-    {
-        get => _isBusy;
-        private set { if (Set(ref _isBusy, value)) Requery(); }
-    }
-
-    /// <summary>True while a clean runs (the window does not close then: the step would stop half-way).</summary>
-    public bool IsChanging
-    {
-        get => _isChanging;
-        private set => Set(ref _isChanging, value);
-    }
-
-    public bool CanClean => !IsBusy && _rows.Any(r => r.Selected);
-    public int SelectedCount => _rows.Count(r => r.Selected);
-
-    /// <summary>Whether the running scan can be cancelled.</summary>
-    protected virtual bool CanCancel => true;
+    public bool CanClean => !IsBusy && _selectedCount > 0;
+    public int SelectedCount => _selectedCount;
 
     protected abstract Task ScanAsync(CancellationToken ct);
     protected abstract Task CleanAsync(IReadOnlyList<TRow> chosen, CancellationToken ct);
+
+    /// <summary>Called when the rows were replaced (scan, clean); derived pages recompute their own totals here.</summary>
+    protected virtual void RowsReplaced() { }
+
+    /// <summary>Called for every row whose check changed (derived pages keep running totals, e.g. the selected bytes).</summary>
+    protected virtual void SelectionChanged(TRow row) { }
+
+    /// <summary>Called once after a selection change, or once after a bulk change (Check all) instead of per row.</summary>
+    protected virtual void SelectionSettled() { }
 
     private Task CleanSelectedAsync()
     {
@@ -82,48 +90,42 @@ public abstract class ScanCleanViewModel<TRow> : ViewModelBase where TRow : ISel
         return Run(ct => CleanAsync(chosen, ct), changing: true);
     }
 
-    /// <summary>Runs one operation under the busy flag; a second one at the same time is ignored.</summary>
-    protected async Task Run(Func<CancellationToken, Task> work, bool changing)
+    /// <summary>Applies a check to every row, announcing the change once at the end.</summary>
+    protected void SetAll(Func<TRow, bool> value) => SetMany(_rows, value);
+
+    /// <summary>Applies a check to the given rows (e.g. the highlighted ones), announcing the change once at the end.</summary>
+    public void SetMany(IEnumerable<TRow> rows, Func<TRow, bool> value)
     {
         if (IsBusy) return;
-        _cts = new CancellationTokenSource();
-        IsBusy = true;
-        IsChanging = changing;
-        try { await work(_cts.Token); }
-        catch (OperationCanceledException) { Cancelled(); }
-        catch (Exception ex) { Error?.Invoke(ex); }
-        finally
-        {
-            IsChanging = false;
-            IsBusy = false;
-            _cts.Dispose();
-            _cts = null;
-        }
-    }
-
-    /// <summary>Called when an operation was cancelled.</summary>
-    protected virtual void Cancelled() { }
-
-    private void SetAll(bool on)
-    {
-        if (IsBusy) return;
-        foreach (var r in _rows) r.Selected = on;
+        _bulk++;
+        try { foreach (var r in rows.ToList()) r.Selected = value(r); }
+        finally { _bulk--; }
+        Settle();
     }
 
     private void RowChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(ISelectableRow.Selected)) return;
+        if (e.PropertyName != nameof(ISelectableRow.Selected) || sender is not TRow row) return;
+        _selectedCount += row.Selected ? 1 : -1;
+        SelectionChanged(row);
+        if (_bulk == 0) Settle();
+    }
+
+    private void Settle()
+    {
         Raise(nameof(SelectedCount));
+        SelectionSettled();
         Requery();
     }
 
-    protected void Requery()
+    protected override void Requery()
     {
+        base.Requery();
         Raise(nameof(CanClean));
         ScanCommand.RaiseCanExecuteChanged();
         CleanCommand.RaiseCanExecuteChanged();
         SelectAllCommand.RaiseCanExecuteChanged();
         SelectNoneCommand.RaiseCanExecuteChanged();
-        CancelCommand.RaiseCanExecuteChanged();
+        InvertCommand.RaiseCanExecuteChanged();
     }
 }

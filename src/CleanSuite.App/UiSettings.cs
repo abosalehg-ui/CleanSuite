@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CleanSuite.App.Localization;
@@ -14,8 +14,17 @@ public sealed class UiSettings
     public UiLanguage Language { get; set; } = UiLanguage.Arabic;
     public ThemeChoice Theme { get; set; } = ThemeChoice.System;
 
-    public static string DefaultPath =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "ui.json");
+    /// <summary>Main window position and size when it was last closed (restored size, not maximised); null the first time.</summary>
+    public double? WindowLeft { get; set; }
+    public double? WindowTop { get; set; }
+    public double? WindowWidth { get; set; }
+    public double? WindowHeight { get; set; }
+    public bool WindowMaximized { get; set; }
+
+    /// <summary>Whether the junk page's scan options are open (the user's last choice).</summary>
+    public bool JunkOptionsExpanded { get; set; } = true;
+
+    public static string DefaultPath => Path.Combine(CleanSuite.Safety.CleanSuitePaths.Root, "ui.json");
 
     public static UiSettings Load(string? path = null)
     {

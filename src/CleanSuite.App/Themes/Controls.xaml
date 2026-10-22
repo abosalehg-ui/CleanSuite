@@ -63,6 +63,9 @@
     <!-- Buttons -->
     <Style TargetType="Button">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+        <!-- An explanation in a tool tip also appears when the control gets keyboard focus, and on a disabled control. -->
+        <Setter Property="ToolTipService.ShowsToolTipOnKeyboardFocus" Value="True" />
+        <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
         <Setter Property="Background" Value="{DynamicResource ControlBg}" />
         <Setter Property="Foreground" Value="{DynamicResource TextFg}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ControlBorder}" />
@@ -141,6 +144,9 @@
     <!-- CheckBox -->
     <Style TargetType="CheckBox">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+        <!-- An explanation in a tool tip also appears when the control gets keyboard focus, and on a disabled control. -->
+        <Setter Property="ToolTipService.ShowsToolTipOnKeyboardFocus" Value="True" />
+        <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource TextFg}" />
         <Setter Property="Margin" Value="0,3,16,3" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -833,6 +839,15 @@
                 <Setter Property="TextAlignment" Value="Right" />
             </DataTrigger>
         </Style.Triggers>
+    </Style>
+
+    <!-- Sizes and counts in a grid: digits left-to-right and aligned to the right in both languages, which is the start edge in
+         Arabic (where the names are aligned too) and the end edge in English. -->
+    <Style x:Key="NumberCell" TargetType="TextBlock">
+        <Setter Property="FlowDirection" Value="LeftToRight" />
+        <Setter Property="TextAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="4,0,10,0" />
     </Style>
 
     <!-- The bar of buttons at the top of every page. -->

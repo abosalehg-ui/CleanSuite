@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -110,6 +110,7 @@ public sealed class Loc : INotifyPropertyChanged
 
     public static string FormatSize(long bytes) => bytes switch
     {
+        >= 1L << 40 => F("SizeTB", bytes / (double)(1L << 40)),
         >= 1L << 30 => F("SizeGB", bytes / (double)(1L << 30)),
         >= 1L << 20 => F("SizeMB", bytes / (double)(1L << 20)),
         >= 1L << 10 => F("SizeKB", bytes / 1024.0),
@@ -124,7 +125,7 @@ public sealed class Loc : INotifyPropertyChanged
     /// neighbouring digits are not pulled into the name). Win32 message boxes honour these controls; WPF's text engine does
     /// not, so WPF layouts use separate left-to-right elements instead (see the drive list and the PathCell styles).
     /// </summary>
-    public static string Ltr(string s) => "‪" + s + "‬" + (Instance.IsRtl ? "‏" : "‎");
+    public static string Ltr(string s) => "\u202A" + s + "\u202C" + (Instance.IsRtl ? "\u200F" : "\u200E");
 
     /// <summary>Translates the fixed reason strings produced by the engine; unknown texts (e.g. OS messages) pass through.</summary>
     public static string Reason(string reason)

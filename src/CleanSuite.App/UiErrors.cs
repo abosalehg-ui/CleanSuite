@@ -13,7 +13,7 @@ namespace CleanSuite.App;
 public static class UiErrors
 {
     public static string LogPath =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Logs", "errors.log");
+        Path.Combine(CleanSuite.Safety.CleanSuitePaths.Logs, "errors.log");
 
     public static void Log(Exception ex, string context)
     {

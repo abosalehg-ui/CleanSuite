@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using CleanSuite.App.Localization;
@@ -11,7 +11,7 @@ namespace CleanSuite.App;
 /// Scheduler tab (the original's Scheduled Task page): which tools to run and when, kept as one Windows Task Scheduler task
 /// that starts CleanSuite with "--tasks". Nothing is written until "Save schedule" is pressed.
 /// </summary>
-public partial class SchedulerView : UserControl
+public partial class SchedulerView : UserControl, IToolPage
 {
     private static readonly DayOfWeek[] Days = Enum.GetValues<DayOfWeek>();
     private readonly TaskSchedule _schedule = new(new WindowsTaskStore(), Environment.ProcessPath ?? "CleanSuite.App.exe");
@@ -19,6 +19,13 @@ public partial class SchedulerView : UserControl
     private bool _exists;
     private string? _problem;
     private bool _loaded;
+
+    /// <summary>Saving or removing the task is one quick call to Task Scheduler on the UI thread: never busy in between.</summary>
+    public bool IsBusy => false;
+    public bool IsChanging => false;
+    Button? IToolPage.ScanButton => null;
+    Button? IToolPage.CancelButton => null;
+    public void CancelWork() { }
 
     public SchedulerView()
     {
@@ -65,8 +72,12 @@ public partial class SchedulerView : UserControl
         TaskShortcuts.IsChecked = (s.Tasks & ScheduledTasks.Shortcuts) != 0;
         var kind = s.Kind switch
         {
-            ScheduleKind.Once => KindOnce, ScheduleKind.Daily => KindDaily, ScheduleKind.Weekly => KindWeekly,
-            ScheduleKind.Monthly => KindMonthly, ScheduleKind.AtStartup => KindStartup, _ => KindLogon,
+            ScheduleKind.Once => KindOnce,
+            ScheduleKind.Daily => KindDaily,
+            ScheduleKind.Weekly => KindWeekly,
+            ScheduleKind.Monthly => KindMonthly,
+            ScheduleKind.AtStartup => KindStartup,
+            _ => KindLogon,
         };
         kind.IsChecked = true;
         var start = s.IsTimed ? s.Start : DateTime.Now;

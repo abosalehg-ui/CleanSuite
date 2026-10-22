@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\CleanSuite.Matching\CleanSuite.Matching.csproj" />
@@ -6,13 +6,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.10" />
-    <!-- Explicit, patched native SQLite (GHSA-2m69-gcr7-jv3q affects 2.1.6 that Microsoft.Data.Sqlite 8.0.10 brings). -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.13" />
+    <!-- Native SQLite pinned explicitly (Microsoft.Data.Sqlite 10.0.13 brings 2.1.13): never below a patched build (GHSA-2m69-gcr7-jv3q). -->
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="CleanSuite.Tests" />
+  </ItemGroup>
+
   <PropertyGroup>
-    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

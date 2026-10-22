@@ -1,4 +1,4 @@
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 
 namespace CleanSuite.History;
 
@@ -31,7 +31,7 @@ public static class Sqlite
     {
         if (!TableExists(c, table)) return 0;
         using var cmd = c.CreateCommand();
-        cmd.CommandText = $"SELECT COUNT(*) FROM \"{table.Replace("\"", "\"\"")}\"";
+        cmd.CommandText = $"SELECT COUNT(*) FROM {Quote(table)}";
         return Convert.ToInt64(cmd.ExecuteScalar());
     }
 
@@ -44,13 +44,16 @@ public static class Sqlite
             using var c = Open(db, readOnly: true);
             if (!TableExists(c, table)) return list;
             using var cmd = c.CreateCommand();
-            cmd.CommandText = $"SELECT DISTINCT \"{column}\" FROM \"{table}\"";
+            cmd.CommandText = $"SELECT DISTINCT {Quote(column)} FROM {Quote(table)}";
             using var r = cmd.ExecuteReader();
             while (r.Read()) if (!r.IsDBNull(0)) list.Add(r.GetValue(0).ToString() ?? "");
         }
         catch (SqliteException) { }
         return list;
     }
+
+    /// <summary>A table or column name as a quoted SQL identifier (names cannot be parameters; inner quotes are doubled).</summary>
+    public static string Quote(string identifier) => "\"" + identifier.Replace("\"", "\"\"") + "\"";
 
     internal static bool IsMissingObject(SqliteException e) =>
         e.SqliteErrorCode == 1 && (e.Message.Contains("no such table", StringComparison.OrdinalIgnoreCase) ||
@@ -72,7 +75,7 @@ public sealed class SqlBatchAction : HistoryAction
     public override ActionResult Execute(ExecutionContext ctx)
     {
         if (!File.Exists(Target)) return ActionResult.Ok;
-        if (ctx.Protected.Check(Target) is { } why) return ActionResult.Fail(why);
+        if (ctx.Protected.CheckResolved(Target) is { } why) return ActionResult.Fail(why);
         try
         {
             using var c = Sqlite.Open(Target, readOnly: false);
@@ -115,7 +118,7 @@ public sealed class SqlDeleteKeysAction : HistoryAction
     public override ActionResult Execute(ExecutionContext ctx)
     {
         if (!File.Exists(Target) || Keys.Count == 0) return ActionResult.Ok;
-        if (ctx.Protected.Check(Target) is { } why) return ActionResult.Fail(why);
+        if (ctx.Protected.CheckResolved(Target) is { } why) return ActionResult.Fail(why);
         try
         {
             using var c = Sqlite.Open(Target, readOnly: false);
@@ -123,7 +126,7 @@ public sealed class SqlDeleteKeysAction : HistoryAction
             using var tx = c.BeginTransaction();
             using var cmd = c.CreateCommand();
             cmd.Transaction = tx;
-            cmd.CommandText = $"DELETE FROM \"{Table}\" WHERE \"{Column}\" = $k";
+            cmd.CommandText = $"DELETE FROM {Sqlite.Quote(Table)} WHERE {Sqlite.Quote(Column)} = $k";
             var p = cmd.Parameters.Add("$k", SqliteType.Text);
             long rows = 0;
             foreach (var k in Keys)
@@ -160,7 +163,7 @@ public sealed class VacuumAction : HistoryAction
     public override ActionResult Execute(ExecutionContext ctx)
     {
         if (!File.Exists(Target)) return ActionResult.Ok;
-        if (ctx.Protected.Check(Target) is { } why) return ActionResult.Fail(why);
+        if (ctx.Protected.CheckResolved(Target) is { } why) return ActionResult.Fail(why);
         long before = new FileInfo(Target).Length;
         try
         {

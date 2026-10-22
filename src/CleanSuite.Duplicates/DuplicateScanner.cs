@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Cryptography;
 using CleanSuite.Matching;
 using CleanSuite.Safety;
@@ -87,44 +87,43 @@ public sealed class DuplicateScanner
 
     private bool Excluded(string dir) => _excludes.Any(p => AceWildcard.IsMatch(dir, p));
 
-    private void Walk(string dir, Dictionary<string, List<DupFile>> groups)
+    /// <summary>
+    /// Every file below <paramref name="root"/> that matches the criteria, grouped by its key. The walk is the shared
+    /// <see cref="SafeWalk"/> (links never followed); excluded folders and hidden system folders are not entered.
+    /// </summary>
+    private void Walk(string root, Dictionary<string, List<DupFile>> groups)
     {
-        _ct.ThrowIfCancellationRequested();
-        if (dir.Length >= 261 || Excluded(dir)) return;
-        IEnumerable<FileSystemInfo> entries;
-        try { entries = new DirectoryInfo(dir + "\\").EnumerateFileSystemInfos("*", new EnumerationOptions { AttributesToSkip = 0, IgnoreInaccessible = true, RecurseSubdirectories = false }).ToList(); }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException or System.Security.SecurityException) { return; }
-
-        var subdirs = new List<string>();
-        foreach (var e in entries)
+        var skip = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        SafeWalk.Walk(root, dir => !skip.Contains(dir) && !Excluded(dir), (dir, entries) =>
         {
-            var a = e.Attributes;
-            if ((a & FileAttributes.Directory) != 0)
+            foreach (var e in entries)
             {
-                if ((a & FileAttributes.ReparsePoint) != 0) continue;                 // junctions and links are never followed
-                if ((a & FileAttributes.Hidden) != 0 && (a & FileAttributes.System) != 0) continue;
-                subdirs.Add(e.FullName);
-                continue;
+                var a = e.Attributes;
+                if ((a & FileAttributes.Directory) != 0)
+                {
+                    if ((a & FileAttributes.Hidden) != 0 && (a & FileAttributes.System) != 0) skip.Add(dir + "\\" + e.Name);
+                    continue;
+                }
+                if ((a & (FileAttributes.System | FileAttributes.ReparsePoint)) != 0) continue;   // system files are not even counted
+                _searched++;
+                if (_searched % 500 == 0) Progress?.Invoke("scan", _searched);
+                var f = (FileInfo)e;
+                long size;
+                try { size = f.Length; }
+                catch (IOException) { continue; }
+                if (size == 0) continue;
+                if (_o.MinSize > 0 && size < _o.MinSize) continue;
+                var name = f.Name;
+                if (!_patterns.Any(p => AceWildcard.IsMatch(name, p))) continue;
+                if (_ignore.Any(p => AceWildcard.IsMatch(name, p))) continue;
+                var full = dir + "\\" + name;
+                if (full.Length >= SafeWalk.MaxPath) continue;
+                var file = new DupFile(full, size, f.LastWriteTimeUtc);
+                var key = Key(file);
+                if (!groups.TryGetValue(key, out var list)) groups[key] = list = new List<DupFile>();
+                list.Add(file);
             }
-            if ((a & FileAttributes.System) != 0) continue;                           // system files are not even counted
-            _searched++;
-            if (_searched % 500 == 0) Progress?.Invoke("scan", _searched);
-            var f = (FileInfo)e;
-            long size;
-            try { size = f.Length; }
-            catch (IOException) { continue; }
-            if (size == 0) continue;
-            if (_o.MinSize > 0 && size < _o.MinSize) continue;
-            var name = f.Name;
-            if (!_patterns.Any(p => AceWildcard.IsMatch(name, p))) continue;
-            if (_ignore.Any(p => AceWildcard.IsMatch(name, p))) continue;
-            if (f.FullName.Length >= 0x106) continue;
-            var file = new DupFile(f.FullName, size, f.LastWriteTimeUtc);
-            var key = Key(file);
-            if (!groups.TryGetValue(key, out var list)) groups[key] = list = new List<DupFile>();
-            list.Add(file);
-        }
-        foreach (var s in subdirs) Walk(s, groups);
+        }, ct: _ct);
     }
 
     /// <summary>"size|" + "\name" + "|MM/DD/YYYY  hh:mm|", case-folded.</summary>

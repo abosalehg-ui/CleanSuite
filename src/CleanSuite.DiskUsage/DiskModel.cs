@@ -117,8 +117,8 @@ public sealed class DiskFolder
     }
 }
 
-/// <summary>Capacity of a drive (Overview tab; GetDiskFreeSpaceEx).</summary>
-public sealed record DriveSpace(string Root, string Label, long Total, long Free)
+/// <summary>Capacity of a drive (Overview tab; GetDiskFreeSpaceEx) and its kind (an unlabelled drive is named after it).</summary>
+public sealed record DriveSpace(string Root, string Label, long Total, long Free, DriveType Type = DriveType.Fixed)
 {
     public long Used => Total - Free;
     public int UsedPercent => Total > 0 ? (int)(Used * 100 / Total) : 0;

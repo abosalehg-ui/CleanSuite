@@ -52,7 +52,7 @@ public sealed class ScheduledRunner(IReadOnlyDictionary<ScheduledTasks, Func<Can
     }
 
     public static string DefaultLogPath =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Scheduled.log");
+        CleanSuitePaths.ScheduledLog;
 
     /// <summary>
     /// Appends one line per step to a plain log (the original keeps no record of scheduled runs; this one is CleanSuite's
@@ -137,10 +137,17 @@ public sealed class ScheduledRunner(IReadOnlyDictionary<ScheduledTasks, Func<Can
         return new StepResult(ScheduledTasks.Registry, chosen.Count, res.Removed, res.Failed.Count, BackupPath: res.BackupPath);
     }
 
-    /// <summary>Erase History tab defaults: the items checked by default, Firefox defaults (no passwords, no sessions), this user.</summary>
+    /// <summary>
+    /// The Erase History items a run without anyone watching cleans: the tab's defaults without the clipboard (whatever the user
+    /// copied last would vanish at sign-in or overnight) and without anything that closes Explorer.
+    /// </summary>
+    public static IReadOnlySet<int> UnattendedHistoryItems { get; } = WindowsHistoryCatalog.Items
+        .Where(i => i.DefaultOn && i.Key is not ("win.clipboard" or "win.trayicons")).Select(i => i.Id).ToHashSet();
+
+    /// <summary>Erase History tab defaults (see <see cref="UnattendedHistoryItems"/>), Firefox defaults (no passwords, no sessions), this user.</summary>
     private static StepResult History(CancellationToken ct)
     {
-        var ids = WindowsHistoryCatalog.Items.Where(i => i.DefaultOn).Select(i => i.Id).ToHashSet();
+        var ids = UnattendedHistoryItems.ToHashSet();
         var files = new RulePlanner(TokenExpander.ForCurrentUser(), RulePlanner.DefaultNeverDelete);
         var plan = new WindowsHistoryCleaner(files, new RegistryPlanner(WindowsRegistryRoots.Instance),
             () => TempFolderLocator.Locate(new WindowsEnvironment())).Plan(ids, ct: ct);
@@ -163,7 +170,7 @@ public sealed class ScheduledRunner(IReadOnlyDictionary<ScheduledTasks, Func<Can
             IgnoreFolders = ace?.IgnoreFolders ?? Array.Empty<string>(),
         }).Scan(ct);
         if (items.Count == 0) return new StepResult(ScheduledTasks.Shortcuts, 0, 0, 0);
-        var res = new ShortcutCleaner().Remove(items, silent: true);
+        var res = new ShortcutCleaner().Remove(items, silent: true, ct);
         return new StepResult(ScheduledTasks.Shortcuts, items.Count, res.Succeeded, res.Failed.Count);
     }
 }

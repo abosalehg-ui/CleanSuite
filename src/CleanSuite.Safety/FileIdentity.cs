@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
 namespace CleanSuite.Safety;
@@ -27,6 +27,16 @@ public readonly record struct FileIdentity(uint Volume, ulong Index)
         var ib = Of(b);
         return ia != null && ia == ib;
     }
+
+    /// <summary>
+    /// "changed since scan" when the file's size or last write time is no longer what the scan saw, otherwise null. The one test
+    /// every remover applies before touching a file (a default <paramref name="lastWriteUtc"/> means the time was not recorded).
+    /// </summary>
+    public static string? ChangedSince(FileInfo current, long size, DateTime lastWriteUtc) =>
+        current.Length != size || lastWriteUtc != default && current.LastWriteTimeUtc != lastWriteUtc ? ChangedReason : null;
+
+    /// <summary>The reason text of <see cref="ChangedSince"/> (translated by the program).</summary>
+    public const string ChangedReason = "changed since scan";
 
     /// <summary>Byte-for-byte comparison of two files; false when either cannot be read.</summary>
     public static bool SameContent(string a, string b)

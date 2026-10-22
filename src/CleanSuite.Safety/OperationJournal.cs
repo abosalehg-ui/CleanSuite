@@ -1,4 +1,4 @@
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace CleanSuite.Safety;
@@ -42,7 +42,7 @@ public sealed class OperationJournal : IDisposable
     }
 
     public static string DefaultBaseFolder =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Journal");
+        CleanSuitePaths.Journal;
 
     public void Record(JournalEntry entry)
     {
@@ -52,8 +52,16 @@ public sealed class OperationJournal : IDisposable
     public void Record(string action, string target, bool success, string? backupRef = null, string? error = null) =>
         Record(new JournalEntry(DateTime.UtcNow, action, target, success, backupRef, error));
 
-    public static IEnumerable<JournalEntry> Read(string journalFile) =>
-        File.ReadLines(journalFile).Where(l => l.Length > 0).Select(l => JsonSerializer.Deserialize<JournalEntry>(l, Json)!);
+    /// <summary>The entries of a journal, also one that a running session is still writing (it is opened for reading with sharing).</summary>
+    public static IReadOnlyList<JournalEntry> Read(string journalFile)
+    {
+        using var fs = new FileStream(journalFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+        using var reader = new StreamReader(fs);
+        var list = new List<JournalEntry>();
+        while (reader.ReadLine() is { } line)
+            if (line.Length > 0) list.Add(JsonSerializer.Deserialize<JournalEntry>(line, Json)!);
+        return list;
+    }
 
     public void Dispose()
     {

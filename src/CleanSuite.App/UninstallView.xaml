@@ -19,7 +19,7 @@
                 </WrapPanel>
                 <WrapPanel Margin="0,8,0,0">
                     <TextBlock Text="{loc:T UnSearch}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <TextBox x:Name="SearchBox" AutomationProperties.Name="{loc:T UnSearch}" Width="260" TextChanged="Search_Changed" VerticalContentAlignment="Center" />
+                    <TextBox x:Name="SearchBox" AutomationProperties.Name="{loc:T UnSearch}" MinWidth="220" TextChanged="Search_Changed" VerticalContentAlignment="Center" />
                     <CheckBox x:Name="ShowUpdates" Content="{loc:T UnShowUpdates}" Margin="16,0,0,0" VerticalAlignment="Center" Click="Refresh_Click" />
                 </WrapPanel>
             </StackPanel>
@@ -27,7 +27,7 @@
 
         <TextBlock theming:Live.Announce="True" DockPanel.Dock="Bottom" x:Name="StatusText" Style="{StaticResource MutedText}" Margin="0,10,0,0" TextTrimming="CharacterEllipsis" />
 
-        <DataGrid x:Name="Grid" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+        <DataGrid x:Name="Grid" theming:Empty.Text="{loc:T EmUninstall}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
                   HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
                   SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Grid_DoubleClick">
             <DataGrid.RowStyle>

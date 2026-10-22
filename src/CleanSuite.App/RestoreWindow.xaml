@@ -1,4 +1,4 @@
-<Window x:Class="CleanSuite.App.RestoreWindow"
+﻿<Window x:Class="CleanSuite.App.RestoreWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:CleanSuite.App.Localization"
@@ -72,20 +72,13 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{loc:T ColOriginalPath}" Binding="{Binding DisplayPath}" Width="440" IsReadOnly="True"
+                <DataGridTextColumn Header="{loc:T ColOriginalPath}" Binding="{Binding DisplayPath}" Width="3*" MinWidth="220" IsReadOnly="True"
                                     ElementStyle="{StaticResource PathCell}" />
-                <DataGridTextColumn Header="{loc:T ColSize}" Binding="{Binding SizeText}" Width="90" IsReadOnly="True" SortMemberPath="Entry.Size">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Margin" Value="0,0,10,0" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="{loc:T ColSize}" Binding="{Binding SizeText}" Width="Auto" MinWidth="80" IsReadOnly="True" SortMemberPath="Entry.Size"
+                                    ElementStyle="{StaticResource NumberCell}" />
                 <DataGridTextColumn Header="{loc:T ColModified}" Binding="{Binding ModifiedText}" Width="130" IsReadOnly="True"
                                     SortMemberPath="Entry.LastWriteUtc" />
-                <DataGridTextColumn Header="{loc:T ColStatus}" Binding="{Binding StatusText}" Width="*" IsReadOnly="True" />
+                <DataGridTextColumn Header="{loc:T ColStatus}" Binding="{Binding StatusText}" Width="2*" MinWidth="120" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

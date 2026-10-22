@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Security.Principal;
 using CleanSuite.Matching;
 using CleanSuite.Safety;
@@ -200,47 +200,54 @@ public sealed class ShortcutScanner
 
     // ------------------------------------------------------------------ folder walk
 
-    private const int MaxPath = 261;
+    private const int MaxPath = SafeWalk.MaxPath;
 
-    private void ScanFolder(string path, bool emptyFolders)
+    /// <summary>
+    /// Checks every shortcut below <paramref name="root"/> (the shared <see cref="SafeWalk"/>: links never followed). Ignored
+    /// folders, hidden system folders, "Send To" and Administrative Tools are not entered; an empty Start-menu folder is reported
+    /// (when asked) instead of being entered.
+    /// </summary>
+    private void ScanFolder(string root, bool emptyFolders)
     {
-        if (path.Length >= MaxPath) return;
-        _ct.ThrowIfCancellationRequested();
-        IEnumerable<FileSystemInfo> entries;
-        try { entries = new DirectoryInfo(path + "\\").EnumerateFileSystemInfos("*", new EnumerationOptions { AttributesToSkip = 0, IgnoreInaccessible = true }).ToList(); }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException or System.Security.SecurityException) { return; }
-
-        foreach (var e in entries)
+        var skip = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        SafeWalk.Walk(root, dir => !skip.Contains(dir), (path, entries) =>
         {
-            _ct.ThrowIfCancellationRequested();
-            var full = path + "\\" + e.Name;
-            if (IsIgnored(e.Name, full)) continue;
-            if (e is FileInfo fi)
+            foreach (var e in entries)
             {
-                FilesScanned++;
-                if (!e.Name.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase)) continue;
-                ShortcutsScanned++;
-                if (e.Name.Equals("Windows Catalog.lnk", StringComparison.OrdinalIgnoreCase)) continue;
-                CheckShortcut(fi, path);
-                continue;
+                _ct.ThrowIfCancellationRequested();
+                var full = path + "\\" + e.Name;
+                if (e is FileInfo fi)
+                {
+                    if (IsIgnored(e.Name, full)) continue;
+                    FilesScanned++;
+                    if (!e.Name.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase)) continue;
+                    ShortcutsScanned++;
+                    if (e.Name.Equals("Windows Catalog.lnk", StringComparison.OrdinalIgnoreCase)) continue;
+                    CheckShortcut(fi, path);
+                    continue;
+                }
+                var attr = e.Attributes;
+                if (IsIgnored(e.Name, full)
+                    || (attr & (FileAttributes.Hidden | FileAttributes.System)) == (FileAttributes.Hidden | FileAttributes.System)
+                    || (attr & FileAttributes.ReparsePoint) != 0
+                    || AceWildcard.IsMatch(full, @"*\sendto*ba*") || AceWildcard.IsMatch(full, @"*\Administrative Tools"))
+                {
+                    skip.Add(full);
+                    continue;
+                }
+                if (emptyFolders && HasNoFiles(full))
+                {
+                    skip.Add(full);
+                    if (!e.Name.Equals("startup", StringComparison.OrdinalIgnoreCase) && !e.Name.Equals("startup-", StringComparison.OrdinalIgnoreCase)
+                        && !e.Name.Equals("System Tools", StringComparison.OrdinalIgnoreCase))
+                        _items.Add(new ShortcutItem
+                        {
+                            Kind = ShortcutItemKind.EmptyFolder, Name = e.Name, Folder = path, Target = "", Reason = ShortcutReason.EmptyFolder,
+                            LastWriteUtc = e.LastWriteTimeUtc,
+                        });
+                }
             }
-            var attr = e.Attributes;
-            if ((attr & (FileAttributes.Hidden | FileAttributes.System)) == (FileAttributes.Hidden | FileAttributes.System)) continue;
-            if ((attr & FileAttributes.ReparsePoint) != 0) continue;
-            if (AceWildcard.IsMatch(full, @"*\sendto*ba*") || AceWildcard.IsMatch(full, @"*\Administrative Tools")) continue;
-            if (emptyFolders && HasNoFiles(full))
-            {
-                if (!e.Name.Equals("startup", StringComparison.OrdinalIgnoreCase) && !e.Name.Equals("startup-", StringComparison.OrdinalIgnoreCase)
-                    && !e.Name.Equals("System Tools", StringComparison.OrdinalIgnoreCase))
-                    _items.Add(new ShortcutItem
-                    {
-                        Kind = ShortcutItemKind.EmptyFolder, Name = e.Name, Folder = path, Target = "", Reason = ShortcutReason.EmptyFolder,
-                        LastWriteUtc = e.LastWriteTimeUtc,
-                    });
-                continue;
-            }
-            ScanFolder(full, emptyFolders);
-        }
+        }, ct: _ct);
     }
 
     /// <summary>No file anywhere below; a reparse-point subfolder counts as content.</summary>

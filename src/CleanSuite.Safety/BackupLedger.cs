@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -23,19 +23,24 @@ public static class BackupLedger
 {
     public const string FileName = "ledger.tsv";
 
+    /// <summary>Journal reason when a backup could not be added to the ledger.</summary>
+    public const string NotRecorded = "backup written but not recorded in the ledger; it will be treated as not made by CleanSuite";
+
     private static string LedgerFor(string backupPath) => Path.Combine(Path.GetDirectoryName(Path.GetFullPath(backupPath))!, FileName);
 
-    public static void Record(string backupPath, string? ledgerPath = null)
+    /// <returns>False when the backup could not be recorded (it will then count as <see cref="BackupTrust.Unknown"/>).</returns>
+    public static bool Record(string backupPath, string? ledgerPath = null)
     {
-        if (!File.Exists(backupPath) || Hash(backupPath) is not { } hash) return;
+        if (!File.Exists(backupPath) || Hash(backupPath) is not { } hash) return false;
         ledgerPath ??= LedgerFor(backupPath);
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(ledgerPath)!);
             File.AppendAllText(ledgerPath, hash + "\t" + Path.GetFullPath(backupPath) + "\t"
                                            + DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture) + Environment.NewLine, Encoding.UTF8);
+            return true;
         }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { return false; }
     }
 
     public static BackupTrust Status(string backupPath, string? ledgerPath = null)

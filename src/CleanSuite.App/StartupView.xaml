@@ -22,7 +22,7 @@
             <TextBlock theming:Live.Announce="True" x:Name="StatusText" Style="{StaticResource MutedText}" TextTrimming="CharacterEllipsis" />
         </StackPanel>
 
-        <DataGrid x:Name="Grid" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+        <DataGrid x:Name="Grid" theming:Empty.Text="{loc:T EmStartup}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
                   HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
                   SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Grid_DoubleClick">
             <DataGrid.RowStyle>

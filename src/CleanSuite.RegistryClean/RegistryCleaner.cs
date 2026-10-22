@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using CleanSuite.Safety;
 using Microsoft.Win32;
 
@@ -36,7 +36,7 @@ public sealed class RegistryCleaner
     public RegCleanResult Clean(IReadOnlyList<RegFinding> findings, CancellationToken ct = default)
     {
         using var journal = new OperationJournal("registry", _journalBase);
-        using var backup = new RegBackupWriter(_backupFolder);
+        using var backup = new RegBackupWriter(_backupFolder, journal);
         int removed = 0;
         var skipped = new List<RegFinding>();
         var failed = new List<(RegFinding, string)>();
@@ -86,7 +86,17 @@ public sealed class RegistryCleaner
     }
 
     /// <summary>Restores a backup written by <see cref="Clean"/> (or by the original's .reg backups); returns the number of values written.</summary>
-    public int Restore(string regFile) => RegFileImporter.Import(regFile, _roots);
+    /// <remarks>A file CleanSuite did not write (or that changed since) never writes the keys through which programs start.</remarks>
+    public int Restore(string regFile) => Restore(regFile, out _);
+
+    /// <param name="refused">Keys left out because the file is not a verified CleanSuite backup and they start programs.</param>
+    public int Restore(string regFile, out IReadOnlyList<string> refused)
+    {
+        var skipped = new List<string>();
+        int n = RegFileImporter.Import(regFile, _roots, AutoStartKeys.FilterFor(regFile), skipped.Add);
+        refused = skipped;
+        return n;
+    }
 
     private static bool SameValue(object a, object? b) => (a, b) switch
     {

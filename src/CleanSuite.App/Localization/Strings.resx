@@ -1,0 +1,2225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>CleanSuite</value>
+    <comment>Window / toolbar</comment>
+  </data>
+  <data name="AboutLicense" xml:space="preserve">
+    <value>Free and open source under the MIT License.</value>
+    <comment>About window</comment>
+  </data>
+  <data name="AboutDeveloper" xml:space="preserve">
+    <value>Developer page</value>
+  </data>
+  <data name="UnitMB" xml:space="preserve">
+    <value>MB</value>
+    <comment>Size units</comment>
+  </data>
+  <data name="UnitKB" xml:space="preserve">
+    <value>KB</value>
+  </data>
+  <data name="PaneSplitter" xml:space="preserve">
+    <value>Resize panes (arrow keys)</value>
+    <comment>Pane splitter</comment>
+  </data>
+  <data name="ScRemoving" xml:space="preserve">
+    <value>Moving the checked shortcuts to the Recycle Bin…</value>
+    <comment>Shortcuts page view model</comment>
+  </data>
+  <data name="SdHour" xml:space="preserve">
+    <value>Hour</value>
+  </data>
+  <data name="SdMinute" xml:space="preserve">
+    <value>Minute</value>
+  </data>
+  <data name="RsReading" xml:space="preserve">
+    <value>Reading the backup…</value>
+    <comment>Restore page background work</comment>
+  </data>
+  <data name="RsDeleting" xml:space="preserve">
+    <value>Moving the backups to the Recycle Bin…</value>
+  </data>
+  <data name="StLoading" xml:space="preserve">
+    <value>Reading startup entries…</value>
+    <comment>Background work</comment>
+  </data>
+  <data name="RestoreChecking" xml:space="preserve">
+    <value>Checking the destinations…</value>
+  </data>
+  <data name="RestoreRunning" xml:space="preserve">
+    <value>Restoring…</value>
+  </data>
+  <data name="RsKeys" xml:space="preserve">
+    <value>{0} key(s) will be written, including:</value>
+    <comment>Restore trust</comment>
+  </data>
+  <data name="RsTrust_Verified" xml:space="preserve">
+    <value>CleanSuite made this backup and it is unchanged.</value>
+  </data>
+  <data name="RsTrust_Modified" xml:space="preserve">
+    <value>Warning: this backup was changed after CleanSuite wrote it. Check the keys above before restoring.</value>
+  </data>
+  <data name="RsTrust_Unknown" xml:space="preserve">
+    <value>Warning: CleanSuite did not make this backup (for example one of the original program). Check the keys above before restoring.</value>
+  </data>
+  <data name="RsAdminUnverified" xml:space="preserve">
+    <value>CleanSuite runs as administrator, so this backup can write anywhere in the registry.</value>
+  </data>
+  <data name="RcLeftOver" xml:space="preserve">
+    <value>{0} temporary copy(ies) could not be deleted (in use by another program). Delete them from {1} later.</value>
+    <comment>Registry compactor leftovers</comment>
+  </data>
+  <data name="UnCommand" xml:space="preserve">
+    <value>Command that will run: {0}</value>
+    <comment>Uninstall command</comment>
+  </data>
+  <data name="ErrTitle" xml:space="preserve">
+    <value>CleanSuite</value>
+    <comment>Errors and busy states</comment>
+  </data>
+  <data name="ErrUnexpected" xml:space="preserve">
+    <value>Something went wrong: {0}&#xA;&#xA;The operation stopped at this point; what was done before is in the journal. Details were written to {1}.</value>
+  </data>
+  <data name="SaveFailed" xml:space="preserve">
+    <value>The file could not be saved: {0}</value>
+  </data>
+  <data name="WaitForClean" xml:space="preserve">
+    <value>Removal is still running. Wait until it finishes, then close CleanSuite; stopping it half-way would leave its backup incomplete.</value>
+  </data>
+  <data name="CleanCancelledCount" xml:space="preserve">
+    <value>{0} file(s) had already been removed.</value>
+  </data>
+  <data name="RgCleaning" xml:space="preserve">
+    <value>Removing the checked registry entries…</value>
+  </data>
+  <data name="HsCleaning" xml:space="preserve">
+    <value>Cleaning the checked items…</value>
+  </data>
+  <data name="DaDeleting" xml:space="preserve">
+    <value>Moving to the Recycle Bin…</value>
+  </data>
+  <data name="DpRemoving" xml:space="preserve">
+    <value>Removing the checked files…</value>
+  </data>
+  <data name="UnLoading" xml:space="preserve">
+    <value>Reading the installed programs…</value>
+  </data>
+  <data name="EmJunk" xml:space="preserve">
+    <value>No results yet. Choose drives or folders and press Scan.</value>
+    <comment>Empty lists</comment>
+  </data>
+  <data name="EmRegistry" xml:space="preserve">
+    <value>No results yet. Press Scan registry to list invalid entries.</value>
+  </data>
+  <data name="EmShortcuts" xml:space="preserve">
+    <value>No results yet. Press Scan to look for invalid shortcuts.</value>
+  </data>
+  <data name="EmHistory" xml:space="preserve">
+    <value>Nothing analyzed yet. Choose items and press Analyze to see what would be cleaned.</value>
+  </data>
+  <data name="EmDuplicates" xml:space="preserve">
+    <value>No results yet. Choose folders or drives and press Scan.</value>
+  </data>
+  <data name="EmRestore" xml:space="preserve">
+    <value>No backups yet. Backups made when files or registry data are removed appear here.</value>
+  </data>
+  <data name="EmCompact" xml:space="preserve">
+    <value>Press Analyze to measure how much compacting would save.</value>
+  </data>
+  <data name="TabHome" xml:space="preserve">
+    <value>Home</value>
+    <comment>Home page, navigation, about</comment>
+  </data>
+  <data name="NavClean" xml:space="preserve">
+    <value>Cleaning</value>
+  </data>
+  <data name="NavSystem" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="NavTools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="AppTagline" xml:space="preserve">
+    <value>Windows maintenance</value>
+  </data>
+  <data name="AboutOpen" xml:space="preserve">
+    <value>About CleanSuite</value>
+  </data>
+  <data name="AboutText" xml:space="preserve">
+    <value>Cleans and maintains Windows: junk files, history, duplicate files, invalid shortcuts, the registry, startup and installed programs.</value>
+  </data>
+  <data name="HmWelcome" xml:space="preserve">
+    <value>Welcome to CleanSuite</value>
+  </data>
+  <data name="HmSubtitle" xml:space="preserve">
+    <value>Choose a tool from the list. Every scan only reads, and nothing is removed until you confirm.</value>
+  </data>
+  <data name="HmDrives" xml:space="preserve">
+    <value>Drives</value>
+  </data>
+  <data name="HmFree" xml:space="preserve">
+    <value>{0} free of {1}</value>
+  </data>
+  <data name="HmBackups" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="HmBackupLast" xml:space="preserve">
+    <value>Newest: {0}, {1}</value>
+  </data>
+  <data name="HmBackupNone" xml:space="preserve">
+    <value>No backups yet.</value>
+  </data>
+  <data name="HmBackupNote" xml:space="preserve">
+    <value>Removed files and registry data can be brought back from the Restore page.</value>
+  </data>
+  <data name="HmSchedule" xml:space="preserve">
+    <value>Scheduled cleanup</value>
+  </data>
+  <data name="HmLastRun" xml:space="preserve">
+    <value>Last run: {0}</value>
+  </data>
+  <data name="HmNeverRun" xml:space="preserve">
+    <value>No scheduled run yet.</value>
+  </data>
+  <data name="HmQuick" xml:space="preserve">
+    <value>Quick start</value>
+  </data>
+  <data name="HmQuickNote" xml:space="preserve">
+    <value>Opens the tool; nothing starts by itself.</value>
+  </data>
+  <data name="AppTitleSelection" xml:space="preserve">
+    <value>CleanSuite — Junk Files · {0} of {1} selected ({2})</value>
+  </data>
+  <data name="Scan" xml:space="preserve">
+    <value>_Scan</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>_Cancel</value>
+  </data>
+  <data name="RemovalLabel" xml:space="preserve">
+    <value>Removal:</value>
+  </data>
+  <data name="RemovalRecycle" xml:space="preserve">
+    <value>Send to the Recycle Bin</value>
+  </data>
+  <data name="RemovalZip" xml:space="preserve">
+    <value>Back up to zip, then delete</value>
+  </data>
+  <data name="RemovalPermanent" xml:space="preserve">
+    <value>Delete permanently</value>
+  </data>
+  <data name="CleanSelected" xml:space="preserve">
+    <value>C_lean selected</value>
+  </data>
+  <data name="RestoreBackup" xml:space="preserve">
+    <value>_Restore from backup…</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="ThemeSystem" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="ScanOptions" xml:space="preserve">
+    <value>Scan options</value>
+    <comment>Options</comment>
+  </data>
+  <data name="Drives" xml:space="preserve">
+    <value>Drives:</value>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Folders:</value>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>A_dd folder…</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Re_move</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options:</value>
+  </data>
+  <data name="OptTemp" xml:space="preserve">
+    <value>Clean Temp folders (recommended)</value>
+  </data>
+  <data name="OptZero" xml:space="preserve">
+    <value>Find zero-length files</value>
+  </data>
+  <data name="OptIgnore" xml:space="preserve">
+    <value>Use ignore lists</value>
+  </data>
+  <data name="OptEmptyTemp" xml:space="preserve">
+    <value>Delete empty temp folders</value>
+  </data>
+  <data name="OptRecent" xml:space="preserve">
+    <value>Exclude files modified within a week</value>
+  </data>
+  <data name="OptTempAllIgnores" xml:space="preserve">
+    <value>Apply all ignore lists inside Temp folders</value>
+  </data>
+  <data name="OptTempAllIgnoresTip" xml:space="preserve">
+    <value>Off by default, as in the original: inside Temp folders only ignore-list lines marked "/T" apply.</value>
+  </data>
+  <data name="DriveFree" xml:space="preserve">
+    <value>{0} GB free</value>
+  </data>
+  <data name="SettingsInfo" xml:space="preserve">
+    <value>Settings: {0} · profile "{1}" ({2} file types) · {3} excluded folders · ignore lists: {4}</value>
+  </data>
+  <data name="SettingsDefaults" xml:space="preserve">
+    <value>built-in defaults</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>none</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>Check _all</value>
+    <comment>Grid</comment>
+  </data>
+  <data name="UncheckAll" xml:space="preserve">
+    <value>_Uncheck all</value>
+  </data>
+  <data name="Invert" xml:space="preserve">
+    <value>_Invert</value>
+  </data>
+  <data name="ColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ColFolder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ColSize" xml:space="preserve">
+    <value>Size (KB)</value>
+  </data>
+  <data name="ColType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ColReason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="MenuOpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="MenuCheckHighlighted" xml:space="preserve">
+    <value>Check highlighted</value>
+  </data>
+  <data name="MenuUncheckHighlighted" xml:space="preserve">
+    <value>Uncheck highlighted</value>
+  </data>
+  <data name="MenuExcludeAlways" xml:space="preserve">
+    <value>Exclude always (never find again)</value>
+  </data>
+  <data name="GroupUser" xml:space="preserve">
+    <value>User included files</value>
+  </data>
+  <data name="GroupTemp" xml:space="preserve">
+    <value>Temp folder files</value>
+  </data>
+  <data name="GroupDisk" xml:space="preserve">
+    <value>Files on disk group {0}</value>
+  </data>
+  <data name="ReasonJunkType" xml:space="preserve">
+    <value>Junk file type</value>
+  </data>
+  <data name="ReasonTemp" xml:space="preserve">
+    <value>Temporary file in a temp folder</value>
+  </data>
+  <data name="ReasonZero" xml:space="preserve">
+    <value>Zero length file</value>
+  </data>
+  <data name="ReasonAlwaysInclude" xml:space="preserve">
+    <value>Inside an always-include folder</value>
+  </data>
+  <data name="ReasonEmptyTemp" xml:space="preserve">
+    <value>Empty temp folder</value>
+  </data>
+  <data name="Cat_Temp" xml:space="preserve">
+    <value>Temp</value>
+  </data>
+  <data name="Cat_Junk" xml:space="preserve">
+    <value>Junk</value>
+  </data>
+  <data name="Cat_Backup" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="Cat_Log" xml:space="preserve">
+    <value>Log</value>
+  </data>
+  <data name="StatusReady" xml:space="preserve">
+    <value>Choose drives or folders and click Scan. Scanning never deletes anything.</value>
+    <comment>Status / messages</comment>
+  </data>
+  <data name="SelectSomething" xml:space="preserve">
+    <value>Choose at least one drive or folder, or the temp folders.</value>
+  </data>
+  <data name="Scanning" xml:space="preserve">
+    <value>Scanning… (read-only)</value>
+  </data>
+  <data name="ScanFound" xml:space="preserve">
+    <value>Found {0} junk files ({1}) in {2} files · {3} ignored · {4} in use · {5:N1} s</value>
+  </data>
+  <data name="ScanCancelled" xml:space="preserve">
+    <value>Scan cancelled.</value>
+  </data>
+  <data name="ScanFailed" xml:space="preserve">
+    <value>Scan failed: {0}</value>
+  </data>
+  <data name="HowRecycle" xml:space="preserve">
+    <value>sent to the Recycle Bin</value>
+  </data>
+  <data name="HowZip" xml:space="preserve">
+    <value>backed up to a zip file and then deleted</value>
+  </data>
+  <data name="HowPermanent" xml:space="preserve">
+    <value>PERMANENTLY deleted (cannot be undone)</value>
+  </data>
+  <data name="CleanConfirm" xml:space="preserve">
+    <value>{0} file(s), {1}, will be {2}.&#xA;&#xA;Continue?</value>
+  </data>
+  <data name="CleanTitle" xml:space="preserve">
+    <value>Clean selected files</value>
+  </data>
+  <data name="Cleaning" xml:space="preserve">
+    <value>Cleaning…</value>
+  </data>
+  <data name="CleanStatus" xml:space="preserve">
+    <value>Removed {0} file(s), freed {1} · {2} not removed · {3} empty temp folders removed</value>
+  </data>
+  <data name="CleanReport" xml:space="preserve">
+    <value>Removed: {0} file(s) ({1})&#xA;Not removed: {2}&#xA;Empty temp folders removed: {3}</value>
+  </data>
+  <data name="CleanReportBackup" xml:space="preserve">
+    <value>Backup: {0}</value>
+  </data>
+  <data name="CleanReportJournal" xml:space="preserve">
+    <value>Journal: {0}</value>
+  </data>
+  <data name="FirstProblems" xml:space="preserve">
+    <value>First problems:</value>
+  </data>
+  <data name="CleanFinished" xml:space="preserve">
+    <value>Clean finished</value>
+  </data>
+  <data name="CleanCancelled" xml:space="preserve">
+    <value>Cleaning cancelled. Files already processed are listed in the journal.</value>
+  </data>
+  <data name="CleanFailed" xml:space="preserve">
+    <value>Cleaning failed: {0}</value>
+  </data>
+  <data name="AddFolderTitle" xml:space="preserve">
+    <value>Add a folder to scan</value>
+  </data>
+  <data name="ExcludedStatus" xml:space="preserve">
+    <value>{0} item(s) added to {1}</value>
+  </data>
+  <data name="SizeGB" xml:space="preserve">
+    <value>{0:N2} GB</value>
+    <comment>Size units</comment>
+  </data>
+  <data name="SizeMB" xml:space="preserve">
+    <value>{0:N1} MB</value>
+  </data>
+  <data name="SizeKB" xml:space="preserve">
+    <value>{0:N0} KB</value>
+  </data>
+  <data name="SizeBytes" xml:space="preserve">
+    <value>{0} bytes</value>
+  </data>
+  <data name="RestoreTitle" xml:space="preserve">
+    <value>Restore from backup</value>
+    <comment>Restore window</comment>
+  </data>
+  <data name="RestoreOpenTitle" xml:space="preserve">
+    <value>Choose a junk backup</value>
+  </data>
+  <data name="RestoreFilter" xml:space="preserve">
+    <value>Junk backups (Jnk *.zip)|Jnk *.zip|Zip files (*.zip)|*.zip</value>
+  </data>
+  <data name="RestoreBackupFile" xml:space="preserve">
+    <value>Backup:</value>
+  </data>
+  <data name="RestoreFormat" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="FormatCleanSuite" xml:space="preserve">
+    <value>CleanSuite</value>
+  </data>
+  <data name="FormatAce" xml:space="preserve">
+    <value>Ace Utilities (legacy)</value>
+  </data>
+  <data name="RestoreSummary" xml:space="preserve">
+    <value>{0} file(s), {1} · {2} cannot be restored</value>
+  </data>
+  <data name="ColOriginalPath" xml:space="preserve">
+    <value>Original location</value>
+  </data>
+  <data name="ColModified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="ColStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="StatusRestorable" xml:space="preserve">
+    <value>Can be restored</value>
+  </data>
+  <data name="StatusExistsNow" xml:space="preserve">
+    <value>A file with this name exists</value>
+  </data>
+  <data name="OptOverwrite" xml:space="preserve">
+    <value>Overwrite existing files</value>
+  </data>
+  <data name="OptOtherFolder" xml:space="preserve">
+    <value>Restore to another folder:</value>
+  </data>
+  <data name="ChooseFolder" xml:space="preserve">
+    <value>Choose…</value>
+  </data>
+  <data name="ChooseFolderTitle" xml:space="preserve">
+    <value>Folder to restore into</value>
+  </data>
+  <data name="RestoreSelected" xml:space="preserve">
+    <value>Restore selected</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="RestoreDone" xml:space="preserve">
+    <value>Restored {0} file(s).</value>
+  </data>
+  <data name="RestoreSkipped" xml:space="preserve">
+    <value>Not restored: {0}</value>
+  </data>
+  <data name="RestoreFailed" xml:space="preserve">
+    <value>Restore failed: {0}</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Select at least one file that can be restored.</value>
+  </data>
+  <data name="NeedFolder" xml:space="preserve">
+    <value>Choose the folder to restore into.</value>
+  </data>
+  <data name="RestoreConfirmOverwrite" xml:space="preserve">
+    <value>{0} existing file(s) will be overwritten.&#xA;&#xA;Continue?</value>
+  </data>
+  <data name="TabJunk" xml:space="preserve">
+    <value>Junk files</value>
+    <comment>Tabs and startup manager</comment>
+  </data>
+  <data name="TabStartup" xml:space="preserve">
+    <value>Startup programs</value>
+  </data>
+  <data name="StRefresh" xml:space="preserve">
+    <value>_Refresh</value>
+  </data>
+  <data name="StDisable" xml:space="preserve">
+    <value>_Disable</value>
+  </data>
+  <data name="StEnable" xml:space="preserve">
+    <value>_Enable</value>
+  </data>
+  <data name="StDelete" xml:space="preserve">
+    <value>De_lete…</value>
+  </data>
+  <data name="StOpenLocation" xml:space="preserve">
+    <value>_Open file location</value>
+  </data>
+  <data name="StHideMicrosoft" xml:space="preserve">
+    <value>Hide Microsoft entries</value>
+  </data>
+  <data name="StColState" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="StColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="StColCommand" xml:space="preserve">
+    <value>Command</value>
+  </data>
+  <data name="StColLocation" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="StColCompany" xml:space="preserve">
+    <value>Publisher</value>
+  </data>
+  <data name="StColNotes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="StEnabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="StDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="StDisabledSince" xml:space="preserve">
+    <value>Disabled since {0}</value>
+  </data>
+  <data name="StNoteMissing" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="StNoteReEnabled" xml:space="preserve">
+    <value>Re-enabled itself after being disabled</value>
+  </data>
+  <data name="StNoteLegacy" xml:space="preserve">
+    <value>Disabled by Ace Utilities</value>
+  </data>
+  <data name="StLocUser" xml:space="preserve">
+    <value>Current user</value>
+  </data>
+  <data name="StLocMachine" xml:space="preserve">
+    <value>All users</value>
+  </data>
+  <data name="StLocFolder" xml:space="preserve">
+    <value>Startup folder</value>
+  </data>
+  <data name="St32Bit" xml:space="preserve">
+    <value>(32-bit)</value>
+  </data>
+  <data name="StCount" xml:space="preserve">
+    <value>{0} entries · {1} enabled · {2} disabled</value>
+  </data>
+  <data name="StReEnabledWarning" xml:space="preserve">
+    <value>{0} program(s) that were disabled have enabled themselves again.</value>
+  </data>
+  <data name="StDeleteConfirm" xml:space="preserve">
+    <value>Delete the startup entry "{0}"?&#xA;&#xA;A backup is kept: registry entries in a .reg file, startup-folder files in the backup folder.</value>
+  </data>
+  <data name="StDeleteTitle" xml:space="preserve">
+    <value>Delete startup entry</value>
+  </data>
+  <data name="StChanged" xml:space="preserve">
+    <value>Done: {0}</value>
+  </data>
+  <data name="StFailed" xml:space="preserve">
+    <value>Could not change "{0}": {1}</value>
+  </data>
+  <data name="StNoSelection" xml:space="preserve">
+    <value>Select an entry first.</value>
+  </data>
+  <data name="StAdminHint" xml:space="preserve">
+    <value>Entries for all users need administrator rights to change.</value>
+  </data>
+  <data name="TabRegistry" xml:space="preserve">
+    <value>Registry</value>
+    <comment>Registry cleaner</comment>
+  </data>
+  <data name="RgScan" xml:space="preserve">
+    <value>_Scan registry</value>
+  </data>
+  <data name="RgClean" xml:space="preserve">
+    <value>Remove selected…</value>
+  </data>
+  <data name="RgRestore" xml:space="preserve">
+    <value>Restore backup…</value>
+  </data>
+  <data name="RcOpen" xml:space="preserve">
+    <value>Registry compactor…</value>
+    <comment>Registry compactor</comment>
+  </data>
+  <data name="RcTitle" xml:space="preserve">
+    <value>Registry compactor</value>
+  </data>
+  <data name="RcIntro" xml:space="preserve">
+    <value>Windows keeps the registry in hive files that do not shrink when data is removed. The analysis writes a compacted copy of each hive to a temporary folder, compares the sizes and deletes the copies. It changes nothing in Windows and needs no restart. CleanSuite does not replace the hives: unlike the original program, it only measures how much space compaction would save.</value>
+  </data>
+  <data name="RcNeedsAdmin" xml:space="preserve">
+    <value>Reading the registry hives needs administrator rights. Run CleanSuite as administrator to analyze.</value>
+  </data>
+  <data name="RcAnalyse" xml:space="preserve">
+    <value>Analyze</value>
+  </data>
+  <data name="RcSaveReport" xml:space="preserve">
+    <value>Save report…</value>
+  </data>
+  <data name="RcColHive" xml:space="preserve">
+    <value>Hive</value>
+  </data>
+  <data name="RcColFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="RcColCurrent" xml:space="preserve">
+    <value>Current size</value>
+  </data>
+  <data name="RcColCompact" xml:space="preserve">
+    <value>Compacted size</value>
+  </data>
+  <data name="RcColSaving" xml:space="preserve">
+    <value>Saving</value>
+  </data>
+  <data name="RcColStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="RcProgress" xml:space="preserve">
+    <value>Hive {0} of {1}: {2}</value>
+  </data>
+  <data name="RcSummary" xml:space="preserve">
+    <value>The registry could be reduced by {0} (from {1} to {2}). Nothing was changed.</value>
+  </data>
+  <data name="RcNothing" xml:space="preserve">
+    <value>No hive would become smaller. Nothing was changed.</value>
+  </data>
+  <data name="RcCancelled" xml:space="preserve">
+    <value>Analysis cancelled. Nothing was changed.</value>
+  </data>
+  <data name="RcSaved" xml:space="preserve">
+    <value>Report saved: {0}</value>
+  </data>
+  <data name="RcReportFilter" xml:space="preserve">
+    <value>Text report</value>
+  </data>
+  <data name="RcSt_Measured" xml:space="preserve">
+    <value>Measured</value>
+  </data>
+  <data name="RcSt_NoGain" xml:space="preserve">
+    <value>Would not shrink</value>
+  </data>
+  <data name="RcSt_SaveFailed" xml:space="preserve">
+    <value>Copy failed ({0})</value>
+  </data>
+  <data name="RcSt_Unreadable" xml:space="preserve">
+    <value>Size unreadable</value>
+  </data>
+  <data name="RcSt_NoSpace" xml:space="preserve">
+    <value>Not enough free space</value>
+  </data>
+  <data name="RcSt_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="RcSkip_Volatile" xml:space="preserve">
+    <value>In memory only</value>
+  </data>
+  <data name="RcSkip_OtherNamespace" xml:space="preserve">
+    <value>Application hive</value>
+  </data>
+  <data name="RcSkip_Excluded" xml:space="preserve">
+    <value>Protected (never touched)</value>
+  </data>
+  <data name="RcSkip_UnmappedPath" xml:space="preserve">
+    <value>Location not found</value>
+  </data>
+  <data name="RcSkip_Small" xml:space="preserve">
+    <value>256 KB or smaller</value>
+  </data>
+  <data name="RgSelectAll" xml:space="preserve">
+    <value>Check _all</value>
+  </data>
+  <data name="RgSelectNone" xml:space="preserve">
+    <value>_Uncheck all</value>
+  </data>
+  <data name="RgThorough" xml:space="preserve">
+    <value>Thorough scan</value>
+  </data>
+  <data name="RgThoroughHint" xml:space="preserve">
+    <value>Also checks value names that are paths (finds more, needs more care)</value>
+  </data>
+  <data name="RgColCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="RgColProblem" xml:space="preserve">
+    <value>Problem</value>
+  </data>
+  <data name="RgColKey" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="RgColValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="RgColData" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="RgIntro" xml:space="preserve">
+    <value>Scanning only reads the registry. Nothing is removed until you select entries and confirm; every removal is backed up to a .reg file first.</value>
+  </data>
+  <data name="RgScanning" xml:space="preserve">
+    <value>Scanning the registry…</value>
+  </data>
+  <data name="RgCount" xml:space="preserve">
+    <value>{0} problem(s) found · {1} entr(y/ies) with ignore words not shown</value>
+  </data>
+  <data name="RgUnreadable" xml:space="preserve">
+    <value>{0} key(s) could not be read (administrator rights)</value>
+  </data>
+  <data name="RgBackupAt" xml:space="preserve">
+    <value>Backup: {0}</value>
+  </data>
+  <data name="RgWarning" xml:space="preserve">
+    <value>Review before removing: entries are judged by whether the files they mention exist. Programs on drives that are not connected may look invalid.</value>
+  </data>
+  <data name="RgConfirm" xml:space="preserve">
+    <value>Remove {0} registry entr(y/ies)?&#xA;&#xA;Everything removed is first exported to a .reg backup that you can restore.</value>
+  </data>
+  <data name="RgConfirmTitle" xml:space="preserve">
+    <value>Remove registry entries</value>
+  </data>
+  <data name="RgCleaned" xml:space="preserve">
+    <value>Removed {0} entr(y/ies).</value>
+  </data>
+  <data name="RgSkipped" xml:space="preserve">
+    <value>{0} entr(y/ies) were left alone because they changed or disappeared since the scan.</value>
+  </data>
+  <data name="RgFailed" xml:space="preserve">
+    <value>{0} entr(y/ies) could not be removed: {1}</value>
+  </data>
+  <data name="RgRegFilter" xml:space="preserve">
+    <value>Registry backup</value>
+  </data>
+  <data name="RgRestoreConfirm" xml:space="preserve">
+    <value>Write the contents of this backup back into the registry?&#xA;&#xA;{0}</value>
+  </data>
+  <data name="RgRestored" xml:space="preserve">
+    <value>Restored {0} value(s).</value>
+  </data>
+  <data name="RgRestoreFailed" xml:space="preserve">
+    <value>Restore failed: {0}</value>
+  </data>
+  <data name="RgWholeKey" xml:space="preserve">
+    <value>(whole key)</value>
+  </data>
+  <data name="RgDefaultValue" xml:space="preserve">
+    <value>(default)</value>
+  </data>
+  <data name="RgIgnoredBy" xml:space="preserve">
+    <value>Contains the ignore word "{0}"</value>
+  </data>
+  <data name="Rc_UserEntries" xml:space="preserve">
+    <value>User entries</value>
+  </data>
+  <data name="Rc_AllUsersEntries" xml:space="preserve">
+    <value>All users' entries</value>
+  </data>
+  <data name="Rc_StartMenu" xml:space="preserve">
+    <value>Start menu</value>
+  </data>
+  <data name="Rc_ObsoleteSoftware" xml:space="preserve">
+    <value>Obsolete software</value>
+  </data>
+  <data name="Rc_FileExtensions" xml:space="preserve">
+    <value>File extensions</value>
+  </data>
+  <data name="Rc_FileAssociations" xml:space="preserve">
+    <value>File associations</value>
+  </data>
+  <data name="Rc_ActiveXCom" xml:space="preserve">
+    <value>ActiveX &amp; COM</value>
+  </data>
+  <data name="Rc_SystemEntries" xml:space="preserve">
+    <value>System entries</value>
+  </data>
+  <data name="Rc_ApplicationPaths" xml:space="preserve">
+    <value>Application paths</value>
+  </data>
+  <data name="Rc_AddRemoveEntries" xml:space="preserve">
+    <value>Add/Remove entries</value>
+  </data>
+  <data name="Rc_SharedDlls" xml:space="preserve">
+    <value>Shared DLLs</value>
+  </data>
+  <data name="Rc_Fonts" xml:space="preserve">
+    <value>Fonts</value>
+  </data>
+  <data name="Rc_HelpFiles" xml:space="preserve">
+    <value>Help files</value>
+  </data>
+  <data name="Rc_IeContextMenu" xml:space="preserve">
+    <value>IE context menu</value>
+  </data>
+  <data name="Rc_IeToolbarButtons" xml:space="preserve">
+    <value>IE toolbar buttons</value>
+  </data>
+  <data name="Rc_BrowserHelperObjects" xml:space="preserve">
+    <value>Browser helper objects</value>
+  </data>
+  <data name="Rc_ShellExtensions" xml:space="preserve">
+    <value>Shell extensions</value>
+  </data>
+  <data name="Rc_Sounds" xml:space="preserve">
+    <value>Sounds</value>
+  </data>
+  <data name="Rc_HistoryLists" xml:space="preserve">
+    <value>History lists</value>
+  </data>
+  <data name="Rc_SharedFolders" xml:space="preserve">
+    <value>Shared folders</value>
+  </data>
+  <data name="Rr_InvalidPath" xml:space="preserve">
+    <value>Path does not exist</value>
+  </data>
+  <data name="Rr_InvalidEntry" xml:space="preserve">
+    <value>Name is a path that does not exist</value>
+  </data>
+  <data name="Rr_InvalidStartupReference" xml:space="preserve">
+    <value>Startup approval without a program</value>
+  </data>
+  <data name="Rr_InvalidNotification" xml:space="preserve">
+    <value>Notification of a removed program</value>
+  </data>
+  <data name="Rr_EmptyUselessKey" xml:space="preserve">
+    <value>Empty key</value>
+  </data>
+  <data name="Rr_ObsoleteStartMenuItem" xml:space="preserve">
+    <value>Start menu item no longer exists</value>
+  </data>
+  <data name="Rr_ObsoleteKey" xml:space="preserve">
+    <value>Empty program key</value>
+  </data>
+  <data name="Rr_EmptyKey" xml:space="preserve">
+    <value>Empty key</value>
+  </data>
+  <data name="Rr_OpenWithAppMissing" xml:space="preserve">
+    <value>"Open with" program missing</value>
+  </data>
+  <data name="Rr_InvalidProgid" xml:space="preserve">
+    <value>Unregistered file type</value>
+  </data>
+  <data name="Rr_EmptyIconPath" xml:space="preserve">
+    <value>Empty icon path</value>
+  </data>
+  <data name="Rr_InvalidIconPath" xml:space="preserve">
+    <value>Icon file missing</value>
+  </data>
+  <data name="Rr_UselessFileExtension" xml:space="preserve">
+    <value>Unused file extension</value>
+  </data>
+  <data name="Rr_MissingProgid" xml:space="preserve">
+    <value>Extension points to a missing file type</value>
+  </data>
+  <data name="Rr_EmptyShellKey" xml:space="preserve">
+    <value>Empty shell key</value>
+  </data>
+  <data name="Rr_EmptyCommandKey" xml:space="preserve">
+    <value>Empty command</value>
+  </data>
+  <data name="Rr_InvalidCommand" xml:space="preserve">
+    <value>Command program missing</value>
+  </data>
+  <data name="Rr_InvalidDropTarget" xml:space="preserve">
+    <value>Unregistered drop handler</value>
+  </data>
+  <data name="Rr_EmptyShellexKey" xml:space="preserve">
+    <value>Empty shell extension key</value>
+  </data>
+  <data name="Rr_InvalidShellext" xml:space="preserve">
+    <value>Unregistered shell extension</value>
+  </data>
+  <data name="Rr_InvalidShellexKey" xml:space="preserve">
+    <value>Unregistered shell extension key</value>
+  </data>
+  <data name="Rr_UselessOpenWithApp" xml:space="preserve">
+    <value>Unused "Open with" program key</value>
+  </data>
+  <data name="Rr_UselessKey" xml:space="preserve">
+    <value>Unused application key</value>
+  </data>
+  <data name="Rr_InvalidFirewallRule" xml:space="preserve">
+    <value>Firewall rule for a missing program</value>
+  </data>
+  <data name="Rr_ObsoleteUninstallEntry" xml:space="preserve">
+    <value>Cached entry of an uninstalled program</value>
+  </data>
+  <data name="Rr_InvalidInstallerReference" xml:space="preserve">
+    <value>Installer folder missing</value>
+  </data>
+  <data name="Rr_InvalidApprovedShellExt" xml:space="preserve">
+    <value>Approved shell extension not registered</value>
+  </data>
+  <data name="Rr_FileMissing" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="Rr_FileDamaged" xml:space="preserve">
+    <value>Damaged file (zero size)</value>
+  </data>
+  <data name="Rr_InvalidDeviceDriver" xml:space="preserve">
+    <value>Driver file missing</value>
+  </data>
+  <data name="Rr_InvalidSound" xml:space="preserve">
+    <value>Sound file missing</value>
+  </data>
+  <data name="Rr_InvalidFile" xml:space="preserve">
+    <value>Program missing</value>
+  </data>
+  <data name="Rr_InvalidAutoplayEventHandler" xml:space="preserve">
+    <value>AutoPlay handler not registered</value>
+  </data>
+  <data name="Rr_InvalidAutoplayHandler" xml:space="preserve">
+    <value>AutoPlay handler program missing</value>
+  </data>
+  <data name="Rr_InvalidHistory" xml:space="preserve">
+    <value>History entry of a missing file</value>
+  </data>
+  <data name="TabHistory" xml:space="preserve">
+    <value>Erase history</value>
+    <comment>Erase History</comment>
+  </data>
+  <data name="HsAnalyse" xml:space="preserve">
+    <value>_Analyze</value>
+  </data>
+  <data name="HsClean" xml:space="preserve">
+    <value>Cl_ean selected…</value>
+  </data>
+  <data name="HsSelectAll" xml:space="preserve">
+    <value>Check a_ll</value>
+  </data>
+  <data name="HsSelectNone" xml:space="preserve">
+    <value>_Uncheck all</value>
+  </data>
+  <data name="HsAllUsers" xml:space="preserve">
+    <value>All users' browser profiles</value>
+  </data>
+  <data name="HsAllUsersHint" xml:space="preserve">
+    <value>Also clean the Firefox profiles of the other user accounts (needs administrator rights)</value>
+  </data>
+  <data name="HsGroupWindows" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="HsGroupStart" xml:space="preserve">
+    <value>Start menu</value>
+  </data>
+  <data name="HsGroupFirefox" xml:space="preserve">
+    <value>Firefox, Waterfox, Pale Moon, SeaMonkey</value>
+  </data>
+  <data name="HsGroupUnavailable" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+  <data name="HsChromium" xml:space="preserve">
+    <value>Chrome, Edge, Opera and other Chromium browsers</value>
+  </data>
+  <data name="HsPlugins" xml:space="preserve">
+    <value>Program plug-ins (applications.ini)</value>
+  </data>
+  <data name="HsBlockedTip" xml:space="preserve">
+    <value>Not implemented: the analysis of this part was stopped by the automated safety system.</value>
+  </data>
+  <data name="HsUnavailableNote" xml:space="preserve">
+    <value>These parts of the original were not reimplemented.</value>
+  </data>
+  <data name="HsColItem" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="HsColAction" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="HsColTarget" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="HsColSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="HsIntro" xml:space="preserve">
+    <value>Choose items and press Analyze. Analysis only reads; nothing is removed until you confirm. Registry data is backed up to a .reg file first.</value>
+  </data>
+  <data name="HsAnalysing" xml:space="preserve">
+    <value>Analyzing…</value>
+  </data>
+  <data name="HsCount" xml:space="preserve">
+    <value>{0} action(s) · {1}</value>
+  </data>
+  <data name="HsDone" xml:space="preserve">
+    <value>Done: {0} action(s), {1} freed</value>
+  </data>
+  <data name="HsFailed" xml:space="preserve">
+    <value>{0} action(s) failed: {1}</value>
+  </data>
+  <data name="HsConfirm" xml:space="preserve">
+    <value>Carry out {0} action(s) ({1})?&#xA;&#xA;Files are deleted permanently; registry data is backed up to a .reg file first.</value>
+  </data>
+  <data name="HsConfirmTitle" xml:space="preserve">
+    <value>Erase history</value>
+  </data>
+  <data name="HsBrowserRunning" xml:space="preserve">
+    <value>Skipped because the browser is running: {0}</value>
+  </data>
+  <data name="HsAdminHint" xml:space="preserve">
+    <value>Some selected items need administrator rights; without them those parts are skipped.</value>
+  </data>
+  <data name="HsAdminMark" xml:space="preserve">
+    <value>(admin)</value>
+  </data>
+  <data name="Hi_win_opensave" xml:space="preserve">
+    <value>Open/Save dialog history</value>
+  </data>
+  <data name="Hi_win_clipboard" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="Hi_win_mapdrives" xml:space="preserve">
+    <value>Map network drive history</value>
+  </data>
+  <data name="Hi_win_emptytemp" xml:space="preserve">
+    <value>Empty folders in Temp</value>
+  </data>
+  <data name="Hi_win_prefetch" xml:space="preserve">
+    <value>Prefetch files</value>
+  </data>
+  <data name="Hi_win_spool" xml:space="preserve">
+    <value>Print spooler files</value>
+  </data>
+  <data name="Hi_win_trayicons" xml:space="preserve">
+    <value>Notification area icon history</value>
+  </data>
+  <data name="Hi_win_windowpos" xml:space="preserve">
+    <value>Window sizes and positions</value>
+  </data>
+  <data name="Hi_win_outlooknk2" xml:space="preserve">
+    <value>Outlook auto-complete list (NK2)</value>
+  </data>
+  <data name="Hi_win_outlooktemp" xml:space="preserve">
+    <value>Outlook temporary files</value>
+  </data>
+  <data name="Hi_win_miscmru" xml:space="preserve">
+    <value>Other recent lists</value>
+  </data>
+  <data name="Hi_win_ftp" xml:space="preserve">
+    <value>FTP accounts history</value>
+  </data>
+  <data name="Hi_win_dumps" xml:space="preserve">
+    <value>Memory dumps</value>
+  </data>
+  <data name="Hi_win_logs" xml:space="preserve">
+    <value>Windows log files</value>
+  </data>
+  <data name="Hi_win_wer" xml:space="preserve">
+    <value>Windows error reports</value>
+  </data>
+  <data name="Hi_win_fontcache" xml:space="preserve">
+    <value>Font cache</value>
+  </data>
+  <data name="Hi_win_iislogs" xml:space="preserve">
+    <value>IIS log files</value>
+  </data>
+  <data name="Hi_win_thumbcache" xml:space="preserve">
+    <value>Thumbnail cache</value>
+  </data>
+  <data name="Hi_win_appcompat" xml:space="preserve">
+    <value>Program compatibility history</value>
+  </data>
+  <data name="Hi_win_eventlogs" xml:space="preserve">
+    <value>Event logs</value>
+  </data>
+  <data name="Hi_start_runmru" xml:space="preserve">
+    <value>Run dialog history</value>
+  </data>
+  <data name="Hi_start_recentdocs" xml:space="preserve">
+    <value>Recent documents</value>
+  </data>
+  <data name="Hi_start_findfiles" xml:space="preserve">
+    <value>File search history</value>
+  </data>
+  <data name="Hi_start_findcomputer" xml:space="preserve">
+    <value>Computer search history</value>
+  </data>
+  <data name="Hi_start_userassist_invalid" xml:space="preserve">
+    <value>Program usage list: missing programs only</value>
+  </data>
+  <data name="Hi_start_netrecent" xml:space="preserve">
+    <value>Recent network locations</value>
+  </data>
+  <data name="Hi_start_menuorder" xml:space="preserve">
+    <value>Start menu sort order</value>
+  </data>
+  <data name="Hi_start_userassist_all" xml:space="preserve">
+    <value>Program usage list: all entries</value>
+  </data>
+  <data name="Hi_start_jumplists" xml:space="preserve">
+    <value>Jump lists</value>
+  </data>
+  <data name="Hf_History" xml:space="preserve">
+    <value>Browsing history</value>
+  </data>
+  <data name="Hf_Cache" xml:space="preserve">
+    <value>Cache</value>
+  </data>
+  <data name="Hf_Cookies" xml:space="preserve">
+    <value>Cookies (whitelist kept)</value>
+  </data>
+  <data name="Hf_Forms" xml:space="preserve">
+    <value>Form history</value>
+  </data>
+  <data name="Hf_SearchHistory" xml:space="preserve">
+    <value>Search bar history</value>
+  </data>
+  <data name="Hf_Downloads" xml:space="preserve">
+    <value>Download history</value>
+  </data>
+  <data name="Hf_Passwords" xml:space="preserve">
+    <value>Saved passwords</value>
+  </data>
+  <data name="Hf_Sessions" xml:space="preserve">
+    <value>Saved sessions</value>
+  </data>
+  <data name="Hf_SitePreferences" xml:space="preserve">
+    <value>Site preferences and permissions</value>
+  </data>
+  <data name="Hf_CrashReports" xml:space="preserve">
+    <value>Crash reports</value>
+  </data>
+  <data name="Hf_Compact" xml:space="preserve">
+    <value>Compact databases</value>
+  </data>
+  <data name="Hfk_firefox_history" xml:space="preserve">
+    <value>Firefox: history</value>
+  </data>
+  <data name="Hfk_firefox_cache" xml:space="preserve">
+    <value>Firefox: cache</value>
+  </data>
+  <data name="Hfk_firefox_cookies" xml:space="preserve">
+    <value>Firefox: cookies</value>
+  </data>
+  <data name="Hfk_firefox_forms" xml:space="preserve">
+    <value>Firefox: forms</value>
+  </data>
+  <data name="Hfk_firefox_search" xml:space="preserve">
+    <value>Firefox: search</value>
+  </data>
+  <data name="Hfk_firefox_passwords" xml:space="preserve">
+    <value>Firefox: passwords</value>
+  </data>
+  <data name="Hfk_firefox_downloads" xml:space="preserve">
+    <value>Firefox: downloads</value>
+  </data>
+  <data name="Hfk_firefox_sessions" xml:space="preserve">
+    <value>Firefox: sessions</value>
+  </data>
+  <data name="Hfk_firefox_siteprefs" xml:space="preserve">
+    <value>Firefox: site preferences</value>
+  </data>
+  <data name="Hfk_firefox_crash" xml:space="preserve">
+    <value>Firefox: crash reports</value>
+  </data>
+  <data name="Hfk_firefox_compact" xml:space="preserve">
+    <value>Firefox: compact</value>
+  </data>
+  <data name="Hk_delete" xml:space="preserve">
+    <value>Delete file</value>
+  </data>
+  <data name="Hk_rmdir" xml:space="preserve">
+    <value>Remove folder</value>
+  </data>
+  <data name="Hk_rmdir_empty" xml:space="preserve">
+    <value>Remove empty folders</value>
+  </data>
+  <data name="Hk_ini" xml:space="preserve">
+    <value>Remove INI entry</value>
+  </data>
+  <data name="Hk_filter_lines" xml:space="preserve">
+    <value>Remove lines</value>
+  </data>
+  <data name="Hk_reg_delete_key" xml:space="preserve">
+    <value>Delete registry key</value>
+  </data>
+  <data name="Hk_reg_empty_key" xml:space="preserve">
+    <value>Empty registry key</value>
+  </data>
+  <data name="Hk_reg_delete_value" xml:space="preserve">
+    <value>Delete registry value</value>
+  </data>
+  <data name="Hk_clipboard" xml:space="preserve">
+    <value>Clear clipboard</value>
+  </data>
+  <data name="Hk_eventlog" xml:space="preserve">
+    <value>Clear event log</value>
+  </data>
+  <data name="Hk_explorer_stop" xml:space="preserve">
+    <value>Stop Explorer</value>
+  </data>
+  <data name="Hk_explorer_start" xml:space="preserve">
+    <value>Restart Explorer</value>
+  </data>
+  <data name="Hk_sql" xml:space="preserve">
+    <value>Clean database</value>
+  </data>
+  <data name="Hk_sql_delete" xml:space="preserve">
+    <value>Delete database rows</value>
+  </data>
+  <data name="Hk_vacuum" xml:space="preserve">
+    <value>Compact database</value>
+  </data>
+  <data name="Hk_wal_checkpoint" xml:space="preserve">
+    <value>Merge database journal</value>
+  </data>
+  <data name="TabDuplicates" xml:space="preserve">
+    <value>Duplicate files</value>
+    <comment>Duplicate files</comment>
+  </data>
+  <data name="DpScan" xml:space="preserve">
+    <value>_Scan</value>
+  </data>
+  <data name="DpDelete" xml:space="preserve">
+    <value>Re_move checked…</value>
+  </data>
+  <data name="DpCheckOne" xml:space="preserve">
+    <value>Check _one file in each group</value>
+  </data>
+  <data name="DpCheckOneTip" xml:space="preserve">
+    <value>Checks the first file of every group; the other copies stay unchecked.</value>
+  </data>
+  <data name="DpUncheckAll" xml:space="preserve">
+    <value>_Uncheck all</value>
+  </data>
+  <data name="DpWhere" xml:space="preserve">
+    <value>Folders and drives to scan</value>
+  </data>
+  <data name="DpCompare" xml:space="preserve">
+    <value>Files are duplicates when they have</value>
+  </data>
+  <data name="DpSameName" xml:space="preserve">
+    <value>the same name</value>
+  </data>
+  <data name="DpSameSize" xml:space="preserve">
+    <value>the same size</value>
+  </data>
+  <data name="DpSameDate" xml:space="preserve">
+    <value>the same modified time (to the minute)</value>
+  </data>
+  <data name="DpContent" xml:space="preserve">
+    <value>the same content:</value>
+  </data>
+  <data name="DpContentNone" xml:space="preserve">
+    <value>not compared</value>
+  </data>
+  <data name="DpMinSize" xml:space="preserve">
+    <value>Ignore files smaller than</value>
+  </data>
+  <data name="DpFileTypes" xml:space="preserve">
+    <value>File types</value>
+  </data>
+  <data name="DpNote" xml:space="preserve">
+    <value>Only content comparison finds true duplicates. System files, empty files, links and excluded folders (Windows, Program Files, AppData…) are never scanned.</value>
+  </data>
+  <data name="DpColSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="DpColModified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="DpIntro" xml:space="preserve">
+    <value>Choose folders or drives and click Scan. Scanning never changes anything; nothing is checked for removal until you check it.</value>
+  </data>
+  <data name="DpScanning" xml:space="preserve">
+    <value>Scanning…</value>
+  </data>
+  <data name="DpScanningCount" xml:space="preserve">
+    <value>Scanning… {0} files</value>
+  </data>
+  <data name="DpHashing" xml:space="preserve">
+    <value>Comparing contents… {0}%</value>
+  </data>
+  <data name="DpElapsed" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="DpResult" xml:space="preserve">
+    <value>{0} files searched · {1} duplicate group(s) · {2} files · {3} can be freed</value>
+  </data>
+  <data name="DpGroupTitle" xml:space="preserve">
+    <value>Duplicate group {0} · {1} files · {2} can be freed</value>
+  </data>
+  <data name="DpNotVerified" xml:space="preserve">
+    <value>Contents were not compared: files in a group may differ. Compare contents (MD5) before removing.</value>
+  </data>
+  <data name="DpUnreadable" xml:space="preserve">
+    <value>{0} file(s) could not be read and were left out.</value>
+  </data>
+  <data name="DpNoRoots" xml:space="preserve">
+    <value>Select at least one folder or drive.</value>
+  </data>
+  <data name="DpExcluded" xml:space="preserve">
+    <value>This folder is in the exclusion list and will be skipped:&#xA;&#xA;{0}</value>
+  </data>
+  <data name="DpCheckOneWarning" xml:space="preserve">
+    <value>The scan did not compare contents.&#xA;Checking one file in each group and removing them may remove files that are not true duplicates. Continue?</value>
+  </data>
+  <data name="DpWholeGroups" xml:space="preserve">
+    <value>Every file of {0} group(s) is checked.&#xA;Removing them leaves no copy of those files.&#xA;&#xA;Remove them anyway?</value>
+  </data>
+  <data name="DpWholeGroupsTitle" xml:space="preserve">
+    <value>No copy would be kept</value>
+  </data>
+  <data name="DpConfirm" xml:space="preserve">
+    <value>{0} file(s), {1}, will be {2}.&#xA;&#xA;Continue?</value>
+  </data>
+  <data name="DpConfirmTitle" xml:space="preserve">
+    <value>Remove duplicate files</value>
+  </data>
+  <data name="DpRemoved" xml:space="preserve">
+    <value>Removed {0} file(s), freed {1}.</value>
+  </data>
+  <data name="DpNotRemoved" xml:space="preserve">
+    <value>{0} file(s) were not removed: {1}</value>
+  </data>
+  <data name="DpProf_Default" xml:space="preserve">
+    <value>Default (programs, music, video, archives…)</value>
+  </data>
+  <data name="DpProf_AllFiles" xml:space="preserve">
+    <value>All files</value>
+  </data>
+  <data name="DpProf_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="DpProf_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="DpProf_Zip" xml:space="preserve">
+    <value>Archives</value>
+  </data>
+  <data name="DpProf_Image" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="DpProf_Document" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="TabDisk" xml:space="preserve">
+    <value>Disk analysis</value>
+    <comment>Disk analysis</comment>
+  </data>
+  <data name="DaAnalyze" xml:space="preserve">
+    <value>Analyze</value>
+  </data>
+  <data name="DaOpen" xml:space="preserve">
+    <value>_Open in Explorer</value>
+  </data>
+  <data name="DaDelete" xml:space="preserve">
+    <value>Send to Recycle _Bin…</value>
+  </data>
+  <data name="DaReport" xml:space="preserve">
+    <value>Save _report…</value>
+  </data>
+  <data name="DaAnalyzingCount" xml:space="preserve">
+    <value>Analyzing… {0} files</value>
+  </data>
+  <data name="DaDone" xml:space="preserve">
+    <value>{0} files in {1} folders · {2}</value>
+  </data>
+  <data name="DaContents" xml:space="preserve">
+    <value>Folder contents</value>
+  </data>
+  <data name="DaTypes" xml:space="preserve">
+    <value>File types</value>
+  </data>
+  <data name="DaTop" xml:space="preserve">
+    <value>Largest 100 files</value>
+  </data>
+  <data name="DaColSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="DaColShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="DaColItems" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="DaColFiles" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="DaColFolders" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="DaColAttrib" xml:space="preserve">
+    <value>Attrib.</value>
+  </data>
+  <data name="DaColModified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="DaColType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="DaColExtension" xml:space="preserve">
+    <value>Extension</value>
+  </data>
+  <data name="DaColCount" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="DaColLocation" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="DaNoExtension" xml:space="preserve">
+    <value>(no extension)</value>
+  </data>
+  <data name="DaInaccessible" xml:space="preserve">
+    <value>not accessible</value>
+  </data>
+  <data name="DaEmpty" xml:space="preserve">
+    <value>Empty folders</value>
+  </data>
+  <data name="DaFindEmpty" xml:space="preserve">
+    <value>_Find empty folders</value>
+  </data>
+  <data name="DaDeleteEmpty" xml:space="preserve">
+    <value>Send checked to Recycle B_in…</value>
+  </data>
+  <data name="DaEmptyNote" xml:space="preserve">
+    <value>Folders with no files at any depth. Hidden, system and read-only folders and Windows folders are skipped.</value>
+  </data>
+  <data name="DaFindingEmpty" xml:space="preserve">
+    <value>Searching for empty folders…</value>
+  </data>
+  <data name="DaEmptyFound" xml:space="preserve">
+    <value>{0} empty folder(s) found</value>
+  </data>
+  <data name="DaDeleteEmptyConfirm" xml:space="preserve">
+    <value>Send {0} empty folder(s) to the Recycle Bin?</value>
+  </data>
+  <data name="DaNoLongerEmpty" xml:space="preserve">
+    <value>{0} folder(s) are no longer empty and were left alone.</value>
+  </data>
+  <data name="DaCat_Music" xml:space="preserve">
+    <value>Music</value>
+  </data>
+  <data name="DaCat_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="DaCat_Archives" xml:space="preserve">
+    <value>Archives</value>
+  </data>
+  <data name="DaCat_Images" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="DaCat_Documents" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="DaCat_Others" xml:space="preserve">
+    <value>Others</value>
+  </data>
+  <data name="DaDeleteConfirm" xml:space="preserve">
+    <value>Send {0} item(s), {1}, to the Recycle Bin?</value>
+  </data>
+  <data name="DaDeleteTitle" xml:space="preserve">
+    <value>Send to Recycle Bin</value>
+  </data>
+  <data name="DaDeleteBlocked" xml:space="preserve">
+    <value>This item cannot be deleted here (drive, hidden system item or Recycle Bin):&#xA;&#xA;{0}</value>
+  </data>
+  <data name="DaDeleted" xml:space="preserve">
+    <value>{0} item(s) sent to the Recycle Bin.</value>
+  </data>
+  <data name="DaNotDeleted" xml:space="preserve">
+    <value>{0} item(s) were not deleted: {1}</value>
+  </data>
+  <data name="DaReportFilter" xml:space="preserve">
+    <value>Text report</value>
+  </data>
+  <data name="TabRestore" xml:space="preserve">
+    <value>Restore</value>
+    <comment>Restore</comment>
+  </data>
+  <data name="RsRestore" xml:space="preserve">
+    <value>Restore…</value>
+  </data>
+  <data name="RsOpenFolder" xml:space="preserve">
+    <value>Show in _folder</value>
+  </data>
+  <data name="RsDelete" xml:space="preserve">
+    <value>Delete backup…</value>
+  </data>
+  <data name="RsAddFolder" xml:space="preserve">
+    <value>A_dd backup folder…</value>
+  </data>
+  <data name="RsColType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="RsColCreated" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="RsColSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="RsColSource" xml:space="preserve">
+    <value>Made by</value>
+  </data>
+  <data name="RsKind_JunkFiles" xml:space="preserve">
+    <value>Junk files</value>
+  </data>
+  <data name="RsKind_DuplicateFiles" xml:space="preserve">
+    <value>Duplicate files</value>
+  </data>
+  <data name="RsKind_Registry" xml:space="preserve">
+    <value>Registry (.reg)</value>
+  </data>
+  <data name="RsKind_RegistryZip" xml:space="preserve">
+    <value>Registry (zip)</value>
+  </data>
+  <data name="RsFromOriginal" xml:space="preserve">
+    <value>Ace Utilities</value>
+  </data>
+  <data name="RsFromCleanSuite" xml:space="preserve">
+    <value>CleanSuite</value>
+  </data>
+  <data name="RsCount" xml:space="preserve">
+    <value>{0} backup(s)</value>
+  </data>
+  <data name="RsRegConfirm" xml:space="preserve">
+    <value>Write the registry data of this backup back?&#xA;&#xA;{0}&#xA;&#xA;Existing values with the same name are replaced; nothing is deleted.</value>
+  </data>
+  <data name="RsRegZipConfirm" xml:space="preserve">
+    <value>Restore all {0} registry item(s) of this backup?&#xA;&#xA;{1}&#xA;&#xA;Existing values with the same name are replaced; nothing is deleted.</value>
+  </data>
+  <data name="RsRegDone" xml:space="preserve">
+    <value>Restored {0} registry value(s).</value>
+  </data>
+  <data name="RsRegErrors" xml:space="preserve">
+    <value>{0} part(s) could not be restored: {1}</value>
+  </data>
+  <data name="RsInvalid" xml:space="preserve">
+    <value>This backup cannot be read:&#xA;&#xA;{0}&#xA;&#xA;{1}</value>
+  </data>
+  <data name="RsDeleteConfirm" xml:space="preserve">
+    <value>Send {0} backup(s) to the Recycle Bin? They can no longer be restored from here.</value>
+  </data>
+  <data name="RsDeleteFailed" xml:space="preserve">
+    <value>{0} backup(s) could not be removed.</value>
+  </data>
+  <data name="RsDeleted" xml:space="preserve">
+    <value>{0} backup(s) sent to the Recycle Bin</value>
+  </data>
+  <data name="TabScheduler" xml:space="preserve">
+    <value>Scheduler</value>
+    <comment>Scheduler</comment>
+  </data>
+  <data name="SdIntro" xml:space="preserve">
+    <value>Choose the tools to run and when. Windows Task Scheduler then starts CleanSuite at that time, only while you are signed in and not on battery power.</value>
+  </data>
+  <data name="SdTasksHeader" xml:space="preserve">
+    <value>Tasks to run</value>
+  </data>
+  <data name="SdWhenHeader" xml:space="preserve">
+    <value>When</value>
+  </data>
+  <data name="SdOnce" xml:space="preserve">
+    <value>Once, on</value>
+  </data>
+  <data name="SdDaily" xml:space="preserve">
+    <value>Daily, every</value>
+  </data>
+  <data name="SdDays" xml:space="preserve">
+    <value>day(s)</value>
+  </data>
+  <data name="SdWeekly" xml:space="preserve">
+    <value>Weekly, every</value>
+  </data>
+  <data name="SdWeeksOn" xml:space="preserve">
+    <value>week(s), on</value>
+  </data>
+  <data name="SdMonthly" xml:space="preserve">
+    <value>Monthly, on day</value>
+  </data>
+  <data name="SdMonthNote" xml:space="preserve">
+    <value>Months without this day are skipped.</value>
+  </data>
+  <data name="SdStartup" xml:space="preserve">
+    <value>When Windows starts (2 minutes after I sign in)</value>
+  </data>
+  <data name="SdLogon" xml:space="preserve">
+    <value>When I sign in</value>
+  </data>
+  <data name="SdTime" xml:space="preserve">
+    <value>Time:</value>
+  </data>
+  <data name="SdDateTip" xml:space="preserve">
+    <value>Date as year-month-day</value>
+  </data>
+  <data name="SdSave" xml:space="preserve">
+    <value>Save schedule</value>
+  </data>
+  <data name="SdRemove" xml:space="preserve">
+    <value>Remove schedule…</value>
+  </data>
+  <data name="SdNone" xml:space="preserve">
+    <value>No schedule is set.</value>
+  </data>
+  <data name="SdNext" xml:space="preserve">
+    <value>Next run: {0}</value>
+  </data>
+  <data name="SdNextStartup" xml:space="preserve">
+    <value>Next run: 2 minutes after you next sign in</value>
+  </data>
+  <data name="SdNextLogon" xml:space="preserve">
+    <value>Next run: your next sign-in</value>
+  </data>
+  <data name="SdNextNone" xml:space="preserve">
+    <value>Task Scheduler reports no next run.</value>
+  </data>
+  <data name="SdForeign" xml:space="preserve">
+    <value>A task named «{0}» exists that this program cannot read; saving replaces it.</value>
+  </data>
+  <data name="SdWhat" xml:space="preserve">
+    <value>A scheduled run uses the choices each tab starts with and removes what that tab would select after a scan. Junk files and invalid shortcuts go to the Recycle Bin; the registry is cleaned only in the low-risk categories (recent-item lists, sounds, help files, fonts, application paths, Start menu), and its data is exported to a .reg backup first (see the Restore tab); the history items checked by default are cleaned and their files deleted permanently. A run is skipped while CleanSuite is open. Each run is recorded in {0}.</value>
+  </data>
+  <data name="SdSaved" xml:space="preserve">
+    <value>Schedule saved.</value>
+  </data>
+  <data name="SdRemoved" xml:space="preserve">
+    <value>Schedule removed.</value>
+  </data>
+  <data name="SdRemoveConfirm" xml:space="preserve">
+    <value>Remove the scheduled task «{0}»?</value>
+  </data>
+  <data name="SdNoTasks" xml:space="preserve">
+    <value>Choose at least one task.</value>
+  </data>
+  <data name="SdBadInterval" xml:space="preserve">
+    <value>Enter a whole number from 1 to {0}.</value>
+  </data>
+  <data name="SdBadDate" xml:space="preserve">
+    <value>Enter the date as year-month-day, for example {0}.</value>
+  </data>
+  <data name="SdPast" xml:space="preserve">
+    <value>That time has already passed. A one-time schedule must be in the future.</value>
+  </data>
+  <data name="SdFailed" xml:space="preserve">
+    <value>Task Scheduler did not accept the schedule:&#xA;&#xA;{0}</value>
+  </data>
+  <data name="SdUnavailable" xml:space="preserve">
+    <value>Task Scheduler is not available: {0}</value>
+  </data>
+  <data name="Day_Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Day_Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="Day_Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Day_Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="Day_Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Day_Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="Day_Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="SrTitle" xml:space="preserve">
+    <value>CleanSuite — scheduled cleanup</value>
+  </data>
+  <data name="SrRunning" xml:space="preserve">
+    <value>Running: {0}…</value>
+  </data>
+  <data name="SrFinished" xml:space="preserve">
+    <value>Finished tasks</value>
+  </data>
+  <data name="SrCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="SrJunk" xml:space="preserve">
+    <value>Junk files: {0} removed, {1} freed</value>
+  </data>
+  <data name="SrRegistry" xml:space="preserve">
+    <value>Registry: {0} entries fixed</value>
+  </data>
+  <data name="SrHistory" xml:space="preserve">
+    <value>Erase history: {0} items cleaned, {1} freed</value>
+  </data>
+  <data name="SrShortcuts" xml:space="preserve">
+    <value>Invalid shortcuts: {0} deleted</value>
+  </data>
+  <data name="SrNothing" xml:space="preserve">
+    <value>{0}: nothing to clean</value>
+  </data>
+  <data name="SrFailedPart" xml:space="preserve">
+    <value> ({0} could not be processed)</value>
+  </data>
+  <data name="SrError" xml:space="preserve">
+    <value>{0}: stopped with an error: {1}</value>
+  </data>
+  <data name="SrLog" xml:space="preserve">
+    <value>Recorded in {0}</value>
+  </data>
+  <data name="DaReportSaved" xml:space="preserve">
+    <value>Report saved:&#xA;{0}</value>
+  </data>
+  <data name="R_NoCopyKept" xml:space="preserve">
+    <value>no copy of this file would be kept</value>
+  </data>
+  <data name="TabShortcuts" xml:space="preserve">
+    <value>Invalid shortcuts</value>
+    <comment>Shortcuts tab (Fix Invalid Shortcuts)</comment>
+  </data>
+  <data name="ScScan" xml:space="preserve">
+    <value>_Scan</value>
+  </data>
+  <data name="ScDelete" xml:space="preserve">
+    <value>Send checked to Recycle _Bin…</value>
+  </data>
+  <data name="ScRetarget" xml:space="preserve">
+    <value>Change _target…</value>
+  </data>
+  <data name="ScOpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="ScModeStartMenu" xml:space="preserve">
+    <value>Start menu, desktop and recent items</value>
+  </data>
+  <data name="ScModeDrives" xml:space="preserve">
+    <value>All fixed drives</value>
+  </data>
+  <data name="ScEmptyFolders" xml:space="preserve">
+    <value>Include empty Start-menu folders</value>
+  </data>
+  <data name="ScIncludeRemovable" xml:space="preserve">
+    <value>Check removable drives</value>
+  </data>
+  <data name="ScColName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ScColFolder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ScColTarget" xml:space="preserve">
+    <value>Missing target</value>
+  </data>
+  <data name="ScColReason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="ScReasonTarget" xml:space="preserve">
+    <value>Target not found</value>
+  </data>
+  <data name="ScReasonArgs" xml:space="preserve">
+    <value>File in the arguments not found</value>
+  </data>
+  <data name="ScReasonEmpty" xml:space="preserve">
+    <value>Empty folder</value>
+  </data>
+  <data name="ScReady" xml:space="preserve">
+    <value>Click Scan. Scanning never changes anything.</value>
+  </data>
+  <data name="ScScanning" xml:space="preserve">
+    <value>Scanning shortcuts…</value>
+  </data>
+  <data name="ScResult" xml:space="preserve">
+    <value>{0} item(s) found · {1} shortcuts in {2} files checked</value>
+  </data>
+  <data name="ScDeleteConfirm" xml:space="preserve">
+    <value>Send the {0} checked item(s) to the Recycle Bin?&#xA;&#xA;They can be restored from the Recycle Bin.</value>
+  </data>
+  <data name="ScDeleteTitle" xml:space="preserve">
+    <value>Delete invalid shortcuts</value>
+  </data>
+  <data name="ScDeleted" xml:space="preserve">
+    <value>{0} item(s) sent to the Recycle Bin · {1} skipped</value>
+  </data>
+  <data name="ScRetargetPick" xml:space="preserve">
+    <value>Choose the new target</value>
+  </data>
+  <data name="ScRetargetDone" xml:space="preserve">
+    <value>"{0}" now points to the chosen file. The old shortcut was kept in the backup folder.</value>
+  </data>
+  <data name="ScRetargetFailed" xml:space="preserve">
+    <value>Could not change the shortcut "{0}": {1}</value>
+  </data>
+  <data name="ScRetargetOnlyShortcut" xml:space="preserve">
+    <value>Select a shortcut (not a folder) first.</value>
+  </data>
+  <data name="TabUninstall" xml:space="preserve">
+    <value>Installed programs</value>
+    <comment>Uninstall tab (Uninstall Manager)</comment>
+  </data>
+  <data name="UnRefresh" xml:space="preserve">
+    <value>_Refresh</value>
+  </data>
+  <data name="UnSearch" xml:space="preserve">
+    <value>Search:</value>
+  </data>
+  <data name="UnShowUpdates" xml:space="preserve">
+    <value>Show updates</value>
+  </data>
+  <data name="UnUninstall" xml:space="preserve">
+    <value>_Uninstall…</value>
+  </data>
+  <data name="UnModify" xml:space="preserve">
+    <value>C_hange</value>
+  </data>
+  <data name="UnRepair" xml:space="preserve">
+    <value>Re_pair</value>
+  </data>
+  <data name="UnRemoveEntry" xml:space="preserve">
+    <value>Remove _entry…</value>
+  </data>
+  <data name="UnWebsite" xml:space="preserve">
+    <value>_Website</value>
+  </data>
+  <data name="UnReport" xml:space="preserve">
+    <value>_Save list…</value>
+  </data>
+  <data name="UnColName" xml:space="preserve">
+    <value>Program</value>
+  </data>
+  <data name="UnColPublisher" xml:space="preserve">
+    <value>Publisher</value>
+  </data>
+  <data name="UnColDate" xml:space="preserve">
+    <value>Installed on</value>
+  </data>
+  <data name="UnColSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="UnColVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="UnColNotes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="UnNoteInvalid" xml:space="preserve">
+    <value>Possible invalid: uninstaller not found</value>
+  </data>
+  <data name="UnNote32" xml:space="preserve">
+    <value>32-bit</value>
+  </data>
+  <data name="UnNoteMsi" xml:space="preserve">
+    <value>Windows Installer</value>
+  </data>
+  <data name="UnNoteUser" xml:space="preserve">
+    <value>Current user only</value>
+  </data>
+  <data name="UnCount" xml:space="preserve">
+    <value>{0} programs · {1} possible invalid</value>
+  </data>
+  <data name="UnUninstallConfirm" xml:space="preserve">
+    <value>Start the uninstaller of "{0}"?</value>
+  </data>
+  <data name="UnUninstallTitle" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="UnSelf" xml:space="preserve">
+    <value>CleanSuite cannot uninstall itself. Use Windows Settings for that.</value>
+  </data>
+  <data name="UnRemoveConfirm" xml:space="preserve">
+    <value>Remove "{0}" from the list of installed programs?&#xA;&#xA;Only the list entry is removed; the program's files stay on the disk. Use this only when the program's own uninstaller no longer works. A .reg backup is kept.</value>
+  </data>
+  <data name="UnRemoveTitle" xml:space="preserve">
+    <value>Remove entry</value>
+  </data>
+  <data name="UnMsiNoRemove" xml:space="preserve">
+    <value>Windows Installer entries cannot be removed from the list.</value>
+  </data>
+  <data name="UnStarted" xml:space="preserve">
+    <value>Started: {0}</value>
+  </data>
+  <data name="UnFailed" xml:space="preserve">
+    <value>Could not run the command for "{0}": {1}</value>
+  </data>
+  <data name="UnRemoved" xml:space="preserve">
+    <value>Entry removed. Backup: {0}</value>
+  </data>
+  <data name="UnReportSaved" xml:space="preserve">
+    <value>List saved: {0}</value>
+  </data>
+  <data name="UnReportFilter" xml:space="preserve">
+    <value>Text report|*.txt|Tab-delimited text|*.txt</value>
+  </data>
+  <data name="UnAdminHint" xml:space="preserve">
+    <value>Programs installed for all users may ask for administrator rights.</value>
+  </data>
+  <data name="R_NoLongerExists" xml:space="preserve">
+    <value>no longer exists</value>
+    <comment>Engine reasons</comment>
+  </data>
+  <data name="R_ReparsePoint" xml:space="preserve">
+    <value>link or junction (skipped)</value>
+  </data>
+  <data name="R_Changed" xml:space="preserve">
+    <value>changed since scan</value>
+  </data>
+  <data name="R_NotRecycled" xml:space="preserve">
+    <value>could not be recycled</value>
+  </data>
+  <data name="R_NotArchived" xml:space="preserve">
+    <value>could not be archived</value>
+  </data>
+  <data name="R_StillExists" xml:space="preserve">
+    <value>still exists</value>
+  </data>
+  <data name="R_ProtectedSystem" xml:space="preserve">
+    <value>protected system folder</value>
+  </data>
+  <data name="R_Protected" xml:space="preserve">
+    <value>protected folder</value>
+  </data>
+  <data name="R_DriveRoot" xml:space="preserve">
+    <value>drive root</value>
+  </data>
+  <data name="R_InvalidPath" xml:space="preserve">
+    <value>invalid path</value>
+  </data>
+  <data name="R_Exists" xml:space="preserve">
+    <value>already exists</value>
+  </data>
+  <data name="R_EntryMissing" xml:space="preserve">
+    <value>missing from the archive</value>
+  </data>
+  <data name="R_UnknownRelative" xml:space="preserve">
+    <value>original location unknown (name without a folder)</value>
+  </data>
+  <data name="R_Unknown" xml:space="preserve">
+    <value>original location unknown</value>
+  </data>
+  <data name="R_Traversal" xml:space="preserve">
+    <value>unsafe path ('..')</value>
+  </data>
+  <data name="R_Device" xml:space="preserve">
+    <value>device path (not allowed)</value>
+  </data>
+  <data name="R_NotFile" xml:space="preserve">
+    <value>not a file name</value>
+  </data>
+  <data name="R_NotBackup" xml:space="preserve">
+    <value>not a junk backup</value>
+  </data>
+  <data name="R_Admin" xml:space="preserve">
+    <value>requires administrator rights</value>
+  </data>
+  <data name="DaBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="DaForward" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="DaUp" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="DaAnalyzeTip" xml:space="preserve">
+    <value>Analyze the selected drive or folder again (F5). On This PC: read the drives again.</value>
+  </data>
+  <data name="DaFolderPane" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="DaOverview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="DaComputer" xml:space="preserve">
+    <value>This PC</value>
+  </data>
+  <data name="DaLocalDisk" xml:space="preserve">
+    <value>Local Disk</value>
+  </data>
+  <data name="DaRemovable" xml:space="preserve">
+    <value>Removable Disk</value>
+  </data>
+  <data name="DaNetworkDrive" xml:space="preserve">
+    <value>Network Drive</value>
+  </data>
+  <data name="DaCdDrive" xml:space="preserve">
+    <value>CD Drive</value>
+  </data>
+  <data name="DaColCapacity" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
+  <data name="DaColUsed" xml:space="preserve">
+    <value>Used</value>
+  </data>
+  <data name="DaLargest" xml:space="preserve">
+    <value>Largest folders and files</value>
+  </data>
+  <data name="DaPath" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="DaSizeLabel" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="DaOccupied" xml:space="preserve">
+    <value>Occupied space</value>
+  </data>
+  <data name="DaTotalSize" xml:space="preserve">
+    <value>Total size</value>
+  </data>
+  <data name="DaDrivesLabel" xml:space="preserve">
+    <value>Drives</value>
+  </data>
+  <data name="DaOccupiedValue" xml:space="preserve">
+    <value>{0}% [{1} files, {2} folders]</value>
+  </data>
+  <data name="DaUsedValue" xml:space="preserve">
+    <value>{0} ({1}%)</value>
+  </data>
+  <data name="DaFreeTotal" xml:space="preserve">
+    <value>Free: {0}   |   Total: {1}</value>
+  </data>
+  <data name="DaUsedSlice" xml:space="preserve">
+    <value>Used</value>
+  </data>
+  <data name="DaFreeSlice" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="DaFilesShort" xml:space="preserve">
+    <value>{0} files</value>
+  </data>
+  <data name="DaOtherItems" xml:space="preserve">
+    <value>Other ({0} items)</value>
+  </data>
+  <data name="DaComputerStatus" xml:space="preserve">
+    <value>Select a drive to analyze it. Analysis only reads; you can browse other drives while it runs.</value>
+  </data>
+  <data name="DaPendingStart" xml:space="preserve">
+    <value>Analyzing this drive… It only reads, and you can browse other drives meanwhile.</value>
+  </data>
+  <data name="DaPendingCount" xml:space="preserve">
+    <value>Analyzing… {0} files so far.</value>
+  </data>
+  <data name="DaPendingStopped" xml:space="preserve">
+    <value>The analysis was stopped. Press Analyze to start it again.</value>
+  </data>
+  <data name="DaAnalyzingShort" xml:space="preserve">
+    <value>analyzing…</value>
+  </data>
+  <data name="DaDoneTime" xml:space="preserve">
+    <value>Analyzed: {0} files in {1} folders · {2} · {3} s</value>
+  </data>
+  <data name="DaInaccessibleFolder" xml:space="preserve">
+    <value>This folder could not be read (access denied); it counts as empty.</value>
+  </data>
+  <data name="DaAttr_Hidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="DaAttr_System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="DaAttr_ReadOnly" xml:space="preserve">
+    <value>Read-only</value>
+  </data>
+  <data name="EmDiskFolder" xml:space="preserve">
+    <value>This folder contains nothing.</value>
+  </data>
+  <data name="EmDiskTypes" xml:space="preserve">
+    <value>No files of this type here.</value>
+  </data>
+  <data name="EmDiskEmpty" xml:space="preserve">
+    <value>Press "Find empty folders" to search the selected drive or folder.</value>
+  </data>
+  <data name="R_ProtectedLink" xml:space="preserve">
+    <value>protected location (reached through a link or a short name)</value>
+  </data>
+  <data name="R_ContainsProtected" xml:space="preserve">
+    <value>contains a protected folder</value>
+  </data>
+  <data name="R_NoSameCopy" xml:space="preserve">
+    <value>no other copy with the same content would be kept</value>
+  </data>
+  <data name="R_NoBinNetworkPath" xml:space="preserve">
+    <value>network location without a Recycle Bin (not deleted)</value>
+  </data>
+  <data name="R_NoBinRemovable" xml:space="preserve">
+    <value>removable drive without a Recycle Bin (not deleted)</value>
+  </data>
+  <data name="R_NoBinNetwork" xml:space="preserve">
+    <value>network drive without a Recycle Bin (not deleted)</value>
+  </data>
+  <data name="R_NoBinCd" xml:space="preserve">
+    <value>CD/DVD drive (not deleted)</value>
+  </data>
+  <data name="R_DriveUnavailable" xml:space="preserve">
+    <value>drive not available (not deleted)</value>
+  </data>
+  <data name="R_NoBin" xml:space="preserve">
+    <value>drive without a Recycle Bin (not deleted)</value>
+  </data>
+  <data name="R_BinOff" xml:space="preserve">
+    <value>the Recycle Bin is turned off for this drive (not deleted)</value>
+  </data>
+  <data name="R_HiddenSystem" xml:space="preserve">
+    <value>hidden system item</value>
+  </data>
+  <data name="R_BinFolder" xml:space="preserve">
+    <value>Recycle Bin folder</value>
+  </data>
+  <data name="R_StartupFolder" xml:space="preserve">
+    <value>startup folder (a file there runs at every sign-in)</value>
+  </data>
+  <data name="R_ProgramFolder" xml:space="preserve">
+    <value>program folder (backup not made by CleanSuite)</value>
+  </data>
+  <data name="R_NotEmpty" xml:space="preserve">
+    <value>no longer empty</value>
+  </data>
+  <data name="R_AutoStart" xml:space="preserve">
+    <value>starts programs; not restored from a backup CleanSuite did not make</value>
+  </data>
+  <data name="R_TopLevelKey" xml:space="preserve">
+    <value>a top-level key is never deleted</value>
+  </data>
+  <data name="R_ExplorerOpen" xml:space="preserve">
+    <value>Explorer did not close</value>
+  </data>
+  <data name="R_BackupFailed" xml:space="preserve">
+    <value>the backup could not be checked, so nothing was deleted</value>
+  </data>
+  <data name="R_WindowsInstaller" xml:space="preserve">
+    <value>Windows Installer entries cannot be removed</value>
+  </data>
+  <data name="R_NotAllowed" xml:space="preserve">
+    <value>not allowed for this program</value>
+  </data>
+  <data name="R_NoCommand" xml:space="preserve">
+    <value>the program gives no command for this</value>
+  </data>
+  <data name="R_Drive" xml:space="preserve">
+    <value>a whole drive cannot be deleted</value>
+  </data>
+  <data name="ScanningCount" xml:space="preserve">
+    <value>Scanning (read-only)… {0} files looked at</value>
+  </data>
+  <data name="DpSelected" xml:space="preserve">
+    <value>{0} checked ({1})</value>
+  </data>
+  <data name="RgRestoreRefused" xml:space="preserve">
+    <value>{0} keys were not restored: this file is not a backup CleanSuite made, and these keys start programs:</value>
+  </data>
+  <data name="RsKeyRefused" xml:space="preserve">
+    <value>(not restored: starts programs)</value>
+  </data>
+  <data name="RsKeysRefused" xml:space="preserve">
+    <value>{0} keys that start programs will not be restored, because CleanSuite did not make this backup.</value>
+  </data>
+  <data name="StKeyRun" xml:space="preserve">
+    <value>Run (every sign-in)</value>
+  </data>
+  <data name="StKeyRunOnce" xml:space="preserve">
+    <value>RunOnce (next sign-in only)</value>
+  </data>
+  <data name="StKeyRunServices" xml:space="preserve">
+    <value>RunServices (at startup)</value>
+  </data>
+  <data name="StKeyRunServicesOnce" xml:space="preserve">
+    <value>RunServicesOnce (next startup only)</value>
+  </data>
+  <data name="StKeyPolicies" xml:space="preserve">
+    <value>{0}, set by policy</value>
+  </data>
+  <data name="StKeyTerminalServer" xml:space="preserve">
+    <value>{0}, Terminal Server</value>
+  </data>
+  <data name="EmStartup" xml:space="preserve">
+    <value>No startup programs were found in the Run keys and startup folders.</value>
+  </data>
+  <data name="EmUninstall" xml:space="preserve">
+    <value>No installed programs match.</value>
+  </data>
+  <data name="HsNotProfile" xml:space="preserve">
+    <value>{0}: not a browser profile folder (profiles.ini names it), so it was left alone.</value>
+  </data>
+  <data name="NavMenu" xml:space="preserve">
+    <value>Show or hide the page names</value>
+  </data>
+  <data name="SizeTB" xml:space="preserve">
+    <value>{0:N2} TB</value>
+  </data>
+</root>

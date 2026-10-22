@@ -20,7 +20,7 @@ public sealed class StartupMonitor
 
     public StartupMonitor(string? file = null, IRegistryRoots? roots = null)
     {
-        _file = file ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "startup-monitor.json");
+        _file = file ?? Path.Combine(CleanSuitePaths.Root, "startup-monitor.json");
         _roots = roots ?? WindowsRegistryRoots.Instance;
         _disabled = Load();
     }

@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -81,7 +81,7 @@ public sealed class UninstallManager
         _roots = roots ?? WindowsRegistryRoots.Instance;
         _launcher = launcher ?? new Win32ProcessLauncher();
         _journalBase = journalBase;
-        _backupFolder = backupFolder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Backups");
+        _backupFolder = backupFolder ?? CleanSuitePaths.Backups;
     }
 
     /// <summary>Like the original refuses to uninstall itself ("Ace Utilities"), CleanSuite refuses its own entry.</summary>
@@ -129,7 +129,7 @@ public sealed class UninstallManager
         var root = _roots.Root(e.Hive);
         try
         {
-            using var backup = new RegBackupWriter(_backupFolder);
+            using var backup = new RegBackupWriter(_backupFolder, journal);
             if (!backup.ExportKey(root, e.Hive, e.KeyPath))
             {
                 journal.Record("remove-entry", e.KeyDisplay, false, error: "no longer exists");

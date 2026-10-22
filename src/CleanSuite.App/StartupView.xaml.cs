@@ -3,60 +3,70 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using CleanSuite.App.Localization;
+using CleanSuite.App.Theming;
+using CleanSuite.App.ViewModels;
 using CleanSuite.Startup;
 
 namespace CleanSuite.App;
 
-/// <summary>Startup programs tab (Auto-Start Manager): list, disable/enable (reversible) and delete (with backup).</summary>
-public partial class StartupView : UserControl
+/// <summary>Startup programs tab (Auto-Start Manager): list, disable/enable (reversible) and delete (with backup). State in <see cref="StartupViewModel"/>.</summary>
+public partial class StartupView : UserControl, IToolPage
 {
-    private readonly StartupManager _manager = new(monitor: new StartupMonitor());
-    private IReadOnlyList<StartupEntry> _entries = Array.Empty<StartupEntry>();
-    private bool _loadedOnce, _working;
+    private readonly StartupViewModel _vm = new();
+    private bool _loadedOnce;
+    private string? _changed;
 
     public StartupView()
     {
         InitializeComponent();
+        _vm.Error += ex => UiErrors.Show(Owner, ex, "startup");
+        _vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(_vm.Items)) Render();
+            else if (e.PropertyName == nameof(_vm.IsBusy)) RenderBusy();
+        };
         Loc.Instance.LanguageChanged += (_, _) => Render();
     }
+
+    // ---------------------------------------------------------------- IToolPage
+
+    public bool IsBusy => _vm.IsBusy;
+    public bool IsChanging => _vm.IsChanging;
+    Button? IToolPage.ScanButton => RefreshButton;
+    Button? IToolPage.CancelButton => null;
+    public void CancelWork() => _vm.Cancel();
+
+    private Window Owner => Window.GetWindow(this)!;
 
     private void View_Loaded(object sender, RoutedEventArgs e)
     {
         if (_loadedOnce) return;
         _loadedOnce = true;
-        Reload();
+        _ = _vm.RefreshAsync();
     }
 
-    /// <summary>Reads the entries on a background thread (registry, startup folders, shortcut targets, file versions).</summary>
-    private async void Reload()
+    private void RenderBusy()
     {
-        if (_working) return;
-        SetWorking(true, Loc.T("StLoading"));
-        try { _entries = await Task.Run(_manager.Scan); }
-        catch (Exception ex) { UiErrors.Show(Owner, ex, "startup scan"); }
-        finally { SetWorking(false); }
-        Render();
-    }
-
-    private void SetWorking(bool working, string? status = null)
-    {
-        _working = working;
-        RefreshButton.IsEnabled = !working;
-        Grid.IsEnabled = !working;
-        if (status != null) StatusText.Text = status;
-        if (working) DisableButton.IsEnabled = EnableButton.IsEnabled = DeleteButton.IsEnabled = OpenButton.IsEnabled = false;
-        else UpdateButtons();
+        RefreshButton.IsEnabled = !_vm.IsBusy;
+        Grid.IsEnabled = !_vm.IsBusy;
+        if (_vm.IsBusy) StatusText.Text = Loc.T("StLoading");
+        else Render();
     }
 
     private void Render()
     {
+        var entries = _vm.Items;
         var selected = (Grid.SelectedItem as StartupRow)?.Entry.Identity;
-        var rows = _entries.Where(e => HideMicrosoft.IsChecked != true || !e.IsMicrosoft).Select(e => new StartupRow(e)).ToList();
+        var rows = entries.Where(e => HideMicrosoft.IsChecked != true || !e.IsMicrosoft).Select(e => new StartupRow(e)).ToList();
         Grid.ItemsSource = rows;
         Grid.SelectedItem = rows.FirstOrDefault(r => r.Entry.Identity == selected);
-        StatusText.Text = Loc.F("StCount", Loc.N0(_entries.Count), Loc.N0(_entries.Count(e => e.Enabled)), Loc.N0(_entries.Count(e => !e.Enabled)))
-                          + " · " + Loc.T("StAdminHint");
-        int reEnabled = _entries.Count(e => e.ReEnabledItself);
+        if (!_vm.IsBusy)
+        {
+            var status = Loc.F("StCount", Loc.N0(entries.Count), Loc.N0(entries.Count(e => e.Enabled)), Loc.N0(entries.Count(e => !e.Enabled)))
+                         + " · " + Loc.T("StAdminHint");
+            Bidi.SetText(StatusText, _changed != null ? Loc.F("StChanged", Loc.Ltr(_changed)) + " · " + status : status);
+        }
+        int reEnabled = entries.Count(e => e.ReEnabledItself);
         WarningText.Text = Loc.F("StReEnabledWarning", Loc.N0(reEnabled));
         WarningText.Visibility = reEnabled > 0 ? Visibility.Visible : Visibility.Collapsed;
         UpdateButtons();
@@ -67,43 +77,29 @@ public partial class StartupView : UserControl
     private void UpdateButtons()
     {
         var e = Selected;
-        DisableButton.IsEnabled = e is { Enabled: true };
-        EnableButton.IsEnabled = e is { Enabled: false };
-        DeleteButton.IsEnabled = e != null;
+        bool idle = !_vm.IsBusy;
+        DisableButton.IsEnabled = idle && e is { Enabled: true };
+        EnableButton.IsEnabled = idle && e is { Enabled: false };
+        DeleteButton.IsEnabled = idle && e != null;
         OpenButton.IsEnabled = e?.TargetPath != null;
     }
 
-    private Window Owner => Window.GetWindow(this)!;
-
-    private async void Apply(Func<StartupEntry, StartupManager.ChangeResult> change)
+    private async void Apply(Func<StartupEntry, Task<StartupManager.ChangeResult?>> change)
     {
         var e = Selected;
         if (e == null) { Loc.Show(Owner, Loc.T("StNoSelection"), Loc.T("TabStartup"), MessageBoxButton.OK, MessageBoxImage.Information); return; }
-        if (_working) return;
-        SetWorking(true, Loc.T("StLoading"));
-        StartupManager.ChangeResult? r = null;
-        try
-        {
-            r = await Task.Run(() => change(e));
-            if (!r.Success)
-                Loc.Show(Owner, Loc.F("StFailed", e.Name, Loc.Reason(r.Error ?? "")), Loc.T("TabStartup"), MessageBoxButton.OK, MessageBoxImage.Warning);
-            _entries = await Task.Run(_manager.Scan);
-        }
-        catch (Exception ex) { UiErrors.Show(Owner, ex, "startup change"); }
-        finally { SetWorking(false); }
+        if (_vm.IsBusy) return;
+        _changed = null;
+        var r = await change(e);
+        if (r == null) return;                                     // busy, or an error the page has shown
+        if (r.Success) _changed = e.Name;
+        else Loc.Show(Owner, Loc.F("StFailed", Loc.Ltr(e.Name), Loc.Reason(r.Error ?? "")), Loc.T("TabStartup"), MessageBoxButton.OK, MessageBoxImage.Warning);
         Render();
-        if (r is { Success: true }) StatusText.Text = Loc.F("StChanged", e.Name) + " · " + StatusText.Text;
     }
 
-    /// <summary>A change is being written (the window waits before closing).</summary>
-    public bool IsChanging => _working;
-
-    /// <summary>Entries are being read or changed (used by the snapshot aid).</summary>
-    public bool Busy => _working;
-
-    private void Refresh_Click(object sender, RoutedEventArgs e) => Reload();
-    private void Disable_Click(object sender, RoutedEventArgs e) => Apply(_manager.Disable);
-    private void Enable_Click(object sender, RoutedEventArgs e) => Apply(_manager.Enable);
+    private void Refresh_Click(object sender, RoutedEventArgs e) { _changed = null; _ = _vm.RefreshAsync(); }
+    private void Disable_Click(object sender, RoutedEventArgs e) => Apply(_vm.DisableAsync);
+    private void Enable_Click(object sender, RoutedEventArgs e) => Apply(_vm.EnableAsync);
     private void Filter_Click(object sender, RoutedEventArgs e) => Render();
     private void Grid_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateButtons();
 
@@ -111,9 +107,9 @@ public partial class StartupView : UserControl
     {
         var entry = Selected;
         if (entry == null) return;
-        if (Loc.Show(Owner, Loc.F("StDeleteConfirm", entry.Name), Loc.T("StDeleteTitle"), MessageBoxButton.YesNo,
+        if (Loc.Show(Owner, Loc.F("StDeleteConfirm", Loc.Ltr(entry.Name)), Loc.T("StDeleteTitle"), MessageBoxButton.YesNo,
                 MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes) return;
-        Apply(_manager.Delete);
+        Apply(_vm.DeleteAsync);
     }
 
     private void Open_Click(object sender, RoutedEventArgs e)
@@ -149,12 +145,15 @@ public sealed class StartupRow(StartupEntry entry)
         ? Loc.T("StLocFolder") + " · " + Loc.T(Entry.Location.PerUser ? "StLocUser" : "StLocMachine")
         : Loc.T(Entry.Location.PerUser ? "StLocUser" : "StLocMachine") + " · " + KeyName(Entry.Location);
 
-    /// <summary>Short name of the Run key ("Run", "RunOnce", "Run 32-bit"…), from the key path itself.</summary>
+    /// <summary>The Run key in words ("Run (every sign-in)", "RunOnce (next sign-in only)", policies, Terminal Server, 32-bit).</summary>
     private static string KeyName(StartupLocation l)
     {
-        var name = l.Key[(l.Key.LastIndexOf('\\') + 1)..];
-        if (l.Key.Contains(@"\Policies\", StringComparison.OrdinalIgnoreCase)) name = "Policies " + name;
-        if (l.Key.Contains("Terminal Server", StringComparison.OrdinalIgnoreCase)) name = "Terminal Server " + name;
+        var leaf = l.Key[(l.Key.LastIndexOf('\\') + 1)..];
+        var name = Loc.T(leaf.Equals("RunOnce", StringComparison.OrdinalIgnoreCase) ? "StKeyRunOnce"
+                       : leaf.Equals("RunServices", StringComparison.OrdinalIgnoreCase) ? "StKeyRunServices"
+                       : leaf.Equals("RunServicesOnce", StringComparison.OrdinalIgnoreCase) ? "StKeyRunServicesOnce" : "StKeyRun");
+        if (l.Key.Contains(@"\Policies\", StringComparison.OrdinalIgnoreCase)) name = Loc.F("StKeyPolicies", name);
+        if (l.Key.Contains("Terminal Server", StringComparison.OrdinalIgnoreCase)) name = Loc.F("StKeyTerminalServer", name);
         if (l.Key.Contains("Wow6432Node", StringComparison.OrdinalIgnoreCase)) name += " " + Loc.T("St32Bit");
         return name;
     }

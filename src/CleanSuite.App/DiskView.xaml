@@ -1,191 +1,327 @@
-<UserControl x:Class="CleanSuite.App.DiskView"
+﻿<UserControl x:Class="CleanSuite.App.DiskView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:loc="clr-namespace:CleanSuite.App.Localization"
              xmlns:theming="clr-namespace:CleanSuite.App.Theming">
+    <!--
+        Disk Analysis, laid out like the original: the folder tree on one side ("This PC", its drives, then the analysed folders
+        by size), the views of the selected item on the other (Overview with two pie charts, Folder contents, File types, Top 100
+        files, Empty folders) and a status bar with the drive's free and total space. Selecting a drive analyses it; nothing has
+        to be pressed. Analysis only reads.
+    -->
     <UserControl.Resources>
+        <!-- Share bar with its value beside it (text on the bar would sit on the accent colour and lose contrast). -->
         <DataTemplate x:Key="ShareCell">
             <Grid Margin="2,3">
-                <ProgressBar Minimum="0" Maximum="100" Value="{Binding Percent, Mode=OneWay}" Height="16" />
-                <TextBlock Text="{Binding PercentText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="30" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ProgressBar Minimum="0" Maximum="100" Value="{Binding Percent, Mode=OneWay}" Height="10" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Text="{Binding PercentText}" MinWidth="44" TextAlignment="Right" Margin="6,0,0,0"
+                           VerticalAlignment="Center" FlowDirection="LeftToRight" />
             </Grid>
         </DataTemplate>
-        <!-- Legend row of a chart: colour, name, size and share (the chart is never read from colour alone). -->
+        <!-- One part of a pie: colour, folder/file/type icon, name, size and share (the chart is never read from colour alone). -->
         <DataTemplate x:Key="LegendRow">
-            <Grid Margin="0,3" ToolTip="{Binding ToolTipText}">
+            <Grid Margin="0,2" ToolTip="{Binding ToolTipText}" Background="Transparent">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Border Width="12" Height="12" CornerRadius="3" Background="{Binding Fill}" VerticalAlignment="Center" Margin="0,0,8,0" />
-                <TextBlock Grid.Column="1" Text="{Binding Label}" Style="{StaticResource PathCell}" />
-                <TextBlock Grid.Column="2" Text="{Binding ValueText}" Style="{StaticResource MutedText}" Margin="12,0,0,0" VerticalAlignment="Center" />
-                <TextBlock Grid.Column="3" Text="{Binding PercentText}" Style="{StaticResource MutedText}" MinWidth="52" TextAlignment="Right"
+                <Border Width="14" Height="14" CornerRadius="2" Background="{Binding Fill}" BorderBrush="{DynamicResource ControlBorder}"
+                        BorderThickness="1" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <ContentControl Grid.Column="1" Style="{StaticResource Icon}" Tag="{Binding Icon}" Width="16" Height="16" Margin="0,0,6,0"
+                                Foreground="{DynamicResource TextMutedFg}" />
+                <TextBlock Grid.Column="2" Text="{Binding Label}" Style="{StaticResource PathCell}" />
+                <TextBlock Grid.Column="3" Text="{Binding CountText}" Style="{StaticResource MutedText}" MinWidth="60" TextAlignment="Right"
+                           Margin="12,0,0,0" VerticalAlignment="Center" FlowDirection="LeftToRight" />
+                <TextBlock Grid.Column="4" Text="{Binding ValueText}" MinWidth="72" TextAlignment="Right" Margin="12,0,0,0" VerticalAlignment="Center"
+                           FlowDirection="LeftToRight" />
+                <TextBlock Grid.Column="5" Text="{Binding PercentText}" Style="{StaticResource MutedText}" MinWidth="50" TextAlignment="Right"
                            Margin="10,0,0,0" VerticalAlignment="Center" FlowDirection="LeftToRight" />
             </Grid>
         </DataTemplate>
-        <Style x:Key="ChartCard" TargetType="Border">
+        <!-- A labelled group of the Overview (the original's framed "Largest folders and files" and "File types"). -->
+        <Style x:Key="OverviewGroup" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource SurfaceBg}" />
             <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="Padding" Value="14,10" />
-            <Setter Property="Margin" Value="0,8,8,0" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <!-- Toolbar button with its icon above the text, as in the original's toolbar. -->
+        <Style x:Key="NavButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="MinWidth" Value="64" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel>
+                            <ContentControl Style="{StaticResource Icon}" Width="22" Height="22" HorizontalAlignment="Center"
+                                            Tag="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FactLabel" TargetType="TextBlock" BasedOn="{StaticResource MutedText}">
+            <Setter Property="Margin" Value="0,2,16,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="FactValue" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
     </UserControl.Resources>
 
     <DockPanel>
         <Border DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,10">
             <WrapPanel>
-                <ComboBox x:Name="TargetCombo" AutomationProperties.Name="{loc:T DaTarget}" Width="230" />
-                <Button x:Name="AddFolderButton" Content="{loc:T AddFolder}" Click="AddFolder_Click" />
-                <Button x:Name="AnalyzeButton" Content="{loc:T DaAnalyze}" Click="Analyze_Click" Style="{StaticResource AccentButton}" />
-                <Button x:Name="CancelButton" Content="{loc:T Cancel}" Click="Cancel_Click" IsEnabled="False" />
-                <Button x:Name="OpenButton" Content="{loc:T DaOpen}" Click="Open_Click" IsEnabled="False" />
-                <Button x:Name="DeleteButton" Content="{loc:T DaDelete}" Click="Delete_Click" IsEnabled="False" />
-                <Button x:Name="ReportButton" Content="{loc:T DaReport}" Click="Report_Click" IsEnabled="False" />
+                <Button x:Name="BackButton" Style="{StaticResource NavButton}" Tag="{StaticResource Icon.Back}" Content="{loc:T DaBack}"
+                        Click="Back_Click" IsEnabled="False" AutomationProperties.Name="{loc:T DaBack}" ToolTip="Alt+←" />
+                <Button x:Name="ForwardButton" Style="{StaticResource NavButton}" Tag="{StaticResource Icon.Forward}" Content="{loc:T DaForward}"
+                        Click="Forward_Click" IsEnabled="False" AutomationProperties.Name="{loc:T DaForward}" ToolTip="Alt+→" />
+                <Button x:Name="UpButton" Style="{StaticResource NavButton}" Tag="{StaticResource Icon.Up}" Content="{loc:T DaUp}"
+                        Click="Up_Click" IsEnabled="False" AutomationProperties.Name="{loc:T DaUp}" ToolTip="Alt+↑" />
+                <Rectangle Style="{StaticResource ToolbarSeparator}" />
+                <Button x:Name="AnalyzeButton" Style="{StaticResource NavButton}" Tag="{StaticResource Icon.Refresh}" Content="{loc:T DaAnalyze}"
+                        Click="Analyze_Click" AutomationProperties.Name="{loc:T DaAnalyze}" ToolTip="{loc:T DaAnalyzeTip}" />
+                <Button x:Name="CancelButton" Content="{loc:T Cancel}" Click="Cancel_Click" IsEnabled="False" VerticalAlignment="Center" />
+                <Rectangle Style="{StaticResource ToolbarSeparator}" />
+                <Button x:Name="AddFolderButton" Content="{loc:T AddFolder}" Click="AddFolder_Click" VerticalAlignment="Center" />
+                <Button x:Name="OpenButton" Content="{loc:T DaOpen}" Click="Open_Click" IsEnabled="False" VerticalAlignment="Center" />
+                <Button x:Name="DeleteButton" Content="{loc:T DaDelete}" Click="Delete_Click" IsEnabled="False" VerticalAlignment="Center" />
+                <Button x:Name="ReportButton" Content="{loc:T DaReport}" Click="Report_Click" IsEnabled="False" VerticalAlignment="Center" />
             </WrapPanel>
         </Border>
 
-        <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,10"
-                      theming:Fit.MaxHeightShare="0.28">
-        <ItemsControl x:Name="DrivesList">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border Background="{DynamicResource SurfaceBg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                            CornerRadius="6" Padding="10,6" Margin="0,0,8,8" Width="285">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FlowDirection="LeftToRight" HorizontalAlignment="Left" />
-                            <ProgressBar Minimum="0" Maximum="100" Value="{Binding UsedPercent, Mode=OneWay}" Height="8" Margin="0,4" />
-                            <TextBlock Text="{Binding UsedText}" Style="{StaticResource MutedText}" TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding FreeText}" Style="{StaticResource MutedText}" TextWrapping="Wrap" />
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        </ScrollViewer>
-
-        <TextBlock theming:Live.Announce="True" x:Name="StatusText" DockPanel.Dock="Bottom" Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,10,0,0" />
+        <!-- Status bar: what the page is doing, and the free and total space of the selected item's drive. -->
+        <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Margin="0,8,0,0" Padding="2,6,2,0">
+            <DockPanel>
+                <TextBlock x:Name="SpaceText" DockPanel.Dock="Right" Style="{StaticResource MutedText}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                <ProgressBar x:Name="Progress" DockPanel.Dock="Right" Width="140" Height="6" Margin="12,0,0,0" IsIndeterminate="True" Visibility="Collapsed" />
+                <TextBlock theming:Live.Announce="True" x:Name="StatusText" Style="{StaticResource MutedText}" TextWrapping="Wrap" VerticalAlignment="Center" />
+            </DockPanel>
+        </Border>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" MinWidth="180" />
+                <ColumnDefinition Width="1*" MinWidth="190" />
                 <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="3*" MinWidth="300" />
+                <ColumnDefinition Width="3*" MinWidth="320" />
             </Grid.ColumnDefinitions>
             <GridSplitter Grid.Column="1" Style="{StaticResource PaneSplitter}" />
-            <TreeView x:Name="Tree" SelectedItemChanged="Tree_SelectedItemChanged" />
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="{loc:T DaFolderPane}" Style="{StaticResource GroupTitle}" Margin="2,0,0,6" />
+                <TreeView x:Name="Tree" SelectedItemChanged="Tree_SelectedItemChanged" AutomationProperties.Name="{loc:T DaFolderPane}" />
+            </DockPanel>
 
-            <TabControl x:Name="Views" Grid.Column="2">
-                <TabItem Header="{loc:T DaContents}">
-                    <DataGrid x:Name="ContentsGrid" theming:Empty.Text="{loc:T EmDisk}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Extended"
-                              SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Contents_DoubleClick">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="{loc:T ColName}" Binding="{Binding Name}" Width="*" MinWidth="150" ElementStyle="{StaticResource PathCell}" />
-                            <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="95" SortMemberPath="Size" />
-                            <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="110" SortMemberPath="Percent" />
-                            <DataGridTextColumn Header="{loc:T DaColItems}" Binding="{Binding Items}" Width="70" />
-                            <DataGridTextColumn Header="{loc:T DaColFiles}" Binding="{Binding Files}" Width="80" />
-                            <DataGridTextColumn Header="{loc:T DaColFolders}" Binding="{Binding Folders}" Width="80" />
-                            <DataGridTextColumn Header="{loc:T DaColAttrib}" Binding="{Binding Attrib}" Width="60" />
-                            <DataGridTextColumn Header="{loc:T DaColModified}" Binding="{Binding ModifiedText}" Width="140" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </TabItem>
-                <TabItem Header="{loc:T DaTypes}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" MinWidth="160" />
-                            <ColumnDefinition Width="10" />
-                            <ColumnDefinition Width="3*" MinWidth="240" />
-                        </Grid.ColumnDefinitions>
-                        <GridSplitter Grid.Column="1" Style="{StaticResource PaneSplitter}" />
-                        <DataGrid x:Name="CategoryGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
-                                  SelectionChanged="Category_SelectionChanged">
+            <DockPanel Grid.Column="2">
+                <!-- Name of the selected item, as the original's caption above the views. -->
+                <TextBlock x:Name="CaptionText" DockPanel.Dock="Top" FontSize="15" FontWeight="SemiBold" Margin="2,0,0,6" TextTrimming="CharacterEllipsis" />
+                <TabControl x:Name="Views" SelectionChanged="Views_SelectionChanged">
+                    <TabItem x:Name="OverviewTab" Header="{loc:T DaOverview}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel Margin="4,8,4,0">
+                                <!-- Facts: Path, Size, Occupied space (a folder or drive) or Total size, Occupied space (This PC). -->
+                                <Grid x:Name="FactsGrid" Margin="2,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock x:Name="Fact1Label" Style="{StaticResource FactLabel}" />
+                                    <TextBlock x:Name="Fact1Value" Grid.Column="1" Style="{StaticResource FactValue}" FlowDirection="LeftToRight" HorizontalAlignment="Left" />
+                                    <TextBlock x:Name="Fact2Label" Grid.Row="1" Style="{StaticResource FactLabel}" />
+                                    <TextBlock x:Name="Fact2Value" Grid.Row="1" Grid.Column="1" Style="{StaticResource FactValue}" />
+                                    <TextBlock x:Name="Fact3Label" Grid.Row="2" Style="{StaticResource FactLabel}" />
+                                    <TextBlock x:Name="Fact3Value" Grid.Row="2" Grid.Column="1" Style="{StaticResource FactValue}" />
+                                </Grid>
+
+                                <!-- This PC: every drive with its capacity, used space and share, and a pie of used and free space. -->
+                                <Border x:Name="DrivesGroup" Style="{StaticResource OverviewGroup}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <DataGrid x:Name="DrivesGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
+                                                  MouseDoubleClick="Drives_DoubleClick" KeyDown="Drives_KeyDown" MaxHeight="320"
+                                                  AutomationProperties.Name="{loc:T DaComputer}" VerticalAlignment="Top">
+                                            <DataGrid.Columns>
+                                                <DataGridTemplateColumn Header="{loc:T ColName}" Width="*" MinWidth="150" SortMemberPath="Title">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <!-- Label and drive letter as separate elements: "Games (E:)" keeps its order in Arabic too. -->
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <ContentControl Style="{StaticResource Icon}" Tag="{StaticResource Icon.Drive}" Width="16" Height="16" Margin="0,0,6,0" />
+                                                                <TextBlock Text="{Binding Label}" FlowDirection="{Binding LabelDirection}" VerticalAlignment="Center" />
+                                                                <TextBlock Text="{Binding Letter}" FlowDirection="LeftToRight" Margin="4,0" VerticalAlignment="Center" />
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                                <DataGridTextColumn Header="{loc:T DaColCapacity}" Binding="{Binding CapacityText}" Width="Auto" MinWidth="80" SortMemberPath="Total"
+                                                                    ElementStyle="{StaticResource NumberCell}" />
+                                                <DataGridTextColumn Header="{loc:T DaColUsed}" Binding="{Binding UsedText}" Width="Auto" MinWidth="80" SortMemberPath="Used"
+                                                                    ElementStyle="{StaticResource NumberCell}" />
+                                                <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="*" MinWidth="120" SortMemberPath="Percent" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <theming:DonutChart x:Name="SpaceChart" Grid.Column="1" Width="170" Height="170" InnerRatio="0" ShowPercentLabels="True"
+                                                            Margin="14,0,0,0" VerticalAlignment="Top" />
+                                    </Grid>
+                                </Border>
+
+                                <!-- A drive that is being (or not yet) analysed: what is known without walking it. -->
+                                <Border x:Name="PendingGroup" Style="{StaticResource OverviewGroup}">
+                                    <DockPanel>
+                                        <theming:DonutChart x:Name="PendingChart" DockPanel.Dock="Right" Width="170" Height="170" InnerRatio="0" ShowPercentLabels="True"
+                                                            Margin="14,0,0,0" />
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock x:Name="PendingText" TextWrapping="Wrap" />
+                                            <ProgressBar x:Name="PendingProgress" Height="6" Margin="0,10,0,0" IsIndeterminate="True" />
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Border>
+
+                                <!-- An analysed folder or drive: its largest folders and files, and its size by file type. -->
+                                <Border x:Name="LargestGroup" Style="{StaticResource OverviewGroup}">
+                                    <StackPanel>
+                                        <TextBlock Text="{loc:T DaLargest}" Style="{StaticResource GroupTitle}" Margin="0,0,0,6" />
+                                        <DockPanel>
+                                            <theming:DonutChart x:Name="FolderChart" DockPanel.Dock="Right" Width="190" Height="190" InnerRatio="0" ShowPercentLabels="True"
+                                                                Margin="14,0,0,0" VerticalAlignment="Top" />
+                                            <ListBox x:Name="FolderLegend" ItemTemplate="{StaticResource LegendRow}" BorderThickness="0" Background="Transparent"
+                                                     HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                     MouseDoubleClick="Legend_DoubleClick" KeyDown="Legend_KeyDown" AutomationProperties.Name="{loc:T DaLargest}" />
+                                        </DockPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border x:Name="TypesGroup" Style="{StaticResource OverviewGroup}">
+                                    <StackPanel>
+                                        <TextBlock Text="{loc:T DaTypes}" Style="{StaticResource GroupTitle}" Margin="0,0,0,6" />
+                                        <DockPanel>
+                                            <theming:DonutChart x:Name="TypeChart" DockPanel.Dock="Right" Width="190" Height="190" InnerRatio="0" ShowPercentLabels="True"
+                                                                Margin="14,0,0,0" VerticalAlignment="Top" />
+                                            <ListBox x:Name="TypeLegend" ItemTemplate="{StaticResource LegendRow}" BorderThickness="0" Background="Transparent"
+                                                     HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                     MouseDoubleClick="TypeLegend_DoubleClick" AutomationProperties.Name="{loc:T DaTypes}" />
+                                        </DockPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="ContentsTab" Header="{loc:T DaContents}">
+                        <DataGrid x:Name="ContentsGrid" theming:Empty.Text="{loc:T EmDiskFolder}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Extended"
+                                  SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Contents_DoubleClick">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="{loc:T DaColType}" Binding="{Binding Name}" Width="*" />
-                                <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="80" SortMemberPath="Size" />
-                                <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="80" SortMemberPath="Percent" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <DataGrid x:Name="ExtensionGrid" Grid.Column="2" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="{loc:T DaColExtension}" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource PathCell}" />
-                                <DataGridTextColumn Header="{loc:T DaColCount}" Binding="{Binding Count}" Width="90" SortMemberPath="CountValue" />
-                                <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="95" SortMemberPath="Size" />
-                                <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="110" SortMemberPath="Percent" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="{loc:T DaCharts}">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <UniformGrid x:Name="ChartsPanel" Columns="2" VerticalAlignment="Top">
-                            <Border Style="{StaticResource ChartCard}">
-                                <StackPanel>
-                                    <TextBlock Text="{loc:T DaChartFolders}" Style="{StaticResource GroupTitle}" Margin="0,0,0,8" />
-                                    <theming:DonutChart x:Name="FolderChart" Height="170" />
-                                    <ItemsControl x:Name="FolderLegend" ItemTemplate="{StaticResource LegendRow}" Margin="0,10,0,0" />
-                                </StackPanel>
-                            </Border>
-                            <Border Style="{StaticResource ChartCard}">
-                                <StackPanel>
-                                    <TextBlock Text="{loc:T DaChartTypes}" Style="{StaticResource GroupTitle}" Margin="0,0,0,8" />
-                                    <theming:DonutChart x:Name="TypeChart" Height="170" />
-                                    <ItemsControl x:Name="TypeLegend" ItemTemplate="{StaticResource LegendRow}" Margin="0,10,0,0" />
-                                </StackPanel>
-                            </Border>
-                        </UniformGrid>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="{loc:T DaTop}">
-                    <DataGrid x:Name="TopGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Extended"
-                              SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Top_DoubleClick">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="{loc:T ColName}" Binding="{Binding Name}" Width="220" ElementStyle="{StaticResource PathCell}" />
-                            <DataGridTextColumn Header="{loc:T DaColLocation}" Binding="{Binding Location}" Width="*" ElementStyle="{StaticResource PathCell}" />
-                            <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="95" SortMemberPath="Size" />
-                            <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="110" SortMemberPath="Percent" />
-                            <DataGridTextColumn Header="{loc:T DaColModified}" Binding="{Binding ModifiedText}" Width="140" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </TabItem>
-                <TabItem Header="{loc:T DaEmpty}">
-                    <DockPanel>
-                        <WrapPanel DockPanel.Dock="Top" Margin="0,8,0,8">
-                            <Button x:Name="FindEmptyButton" Content="{loc:T DaFindEmpty}" Click="FindEmpty_Click" />
-                            <Button x:Name="DeleteEmptyButton" Content="{loc:T DaDeleteEmpty}" Click="DeleteEmpty_Click" IsEnabled="False" />
-                            <TextBlock Text="{loc:T DaEmptyNote}" Style="{StaticResource MutedText}" VerticalAlignment="Center" Margin="12,0,0,0" TextWrapping="Wrap" />
-                        </WrapPanel>
-                        <DataGrid x:Name="EmptyGrid" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Width="34" CanUserResize="False" SortMemberPath="Selected">
+                                <DataGridTemplateColumn Header="{loc:T ColName}" Width="*" MinWidth="150" SortMemberPath="Name">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <!-- Named for screen readers; not editable while the grid is read-only (a clean is running). -->
-                                            <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="0"
-                                                      AutomationProperties.Name="{Binding Path}"
-                                                      IsEnabled="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource Not}}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <ContentControl Style="{StaticResource Icon}" Tag="{Binding Icon}" Width="16" Height="16" Margin="0,0,6,0"
+                                                                Foreground="{DynamicResource TextMutedFg}" />
+                                                <TextBlock Text="{Binding Name}" Style="{StaticResource PathCell}" />
+                                            </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="{loc:T ColName}" Binding="{Binding Name}" Width="220" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
-                                <DataGridTextColumn Header="{loc:T DaColLocation}" Binding="{Binding Path}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                                <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="Auto" MinWidth="80" SortMemberPath="Size" />
+                                <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="Auto" MinWidth="120" SortMemberPath="Percent" />
+                                <DataGridTextColumn Header="{loc:T DaColItems}" Binding="{Binding Items}" Width="Auto" MinWidth="60" />
+                                <DataGridTextColumn Header="{loc:T DaColFiles}" Binding="{Binding Files}" Width="Auto" MinWidth="60" />
+                                <DataGridTextColumn Header="{loc:T DaColFolders}" Binding="{Binding Folders}" Width="Auto" MinWidth="60" />
+                                <DataGridTextColumn Header="{loc:T DaColAttrib}" Binding="{Binding Attrib}" Width="Auto" MinWidth="60" />
+                                <DataGridTextColumn Header="{loc:T DaColModified}" Binding="{Binding ModifiedText}" Width="Auto" MinWidth="120" />
                             </DataGrid.Columns>
                         </DataGrid>
-                    </DockPanel>
-                </TabItem>
-            </TabControl>
+                    </TabItem>
+                    <TabItem x:Name="TypesTab" Header="{loc:T DaTypes}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" MinWidth="170" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="3*" MinWidth="240" />
+                            </Grid.ColumnDefinitions>
+                            <GridSplitter Grid.Column="1" Style="{StaticResource PaneSplitter}" />
+                            <DataGrid x:Name="CategoryGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Single"
+                                      SelectionChanged="Category_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="{loc:T DaColType}" Binding="{Binding Name}" Width="*" />
+                                    <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="Auto" MinWidth="70" SortMemberPath="Size" />
+                                    <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="Auto" MinWidth="100" SortMemberPath="Percent" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid x:Name="ExtensionGrid" Grid.Column="2" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal" theming:Empty.Text="{loc:T EmDiskTypes}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="{loc:T DaColExtension}" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource PathCell}" />
+                                    <DataGridTextColumn Header="{loc:T DaColCount}" Binding="{Binding Count}" Width="Auto" MinWidth="70" SortMemberPath="CountValue" />
+                                    <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="Auto" MinWidth="80" SortMemberPath="Size" />
+                                    <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="Auto" MinWidth="120" SortMemberPath="Percent" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="TopTab" Header="{loc:T DaTop}">
+                        <DataGrid x:Name="TopGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" theming:Empty.Text="{loc:T EmDiskFolder}"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionMode="Extended"
+                                  SelectionChanged="Grid_SelectionChanged" MouseDoubleClick="Top_DoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{loc:T ColName}" Binding="{Binding Name}" Width="2*" MinWidth="140" ElementStyle="{StaticResource PathCell}" />
+                                <DataGridTextColumn Header="{loc:T DaColLocation}" Binding="{Binding Location}" Width="3*" MinWidth="160" ElementStyle="{StaticResource PathCell}" />
+                                <DataGridTextColumn Header="{loc:T DaColSize}" Binding="{Binding SizeText}" Width="Auto" MinWidth="80" SortMemberPath="Size" />
+                                <DataGridTemplateColumn Header="{loc:T DaColShare}" CellTemplate="{StaticResource ShareCell}" Width="Auto" MinWidth="120" SortMemberPath="Percent" />
+                                <DataGridTextColumn Header="{loc:T DaColModified}" Binding="{Binding ModifiedText}" Width="Auto" MinWidth="120" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                    <TabItem x:Name="EmptyTab" Header="{loc:T DaEmpty}">
+                        <DockPanel>
+                            <WrapPanel DockPanel.Dock="Top" Margin="0,8,0,8">
+                                <Button x:Name="FindEmptyButton" Content="{loc:T DaFindEmpty}" Click="FindEmpty_Click" />
+                                <Button x:Name="DeleteEmptyButton" Content="{loc:T DaDeleteEmpty}" Click="DeleteEmpty_Click" IsEnabled="False" />
+                                <TextBlock Text="{loc:T DaEmptyNote}" Style="{StaticResource MutedText}" VerticalAlignment="Center" Margin="12,0,0,0" TextWrapping="Wrap" />
+                            </WrapPanel>
+                            <DataGrid x:Name="EmptyGrid" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                                      theming:Empty.Text="{loc:T EmDiskEmpty}">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Width="34" CanUserResize="False" SortMemberPath="Selected">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <!-- Named for screen readers; not editable while the grid is read-only (a clean is running). -->
+                                                <CheckBox IsChecked="{Binding Selected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" Margin="0"
+                                                          AutomationProperties.Name="{Binding Path}"
+                                                          IsEnabled="{Binding IsReadOnly, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource Not}}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="{loc:T ColName}" Binding="{Binding Name}" Width="2*" MinWidth="140" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                                    <DataGridTextColumn Header="{loc:T DaColLocation}" Binding="{Binding Path}" Width="3*" MinWidth="160" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </TabItem>
+                </TabControl>
+            </DockPanel>
         </Grid>
     </DockPanel>
 </UserControl>

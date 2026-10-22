@@ -18,7 +18,8 @@ public sealed class WindowsEnvironment : ISystemEnvironment
     public string GetTempPath()
     {
         var p = Path.GetTempPath();
-        try { return Path.GetFullPath(p); } catch { return p; }
+        try { return Path.GetFullPath(p); }
+        catch (Exception e) when (e is ArgumentException or NotSupportedException or PathTooLongException) { return p; }
     }
 
     public string GetWindowsDirectory() => Environment.GetFolderPath(Environment.SpecialFolder.Windows);

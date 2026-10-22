@@ -15,7 +15,7 @@ namespace CleanSuite.App;
 /// changes are exported to a .reg backup first and everything is journaled (HistoryExecutor). The Chromium cleaner and
 /// the plug-in engine are listed but unavailable: their analysis was stopped by the automated safety system.
 /// </summary>
-public partial class HistoryView : UserControl
+public partial class HistoryView : UserControl, IToolPage
 {
     private readonly List<HistoryOption> _windows;
     private readonly List<HistoryOption> _start;
@@ -73,7 +73,11 @@ public partial class HistoryView : UserControl
     private bool _autoStarted;
 
     /// <summary>True while an analysis or clean is running (the snapshot aid waits for it).</summary>
-    public bool Busy => _vm.IsBusy;
+    public bool IsBusy => _vm.IsBusy;
+
+    Button? IToolPage.ScanButton => AnalyseButton;
+    Button? IToolPage.CancelButton => CancelButton;
+    public void CancelWork() => _vm.Cancel();
 
     /// <summary>True while history items are being removed; the window waits for it before closing.</summary>
     public bool IsChanging => _vm.IsChanging;
@@ -113,7 +117,12 @@ public partial class HistoryView : UserControl
         {
             StatusText.Text = Loc.F("HsCount", Loc.N0(_vm.Rows.Count), Loc.FormatSize(_vm.Rows.Sum(r => r.Action.Size)))
                               + (_vm.Last is { } l ? " · " + Loc.F("HsDone", Loc.N0(l.Succeeded), Loc.FormatSize(l.BytesFreed)) : "");
-            var notes = plan.Notes.Select(n => n.Code == "browser-running" ? Loc.F("HsBrowserRunning", Loc.Ltr(n.Text)) : n.Text).ToList();
+            var notes = plan.Notes.Select(n => n.Code switch
+            {
+                "browser-running" => Loc.F("HsBrowserRunning", Loc.Ltr(n.Text)),
+                "not-a-profile" => Loc.F("HsNotProfile", Loc.Ltr(n.Text)),
+                _ => n.Text,
+            }).ToList();
             if (AllOptions.Any(o => o.IsChecked && o.NeedsAdmin)) notes.Add(Loc.T("HsAdminHint"));
             Bidi.SetText(NotesText, string.Join("\n", notes));
             NotesText.Visibility = notes.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -156,17 +165,9 @@ public sealed class HistoryOption(string labelKey, bool isChecked) : INotifyProp
 }
 
 /// <summary>One planned action in the review grid.</summary>
-public sealed class HistoryActionRow(HistoryAction action) : ISelectableRow
+public sealed class HistoryActionRow(HistoryAction action) : SelectableRow(true)
 {
-    private bool _selected = true;
     public HistoryAction Action { get; } = action;
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    public bool Selected
-    {
-        get => _selected;
-        set { if (_selected != value) { _selected = value; PropertyChanged?.Invoke(this, new(nameof(Selected))); } }
-    }
 
     public string ItemText
     {
@@ -179,7 +180,8 @@ public sealed class HistoryActionRow(HistoryAction action) : ISelectableRow
     }
 
     public string KindText => Loc.T("Hk_" + Action.Kind.Replace('-', '_')) is var t && !t.StartsWith("Hk_", StringComparison.Ordinal) ? t : Action.Kind;
-    public string TargetText => Action.Detail is { } d ? Action.Target + "  ::  " + d : Action.Target;
+    /// <summary>The file, folder or key, then what is done there (SQL, INI section…) after a separator that reads in both directions.</summary>
+    public string TargetText => Action.Detail is { } d ? Action.Target + "  —  " + d : Action.Target;
     public string SizeText => Action.Size > 0 ? Loc.FormatSize(Action.Size) : "";
     public string Tip => TargetText;
 }

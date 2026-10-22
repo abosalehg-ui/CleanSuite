@@ -1,7 +1,6 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-using CleanSuite.Junk;
 using CleanSuite.Safety;
 
 namespace CleanSuite.DiskUsage;
@@ -24,15 +23,12 @@ public static class DiskScanner
         var clock = Stopwatch.StartNew();
         var stack = new Stack<DiskFolder>();
         stack.Push(top);
-        var options = new EnumerationOptions { AttributesToSkip = 0, IgnoreInaccessible = false, RecurseSubdirectories = false, ReturnSpecialDirectories = false };
         while (stack.Count > 0)
         {
             ct.ThrowIfCancellationRequested();
             var dir = stack.Pop();
-            if (dir.FullPath.Length >= 260) continue;
-            List<FileSystemInfo> entries;
-            try { entries = new DirectoryInfo(dir.FullPath).EnumerateFileSystemInfos("*", options).ToList(); }
-            catch (Exception e) when (e is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+            if (dir.FullPath.Length >= SafeWalk.MaxPath) continue;
+            if (SafeWalk.List(dir.FullPath) is not { } entries)
             {
                 dir.Inaccessible = true;
                 continue;
@@ -83,7 +79,7 @@ public static class DiskScanner
             try
             {
                 if (!d.IsReady) continue;
-                list.Add(new DriveSpace(d.Name.TrimEnd('\\'), d.VolumeLabel, d.TotalSize, d.TotalFreeSpace));
+                list.Add(new DriveSpace(d.Name.TrimEnd('\\'), d.VolumeLabel, d.TotalSize, d.TotalFreeSpace, d.DriveType));
             }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
         }
@@ -163,28 +159,18 @@ public static class DiskScanner
         bin ??= new ShellRecycleBin();
         protectedPaths ??= ProtectedPaths.ForCurrentSystem();
         using var journal = new OperationJournal("diskanalysis", journalBase);
-        var ok = new List<string>();
         var failed = new List<(string, string)>();
         var ready = new List<string>();
         foreach (var (path, attrs, isRoot) in items)
         {
-            var why = DeleteBlocked(path, attrs, isRoot) ?? protectedPaths.Check(path, (attrs & FileAttributes.Directory) != 0);
+            var why = DeleteBlocked(path, attrs, isRoot) ?? protectedPaths.CheckResolved(path, (attrs & FileAttributes.Directory) != 0);
+            if (why == null && !File.Exists(path) && !Directory.Exists(path)) why = "no longer exists";
             if (why != null) { failed.Add((path, why)); journal.Record("skip", path, false, error: why); continue; }
-            if (!File.Exists(path) && !Directory.Exists(path)) { failed.Add((path, "no longer exists")); continue; }
-            if (bin.WhyNotRecyclable(path) is { } noBin) { failed.Add((path, noBin)); journal.Record("skip", path, false, error: noBin); continue; }
             ready.Add(path);
         }
-        if (ready.Count > 0)
-        {
-            var notRecycled = new HashSet<string>(bin.Recycle(ready, silent: false), StringComparer.OrdinalIgnoreCase);
-            foreach (var p in ready)
-            {
-                bool gone = !notRecycled.Contains(p) && !File.Exists(p) && !Directory.Exists(p);
-                journal.Record("recycle", p, gone, backupRef: gone ? "RecycleBin" : null, error: gone ? null : "not recycled");
-                if (gone) ok.Add(p); else failed.Add((p, "could not be recycled"));
-            }
-        }
-        return (ok, failed);
+        var (recycled, notRecycled) = RecycleStep.Run(bin, ready, journal, silent: false);
+        failed.AddRange(notRecycled);
+        return (recycled, failed);
     }
 
     /// <summary>Removes deleted items from the scanned tree and recomputes the totals of the affected root.</summary>

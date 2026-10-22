@@ -1,3 +1,4 @@
+﻿using CleanSuite.Safety;
 using System.Text;
 
 namespace CleanSuite.History;
@@ -20,8 +21,8 @@ public sealed class FilterLinesAction : HistoryAction
     {
         var fi = new FileInfo(Target);
         if (!fi.Exists) return ActionResult.Ok;
-        if (ctx.Protected.Check(Target) is { } why) return ActionResult.Fail(why);
-        if (fi.LastWriteTimeUtc != LastWriteUtc || fi.Length != ExpectedLength) return ActionResult.Fail("changed since scan");
+        if (ctx.Protected.CheckResolved(Target) is { } why) return ActionResult.Fail(why);
+        if (fi.LastWriteTimeUtc != LastWriteUtc || fi.Length != ExpectedLength) return ActionResult.Fail(FileIdentity.ChangedReason);
         try
         {
             var drop = new HashSet<string>(LinesToDrop, StringComparer.Ordinal);

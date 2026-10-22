@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using CleanSuite.App.Localization;
 using CleanSuite.App.Theming;
-using CleanSuite.Junk;
+using CleanSuite.Safety;
 
 namespace CleanSuite.App;
 

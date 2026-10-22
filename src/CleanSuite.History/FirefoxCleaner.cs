@@ -1,4 +1,4 @@
-namespace CleanSuite.History;
+﻿namespace CleanSuite.History;
 
 /// <summary>Bits of History\firefox. Default 0x15F.</summary>
 [Flags]
@@ -118,6 +118,12 @@ public sealed class FirefoxCleaner
             }
             foreach (var p in profiles)
             {
+                // profiles.ini can name any folder (an absolute Path=): only a folder that really is a profile is cleaned.
+                if (!IsProfileFolder(p.Roaming))
+                {
+                    if (Directory.Exists(p.Roaming)) plan.Notes.Add(new HistoryNote("firefox", "not-a-profile", p.Roaming));
+                    continue;
+                }
                 PlanProfile(plan, p.Roaming, items, whitelist, vacuum, ct);
                 if (p.Local != null && (items & FirefoxItems.Cache) != 0)
                     PlanProfile(plan, p.Local, FirefoxItems.Cache, whitelist, vacuum, ct);
@@ -139,6 +145,14 @@ public sealed class FirefoxCleaner
         void File_(string key, string rel) => _files.AddFileIfExists(plan.Actions, key, P(rel));
         void Compact(string rel) { if ((items & FirefoxItems.Compact) != 0 && File.Exists(P(rel))) vacuum.Add(P(rel)); }
 
+        if (depth > 0)
+        {
+            // A custom cache location (browser.cache.disk.parent_directory) can be any folder; Firefox only ever puts its
+            // "cache2" there, so that folder alone is emptied, and only when it holds Firefox's cache index.
+            if (File.Exists(Path.Combine(P("cache2"), "index")))
+                _files.AddEmptyFolder(plan.Actions, "firefox.cache", P("cache2"), removeFolder: false, ct);
+            return;
+        }
         if ((items & FirefoxItems.Cache) != 0)
         {
             const string k = "firefox.cache";
@@ -234,6 +248,10 @@ public sealed class FirefoxCleaner
         }
         catch (Microsoft.Data.Sqlite.SqliteException) { return false; }
     }
+
+    /// <summary>A Firefox-family profile folder: it holds the files every profile has after its first start.</summary>
+    public static bool IsProfileFolder(string folder) =>
+        Directory.Exists(folder) && new[] { "prefs.js", "times.json", "places.sqlite", "compatibility.ini" }.Any(f => File.Exists(Path.Combine(folder, f)));
 
     /// <summary>Value of user_pref("browser.cache.disk.parent_directory", "…") from user.js, else prefs.js.</summary>
     public static string? CacheParentDirectory(string profile)

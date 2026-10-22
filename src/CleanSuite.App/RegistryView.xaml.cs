@@ -13,7 +13,7 @@ namespace CleanSuite.App;
 /// Registry tab (Clean System Registry): scan (read-only), review, remove the checked entries after a .reg backup, and
 /// restore a backup.
 /// </summary>
-public partial class RegistryView : UserControl
+public partial class RegistryView : UserControl, IToolPage
 {
     private readonly RegistryViewModel _vm;
 
@@ -40,7 +40,11 @@ public partial class RegistryView : UserControl
     private bool _autoStarted;
 
     /// <summary>True while an analysis or clean is running (the snapshot aid waits for it).</summary>
-    public bool Busy => _vm.IsBusy;
+    public bool IsBusy => _vm.IsBusy || _restoring;
+
+    Button? IToolPage.ScanButton => ScanButton;
+    Button? IToolPage.CancelButton => CancelButton;
+    public void CancelWork() => _vm.Cancel();
 
     /// <summary>True while entries are being removed or a backup restored; the window waits for it before closing.</summary>
     public bool IsChanging => _vm.IsChanging || _restoring;
@@ -78,9 +82,9 @@ public partial class RegistryView : UserControl
         }
         else
         {
-            StatusText.Text = Loc.F("RgCount", Loc.N0(result.Findings.Count), Loc.N0(result.Ignored.Count))
+            Theming.Bidi.SetText(StatusText, Loc.F("RgCount", Loc.N0(result.Findings.Count), Loc.N0(result.Ignored.Count))
                               + (result.Unreadable.Count > 0 ? " · " + Loc.F("RgUnreadable", Loc.N0(result.Unreadable.Count)) : "")
-                              + (_vm.LastBackup != null ? " · " + Loc.F("RgBackupAt", _vm.LastBackup) : "");
+                              + (_vm.LastBackup != null ? " · " + Loc.F("RgBackupAt", Loc.Ltr(_vm.LastBackup)) : ""));
             WarningText.Text = Loc.T("RgWarning");
             WarningText.Visibility = _vm.Rows.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -103,7 +107,7 @@ public partial class RegistryView : UserControl
         var dlg = new Microsoft.Win32.OpenFileDialog
         {
             Filter = Loc.T("RgRegFilter") + " (*.reg)|*.reg",
-            InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CleanSuite", "Backups"),
+            InitialDirectory = CleanSuite.Safety.CleanSuitePaths.Backups,
         };
         if (dlg.ShowDialog(Owner) != true) return;
         if (Loc.Show(Owner, Loc.F("RgRestoreConfirm", Loc.Ltr(dlg.FileName)), Loc.T("RgRestore"), MessageBoxButton.YesNo,
@@ -112,8 +116,11 @@ public partial class RegistryView : UserControl
         _restoring = true;
         try
         {
-            int n = await Task.Run(() => new RegistryCleaner().Restore(file));
-            Loc.Show(Owner, Loc.F("RgRestored", Loc.N0(n)), Loc.T("RgRestore"), MessageBoxButton.OK, MessageBoxImage.Information);
+            var (n, refused) = await Task.Run(() => (new RegistryCleaner().Restore(file, out var r), r));
+            var msg = Loc.F("RgRestored", Loc.N0(n));
+            if (refused.Count > 0)
+                msg += "\n\n" + Loc.F("RgRestoreRefused", Loc.N0(refused.Count)) + "\n" + string.Join("\n", refused.Take(6).Select(k => "• " + Loc.Ltr(k)));
+            Loc.Show(Owner, msg, Loc.T("RgRestore"), MessageBoxButton.OK, refused.Count > 0 ? MessageBoxImage.Warning : MessageBoxImage.Information);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException or InvalidDataException or FormatException)
         {
@@ -126,24 +133,9 @@ public partial class RegistryView : UserControl
 }
 
 /// <summary>One finding in the grid (texts in the current UI language).</summary>
-public sealed class RegistryRow : ISelectableRow
+public sealed class RegistryRow(RegFinding finding) : SelectableRow(finding.IgnoredBy == null)
 {
-    private bool _selected;
-
-    public RegistryRow(RegFinding finding)
-    {
-        Finding = finding;
-        _selected = finding.IgnoredBy == null;
-    }
-
-    public RegFinding Finding { get; }
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    public bool Selected
-    {
-        get => _selected;
-        set { if (_selected != value) { _selected = value; PropertyChanged?.Invoke(this, new(nameof(Selected))); } }
-    }
+    public RegFinding Finding { get; } = finding;
 
     /// <summary>Contains an ignore word (shown, not selected).</summary>
     public bool Marked => Finding.IgnoredBy != null;

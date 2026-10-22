@@ -48,11 +48,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{loc:T RgColCategory}" Binding="{Binding CategoryText}" Width="150" IsReadOnly="True" />
-                <DataGridTextColumn Header="{loc:T RgColProblem}" Binding="{Binding ProblemText}" Width="200" IsReadOnly="True" />
-                <DataGridTextColumn Header="{loc:T RgColKey}" Binding="{Binding Finding.KeyDisplay}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
-                <DataGridTextColumn Header="{loc:T RgColValue}" Binding="{Binding ValueText}" Width="170" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
-                <DataGridTextColumn Header="{loc:T RgColData}" Binding="{Binding Finding.Data}" Width="260" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T RgColCategory}" Binding="{Binding CategoryText}" Width="Auto" MinWidth="120" IsReadOnly="True" />
+                <DataGridTextColumn Header="{loc:T RgColProblem}" Binding="{Binding ProblemText}" Width="Auto" MinWidth="150" IsReadOnly="True" />
+                <DataGridTextColumn Header="{loc:T RgColKey}" Binding="{Binding Finding.KeyDisplay}" Width="2*" MinWidth="200" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T RgColValue}" Binding="{Binding ValueText}" Width="Auto" MinWidth="110" MaxWidth="280" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
+                <DataGridTextColumn Header="{loc:T RgColData}" Binding="{Binding Finding.Data}" Width="*" MinWidth="160" IsReadOnly="True" ElementStyle="{StaticResource PathCell}" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
