@@ -2,7 +2,7 @@
 
 All notable changes to CleanSuite. Versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-10-23
 
 ### Disk analysis, redesigned after the original program
 

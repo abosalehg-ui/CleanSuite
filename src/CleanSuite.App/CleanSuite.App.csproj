@@ -7,7 +7,7 @@
     <ApplicationIcon>Assets\CleanSuite.ico</ApplicationIcon>
     <AssemblyTitle>CleanSuite</AssemblyTitle>
     <Product>CleanSuite</Product>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

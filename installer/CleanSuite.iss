@@ -1,12 +1,12 @@
 ﻿; CleanSuite installer (Inno Setup 6.4 or later).
 ; Build it with ..\build.ps1, which publishes the program first and passes the version and the publish folder:
-;   ISCC.exe /DAppVersion=1.0.0 /DPublishDir=..\artifacts\publish installer\CleanSuite.iss
+;   ISCC.exe /DAppVersion=1.1.0 /DPublishDir=..\artifacts\publish installer\CleanSuite.iss
 ; The program is installed for the current user without administrator rights (Program Files only when the user chooses
 ; "for all users" in the first page). Settings, logs and backups in %LocalAppData%\CleanSuite are kept on uninstall unless
 ; the user asks to remove them; the scheduled task "CleanSuite Maintenance" is always removed.
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.1.0"
 #endif
 #ifndef PublishDir
   #define PublishDir "..\artifacts\publish"

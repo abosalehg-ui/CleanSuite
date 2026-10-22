@@ -95,10 +95,19 @@ jobs:
           ./build.ps1 -SkipTests -Version $version
           $setup = "artifacts/installer/CleanSuite-Setup-$version.exe"
           (Get-FileHash $setup -Algorithm SHA256).Hash + "  CleanSuite-Setup-$version.exe" | Out-File "$setup.sha256" -Encoding ascii
+          # Release notes: this version's section of CHANGELOG.md.
+          $lines = Get-Content CHANGELOG.md -Encoding utf8
+          $start = [Array]::FindIndex($lines, [Predicate[string]]{ param($l) $l.StartsWith("## [$version]") })
+          if ($start -lt 0) { throw "CHANGELOG.md has no section for $version" }
+          $end = [Array]::FindIndex($lines, $start + 1, [Predicate[string]]{ param($l) $l.StartsWith('## ') })
+          if ($end -lt 0) { $end = $lines.Length }
+          $lines[($start + 1)..($end - 1)] | Out-File release-notes.md -Encoding utf8
 
       - uses: softprops/action-gh-release@v2
         with:
           draft: true
+          name: CleanSuite ${{ github.ref_name }}
+          body_path: release-notes.md
           files: |
             artifacts/installer/CleanSuite-Setup-*.exe
             artifacts/installer/CleanSuite-Setup-*.exe.sha256
