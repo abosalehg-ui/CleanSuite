@@ -46,8 +46,10 @@ It needs 64-bit Windows 10 version 1809 or later; .NET does not have to be insta
 without administrator rights (or for all users if you choose), and uninstalling keeps your backups unless you ask to
 delete them.
 
-The setup is not signed yet, so Windows SmartScreen may show "Windows protected your PC": choose **More info** →
-**Run anyway**.
+Releases up to 1.1.0 are not signed. SmartScreen may show "Windows protected your PC" (choose **More info** → **Run
+anyway**), and on a computer with **Smart App Control** turned on Windows refuses to run the program ("An Application
+Control policy has blocked this file", error 4551). Signed releases are on the way; see the
+[code signing policy](#code-signing-policy).
 
 ## Use
 
@@ -87,6 +89,23 @@ CleanSuite is an independent program, written from scratch, that provides the to
 Ace Utilities. It can read that program's settings, ignore lists and backups (read only) and restore its backups.
 It contains no code, images or other material of Ace Utilities and is not affiliated with Acelogix.
 
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by
+[SignPath Foundation](https://signpath.org) (applied for; releases are signed once the application is approved).
+
+- Only files built from this repository by its GitHub Actions workflow ([`build.yml`](.github/workflows/build.yml)) from a
+  version tag are signed: `CleanSuite.App.exe`, `CleanSuite.Cli.exe`, the uninstaller and `CleanSuite-Setup-<version>.exe`.
+- Every signing request is approved by hand before the files are signed.
+- Committers and reviewers: [abosalehg-ui](https://github.com/abosalehg-ui) · Approvers:
+  [abosalehg-ui](https://github.com/abosalehg-ui) (owner)
+
+**Privacy:** this program will not transfer any information to other networked systems unless specifically requested by
+the user or the person installing or operating it. CleanSuite makes no network connections; it opens its GitHub page only
+when you click the link in the About window.
+
+How signing is set up: [`docs/CODE_SIGNING.md`](docs/CODE_SIGNING.md) (Arabic).
+
 ## License
 
 [MIT](LICENSE) © 2026 abosalehg-ui
@@ -102,8 +121,13 @@ It contains no code, images or other material of Ace Utilities and is not affili
 النتائج وتؤكد، وكل تغيير يمكن التراجع عنه من صفحة «الاستعادة».
 
 - **التثبيت:** نزّل `CleanSuite-Setup-<الإصدار>.exe` من [الإصدارات](https://github.com/abosalehg-ui/CleanSuite/releases)
-  وشغّله. يحتاج Windows 10 (الإصدار 1809) أو أحدث، 64 بت، ولا يحتاج تثبيت .NET. المُثبِّت غير موقّع بعد، فقد يظهر تحذير
-  SmartScreen: اختر «مزيد من المعلومات» ثم «التشغيل على أي حال».
+  وشغّله. يحتاج Windows 10 (الإصدار 1809) أو أحدث، 64 بت، ولا يحتاج تثبيت .NET. الإصدارات حتى 1.1.0 غير موقّعة، فقد يظهر
+  تحذير SmartScreen (اختر «مزيد من المعلومات» ثم «التشغيل على أي حال»)، وفي جهاز مفعَّل فيه **التحكم الذكي في التطبيقات**
+  (Smart App Control) يمنع Windows تشغيل البرنامج (الخطأ 4551). الإصدارات الموقّعة قادمة.
+- **سياسة التوقيع:** توقيع مجاني من [SignPath.io](https://about.signpath.io) بشهادة من
+  [SignPath Foundation](https://signpath.org) (الطلب مقدَّم). لا يُوقَّع إلا ما يبنيه GitHub Actions من هذا المستودع لوسم إصدار،
+  وبعد موافقة يدوية على كل طلب. المطوّر والمراجع والموافِق: [abosalehg-ui](https://github.com/abosalehg-ui). **الخصوصية:**
+  البرنامج لا يرسل أي معلومات عبر الشبكة إلا إذا طلب ذلك المستخدم صراحة، ولا يتصل بالإنترنت أصلًا.
 - **الاستخدام:** اختر أداة من الشريط الجانبي، واضغط «فحص» (أو F5)، وراجع القائمة، وأزل التحديد عما تريد إبقاءه، ثم نظّف.
   في «تحليل القرص» اختر قرصًا من شجرة «هذا الكمبيوتر» فيُحلَّل فورًا، وتظهر أكبر المجلدات والملفات وأنواع الملفات برسوم دائرية.
 - **الأمان:** الملفات تُنقل إلى سلة المحذوفات أو نسخة zip، وكل تعديل في السجل تسبقه نسخة `.reg`، وما تغيّر بعد الفحص

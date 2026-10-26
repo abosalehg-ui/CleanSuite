@@ -7,6 +7,11 @@
     <LangVersion>12</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Deterministic>true</Deterministic>
+    <!-- One product name and plain version on every program file: code signing (SignPath) checks them. -->
+    <Product>CleanSuite</Product>
+    <Company>CleanSuite</Company>
+    <Copyright>© 2026 abosalehg-ui (MIT License)</Copyright>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>

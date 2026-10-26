@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SignPath artifact configuration "programs" (paste it in SignPath: Project > Artifact configurations > programs).
+  The release workflow uploads one zip with the two programs and Inno Setup's uninstaller (renamed uninst.exe) and passes the
+  release version as the "version" parameter. Every file must carry the product name CleanSuite and that version.
+-->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <parameters>
+    <parameter name="version" required="true" />
+  </parameters>
+  <zip-file>
+    <pe-file-set product-name="CleanSuite" product-version="${version}">
+      <include path="CleanSuite.App.exe" />
+      <include path="CleanSuite.Cli.exe" />
+      <include path="uninst.exe" />
+      <for-each>
+        <authenticode-sign />
+      </for-each>
+    </pe-file-set>
+  </zip-file>
+</artifact-configuration>

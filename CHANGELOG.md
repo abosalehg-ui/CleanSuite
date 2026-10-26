@@ -2,6 +2,18 @@
 
 All notable changes to CleanSuite. Versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Code signing
+
+- Release builds sign `CleanSuite.App.exe`, `CleanSuite.Cli.exe`, the uninstaller and the setup with Authenticode through
+  SignPath (free signing for open-source projects by SignPath Foundation), so Smart App Control no longer blocks them
+  ("An Application Control policy has blocked this file", error 4551). Every signature is checked before the release is
+  drafted; without the SignPath secret the release is built unsigned as before. Setup: `docs/CODE_SIGNING.md`.
+- Every program file carries the product name CleanSuite and the plain version number (no commit hash).
+- `build.ps1` can run in steps (`-SkipInstaller`, `-PrepareUninstaller`, `-SkipPublish`, `-SignedUninstallerDir`) so files
+  can be signed in between.
+
 ## [1.1.0] - 2026-10-23
 
 ### Disk analysis, redesigned after the original program

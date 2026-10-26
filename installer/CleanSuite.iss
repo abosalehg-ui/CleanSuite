@@ -50,6 +50,12 @@ WizardStyle=modern
 ShowLanguageDialog=auto
 LanguageDetectionMethod=uilanguage
 CloseApplications=yes
+#ifdef SignedUninstallerDir
+; Release builds (build.ps1 -SignedUninstallerDir): the uninstaller is signed outside the compiler (SignPath) and kept in this
+; folder. The first compile writes the unsigned "uninst-*.e32" there; once it is replaced by the signed copy, compiles reuse it.
+SignedUninstaller=yes
+SignedUninstallerDir={#SignedUninstallerDir}
+#endif
 RestartApplications=no
 #if FileExists(AddBackslash(SourcePath) + "..\LICENSE")
 LicenseFile=..\LICENSE

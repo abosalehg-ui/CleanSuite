@@ -73,6 +73,12 @@ the scheduled task "CleanSuite Maintenance" and asks before deleting `%LocalAppD
 backups; kept by default). Continuous integration: `.github/workflows/build.yml` (build with warnings as errors, tests with
 coverage, vulnerable-package check).
 
+Release builds (a `v*` tag) are signed with Authenticode through SignPath when the `SIGNPATH_API_TOKEN` secret is set, and
+`build.ps1` then runs in steps so the files can be signed in between: `-SkipInstaller` (publish only),
+`-SignedUninstallerDir <dir> -PrepareUninstaller` (writes Inno Setup's uninstaller for signing and prints its path) and
+`-SkipPublish -SignedUninstallerDir <dir>` (the installer from the signed files). Setup and the release flow:
+[`CODE_SIGNING.md`](CODE_SIGNING.md); the artifact configurations are in `.signpath/artifact-configurations`.
+
 `CleanSuite.Cli --help` lists every command. It refuses options a command does not know and exits with
 0 done, 1 unknown command (usage printed), 2 invalid arguments, 3 plug-in entries not decoded,
 4 a file or folder could not be read or written.

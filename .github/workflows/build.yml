@@ -68,16 +68,22 @@ jobs:
           name: test-results
           path: TestResults
 
-  # A tag "v1.2.3" builds the installer the same way build.ps1 does on a developer's computer and publishes it with its SHA-256.
+  # A tag "v1.2.3" builds the installer the same way build.ps1 does on a developer's computer and publishes it as a draft release
+  # with its SHA-256. With the SIGNPATH_API_TOKEN secret set, the two programs, the uninstaller and the installer are signed
+  # (Authenticode, SignPath Foundation; docs/CODE_SIGNING.md); without it the release is built unsigned as before.
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build
     runs-on: windows-latest
+    # Each signing request waits for a person to approve it in SignPath (two per release).
+    timeout-minutes: 300
     permissions:
       contents: write
+      actions: read
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
+      SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -88,13 +94,12 @@ jobs:
       - name: Inno Setup
         run: choco install innosetup --no-progress -y
 
-      - name: Installer
+      - name: Version and release notes
+        id: version
         shell: pwsh
         run: |
           $version = '${{ github.ref_name }}'.TrimStart('v')
-          ./build.ps1 -SkipTests -Version $version
-          $setup = "artifacts/installer/CleanSuite-Setup-$version.exe"
-          (Get-FileHash $setup -Algorithm SHA256).Hash + "  CleanSuite-Setup-$version.exe" | Out-File "$setup.sha256" -Encoding ascii
+          "version=$version" >> $env:GITHUB_OUTPUT
           # Release notes: this version's section of CHANGELOG.md.
           $lines = Get-Content CHANGELOG.md -Encoding utf8
           $start = [Array]::FindIndex($lines, [Predicate[string]]{ param($l) $l.StartsWith("## [$version]") })
@@ -102,6 +107,109 @@ jobs:
           $end = [Array]::FindIndex($lines, $start + 1, [Predicate[string]]{ param($l) $l.StartsWith('## ') })
           if ($end -lt 0) { $end = $lines.Length }
           $lines[($start + 1)..($end - 1)] | Out-File release-notes.md -Encoding utf8
+
+      - name: Programs
+        shell: pwsh
+        run: ./build.ps1 -SkipTests -SkipInstaller -Version ${{ steps.version.outputs.version }}
+
+      - name: Installer (unsigned)
+        if: env.SIGNPATH_API_TOKEN == ''
+        shell: pwsh
+        run: |
+          Write-Host '::warning::SIGNPATH_API_TOKEN is not set: this release is not signed (docs/CODE_SIGNING.md).'
+          ./build.ps1 -SkipTests -SkipPublish -Version ${{ steps.version.outputs.version }}
+
+      # Signed build. Inno Setup writes its uninstaller (uninst-*.e32) for signing and stops; it is signed together with the two
+      # programs, put back under its own name, and the installer is built from the signed files and signed last.
+      - name: Files to sign
+        id: unsigned
+        if: env.SIGNPATH_API_TOKEN != ''
+        shell: pwsh
+        run: |
+          $e32 = ./build.ps1 -SkipTests -SkipPublish -SignedUninstallerDir artifacts/uninst -PrepareUninstaller -Version ${{ steps.version.outputs.version }} |
+            Select-Object -Last 1
+          New-Item -ItemType Directory -Force artifacts/to-sign | Out-Null
+          Copy-Item artifacts/publish/CleanSuite.App.exe, artifacts/publish/CleanSuite.Cli.exe artifacts/to-sign
+          Copy-Item $e32 artifacts/to-sign/uninst.exe
+          "e32=$e32" >> $env:GITHUB_OUTPUT
+
+      - name: Upload programs for signing
+        id: upload-programs
+        if: env.SIGNPATH_API_TOKEN != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: programs-unsigned
+          path: artifacts/to-sign/
+          if-no-files-found: error
+
+      - name: Sign programs (SignPath)
+        if: env.SIGNPATH_API_TOKEN != ''
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: programs
+          github-artifact-id: ${{ steps.upload-programs.outputs.artifact-id }}
+          parameters: |
+            version: "${{ steps.version.outputs.version }}"
+          wait-for-completion-timeout-in-seconds: 7200
+          output-artifact-directory: artifacts/signed-programs
+
+      - name: Installer from the signed files
+        if: env.SIGNPATH_API_TOKEN != ''
+        shell: pwsh
+        run: |
+          Copy-Item artifacts/signed-programs/CleanSuite.App.exe, artifacts/signed-programs/CleanSuite.Cli.exe artifacts/publish -Force
+          Copy-Item artifacts/signed-programs/uninst.exe '${{ steps.unsigned.outputs.e32 }}' -Force
+          ./build.ps1 -SkipTests -SkipPublish -SignedUninstallerDir artifacts/uninst -Version ${{ steps.version.outputs.version }}
+          New-Item -ItemType Directory -Force artifacts/installer-unsigned | Out-Null
+          Move-Item artifacts/installer/CleanSuite-Setup-*.exe artifacts/installer-unsigned
+
+      - name: Upload installer for signing
+        id: upload-installer
+        if: env.SIGNPATH_API_TOKEN != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-unsigned
+          path: artifacts/installer-unsigned/
+          if-no-files-found: error
+
+      - name: Sign installer (SignPath)
+        if: env.SIGNPATH_API_TOKEN != ''
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: installer
+          github-artifact-id: ${{ steps.upload-installer.outputs.artifact-id }}
+          parameters: |
+            version: "${{ steps.version.outputs.version }}"
+          wait-for-completion-timeout-in-seconds: 7200
+          output-artifact-directory: artifacts/installer
+
+      - name: Check signatures
+        if: env.SIGNPATH_API_TOKEN != ''
+        shell: pwsh
+        run: |
+          $files = @(Get-Item artifacts/installer/CleanSuite-Setup-*.exe, artifacts/publish/*.exe, '${{ steps.unsigned.outputs.e32 }}')
+          $bad = 0
+          foreach ($f in $files) {
+            $s = Get-AuthenticodeSignature -LiteralPath $f.FullName
+            "{0,-36} {1,-6} {2}" -f $f.Name, $s.Status, $s.SignerCertificate.Subject
+            if ($s.Status -ne 'Valid') { $bad++ }
+          }
+          if ($bad) { throw "$bad file(s) without a valid signature" }
+
+      - name: SHA-256
+        shell: pwsh
+        run: |
+          $name = "CleanSuite-Setup-${{ steps.version.outputs.version }}.exe"
+          $setup = "artifacts/installer/$name"
+          (Get-FileHash $setup -Algorithm SHA256).Hash + "  $name" | Out-File "$setup.sha256" -Encoding ascii
 
       - uses: softprops/action-gh-release@v2
         with:
